@@ -1,0 +1,15 @@
+D:\C#\NEW\smartVision\smartVision\nightOwl\bin\Debug\nightOwl.exe.config
+D:\C#\NEW\smartVision\smartVision\nightOwl\bin\Debug\nightOwl.exe
+D:\C#\NEW\smartVision\smartVision\nightOwl\bin\Debug\nightOwl.pdb
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.Form1.resources
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.Properties.Resources.resources
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.csproj.GenerateResource.Cache
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.csproj.CoreCompileInputs.cache
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.exe
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.pdb
+D:\C#\NEW\smartVision\smartVision\nightOwl\bin\Debug\Interop.WMPLib.dll
+D:\C#\NEW\smartVision\smartVision\nightOwl\bin\Debug\AxInterop.WMPLib.dll
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.csprojAssemblyReference.cache
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\Interop.WMPLib.dll
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\AxInterop.WMPLib.dll
+D:\C#\NEW\smartVision\smartVision\nightOwl\obj\Debug\nightOwl.csproj.ResolveComReference.cache
