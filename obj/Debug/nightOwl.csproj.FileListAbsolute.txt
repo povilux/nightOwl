@@ -31,3 +31,5 @@ C:\Users\popov\Source\Repos\nightOwl\bin\Debug\AForge.Video.dll
 C:\Users\popov\Source\Repos\nightOwl\bin\Debug\Interop.WMPLib.dll
 C:\Users\popov\Source\Repos\nightOwl\bin\Debug\AxInterop.WMPLib.dll
 C:\Users\popov\Source\Repos\nightOwl\obj\Debug\nightOwl.csproj.CopyComplete
+C:\Users\popov\source\repos\nightOwl\obj\Debug\nightOwl.MainForm.resources
+C:\Users\popov\source\repos\nightOwl\obj\Debug\nightOwl.Form2.resources
