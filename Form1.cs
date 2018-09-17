@@ -39,6 +39,7 @@ namespace nightOwl
             comboBoxSupportedModes.SelectedIndex = 0;
 
             FinalVideo.NewFrame += new NewFrameEventHandler(FinalVideo_NewFrame);
+            pictureBoxVideo.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -64,12 +65,6 @@ namespace nightOwl
         private void Start_Click(object sender, EventArgs e)
         {
             FinalVideo.VideoResolution = FinalVideo.VideoCapabilities[comboBoxSupportedModes.SelectedIndex];
-            this.Width = FinalVideo.VideoResolution.FrameSize.Width + 40;
-            this.Height = FinalVideo.VideoResolution.FrameSize.Height + 70;
-
-            this.pictureBoxVideo.Width = FinalVideo.VideoResolution.FrameSize.Width;
-            this.pictureBoxVideo.Height = FinalVideo.VideoResolution.FrameSize.Height;
-
             FinalVideo.Start();
         }
 
