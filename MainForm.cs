@@ -30,5 +30,12 @@ namespace nightOwl
             secondForm.Show();
             this.Hide();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Form3 thirdForm = new Form3();
+            thirdForm.Show();
+            this.Hide();
+        }
     }
 }
