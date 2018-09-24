@@ -37,5 +37,16 @@ namespace nightOwl
             axWindowsMediaPlayer1.URL = openFileDialog1.FileName;
             axWindowsMediaPlayer1.settings.autoStart = true;
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Close();
+            MainForm.self.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            MainForm.self.Close();
+        }
     }
 }

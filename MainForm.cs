@@ -12,22 +12,17 @@ namespace nightOwl
 {
     public partial class MainForm : Form
     {
+        public static MainForm self;
         public MainForm()
         {
             InitializeComponent();
+            self = this;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             Form1 firstForm = new Form1();
             firstForm.Show();
-            this.Hide();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Form2 secondForm = new Form2();
-            secondForm.Show();
             this.Hide();
         }
 
