@@ -74,5 +74,16 @@ namespace nightOwl
             }
 
         }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            Close();
+            MainForm.self.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MainForm.self.Close();
+        }
     }
 }
