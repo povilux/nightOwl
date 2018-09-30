@@ -78,7 +78,9 @@ namespace nightOwl
                         foreach (var face in faces)
                         {
                             Image<Bgr, byte> faceImage = imageFrame.Copy(face);
-                            var result = Recognizer.RecognizeFace(faceImage);
+                            faceImage = ImageHandler.ResizeImage(faceImage);
+                            var grayFace = faceImage.Convert<Gray, Byte>();
+                            var result = Recognizer.RecognizeFace(grayFace);
                             if(result != 0)
                             {
                                 string name = MainForm.names.ElementAt(result + 1);

@@ -25,6 +25,12 @@ namespace nightOwl
             return resizedImage;
         }
 
+        public static Image<Gray, byte> ResizeGrayImage(Image<Gray, byte> image)
+        {
+            Image<Gray, byte> resizedImage = image.Resize(imageDimension, imageDimension, Emgu.CV.CvEnum.Inter.Cubic);
+            return resizedImage;
+        }
+
         public static void SaveFacetoFile(string name, Image<Bgr, byte> image)
         {
             if (!Directory.Exists(Application.StartupPath + "/data/" + name + "/"))
@@ -130,6 +136,20 @@ namespace nightOwl
             {
                 Image<Bgr, byte> faceImage = image.Copy(faces[0]);
                 return faceImage;
+            }
+        }
+
+        public static void WriteNamesToFile(List<string> names)
+        {
+            if (File.Exists(Application.StartupPath + "/data/names.txt"))
+            {
+                using (StreamWriter sw = new StreamWriter(Application.StartupPath + "/data/names.txt"))
+                {
+                    foreach(string name in names)
+                    {
+                        sw.WriteLine(name);
+                    }
+                }
             }
         }
         

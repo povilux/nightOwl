@@ -69,6 +69,7 @@ namespace nightOwl
 
         public static void closeMainForm()
         {
+            ImageHandler.WriteNamesToFile(names);
             /*
             foreach (string name in names)
             {
