@@ -55,9 +55,9 @@ namespace nightOwl
             rec.Write(Application.StartupPath + "/data/recognizer.yaml");
         }
 
-        public static int RecognizeFace(Image<Bgr, byte> image)
+        public static int RecognizeFace(Image<Gray, byte> image)
         {
-            image = ImageHandler.ResizeImage(image);
+            image = ImageHandler.ResizeGrayImage(image);
             EigenFaceRecognizer eigen = OldEigen();
             var result = eigen.Predict(image);
             return result.Label;

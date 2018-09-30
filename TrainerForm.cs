@@ -65,7 +65,7 @@ namespace nightOwl
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.InitialDirectory = @"D:\";
+            openFileDialog1.InitialDirectory = @"D:\C#\NEW\PROJEKTAS\photos\bmp\";
             openFileDialog1.Title = "Open picture location";
             openFileDialog1.Filter = "Image Files (*.bmp, *.jpg| *.bmp;*.jpg";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -114,6 +114,8 @@ namespace nightOwl
                 }
                 var newFace = ImageHandler.GetFaceFromImage(tempImage);
                 ImageHandler.SaveFacetoFile(newName, newFace);
+                listBox1.Items.Add(newName);
+                MainForm.names.Add(newName);
                 textBox2.Text = "A new person was added to database";
 
             }
