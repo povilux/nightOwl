@@ -14,7 +14,7 @@ using Emgu.CV.Structure;
 namespace nightOwl
 {
 
-    public partial class Form3 : Form
+    public partial class WebcamForm : Form
     {
         private VideoCapture capture;
 
@@ -25,7 +25,7 @@ namespace nightOwl
             imgCamUser.Image = ImageFrame;
             */
             CascadeClassifier _cascadeClassifier;
-            _cascadeClassifier = new CascadeClassifier(Application.StartupPath + "/haarcascade_frontalface_alt_tree.xml");
+            _cascadeClassifier = new CascadeClassifier(Application.StartupPath + "/haarcascade_frontalface_default.xml");
             using (var imageFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
             {
                 if (imageFrame != null)
@@ -42,7 +42,7 @@ namespace nightOwl
             }
         }
 
-        public Form3()
+        public WebcamForm()
         {
             InitializeComponent();
         }
@@ -83,7 +83,7 @@ namespace nightOwl
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MainForm.self.Close();
+            MainForm.closeMainForm();
         }
     }
 }
