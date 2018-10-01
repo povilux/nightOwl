@@ -17,22 +17,25 @@ namespace nightOwl
     {
         public static EigenFaceRecognizer NewEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer();
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, double.PositiveInfinity);
             eigenRec.Write(Application.StartupPath + "/data/recognizer.yaml");
             return eigenRec;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer();
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, double.PositiveInfinity);
             if (File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
             {
                 eigenRec.Read(Application.StartupPath + "/data/recognizer.yaml");
+            } else
+            {
+                eigenRec = NewEigen();
             }
             return eigenRec;
         }
 
-        public static bool TrainRecognizer(EigenFaceRecognizer rec, Image<Bgr, byte>[] faceArray, int[] labelArray)
+        public static bool TrainRecognizer(EigenFaceRecognizer rec, Image<Gray, byte>[] faceArray, int[] labelArray)
         {
             if(faceArray.Length != labelArray.Length)
             {
@@ -42,7 +45,7 @@ namespace nightOwl
             {
                 for(int i = 0; i < faceArray.Length; i++)
                 {
-                    faceArray[i] = ImageHandler.ResizeImage(faceArray[i]);
+                    faceArray[i] = ImageHandler.ResizeGrayImage(faceArray[i]);
                 }
                 rec.Train(faceArray, labelArray);
                 SaveRecognizer(rec);
