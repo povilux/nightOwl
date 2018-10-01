@@ -36,8 +36,14 @@ namespace nightOwl
                 newFile.Close();
             }
 
-            // read names from file to List<String>
-            using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
+            if (!File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
+            {
+                var newFile = File.Create(Application.StartupPath + "/data/recognizer.yaml");
+                newFile.Close();
+            }
+
+                // read names from file to List<String>
+                using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
             {
                 while(sr.Peek() >= 0)
                 {
