@@ -1,6 +1,6 @@
 ﻿namespace nightOwl
 {
-    partial class Form3
+    partial class WebcamForm
     {
         /// <summary>
         /// Required designer variable.
