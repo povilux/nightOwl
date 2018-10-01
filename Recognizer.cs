@@ -15,6 +15,35 @@ namespace nightOwl
 {
     public class Recognizer
     {
+        public static List<String> names = new List<String>();
+
+        public static void PrepareInformation()
+        {
+            if(Directory.Exists(Application.StartupPath + "/data"))
+            {
+                Directory.CreateDirectory(Application.StartupPath + "/data");
+            }
+
+            if (!File.Exists(Application.StartupPath + "/data/names.txt"))
+            {
+                var newFile = File.Create(Application.StartupPath + "/data/names.txt");
+                newFile.Close();
+            }
+
+            // read names from file to List<String>
+            using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
+            {
+                while (sr.Peek() >= 0)
+                {
+                    names.Add(sr.ReadLine());
+                }
+            }
+        }
+        public static List<String> GetNamesArray()
+        {
+            return names;
+        }
+
         public static EigenFaceRecognizer NewEigen()
         {
             EigenFaceRecognizer eigenRec = new EigenFaceRecognizer();

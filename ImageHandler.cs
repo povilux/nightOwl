@@ -43,6 +43,9 @@ namespace nightOwl
             {
                 picNumber++;
             }
+            Console.WriteLine("vieta:");
+            Console.WriteLine(Application.StartupPath + "/data/" + name + "/" + picNumber + ".bmp");
+
             image.Save(Application.StartupPath + "/data/" + name + "/" + picNumber + ".bmp");
         }
 

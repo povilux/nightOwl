@@ -79,7 +79,6 @@
             this.pictureBox2.Size = new System.Drawing.Size(166, 158);
             this.pictureBox2.TabIndex = 6;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
             // textBox1
             // 
@@ -90,7 +89,6 @@
             this.textBox1.Size = new System.Drawing.Size(506, 15);
             this.textBox1.TabIndex = 7;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // pictureBox3
             // 
@@ -99,7 +97,6 @@
             this.pictureBox3.Size = new System.Drawing.Size(113, 50);
             this.pictureBox3.TabIndex = 9;
             this.pictureBox3.TabStop = false;
-            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
             // 
             // button3
             // 
@@ -158,7 +155,6 @@
             this.Controls.Add(this.button1);
             this.Name = "TrainerForm";
             this.Text = "Form2";
-            this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();

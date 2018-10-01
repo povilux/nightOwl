@@ -34,7 +34,7 @@ namespace nightOwl
             button3.Text = "";
             button3.Enabled = false;
             textBox2.Hide();
-            foreach(string name in MainForm.names)
+            foreach(string name in Recognizer.GetNamesArray())
             {
                 listBox1.Items.Add(name);
             }
@@ -52,51 +52,32 @@ namespace nightOwl
             MainForm.closeMainForm();
         }
 
-        private void Form2_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.InitialDirectory = @"D:\C#\NEW\PROJEKTAS\photos\bmp\";
             openFileDialog1.Title = "Open picture location";
             openFileDialog1.Filter = "Image Files (*.bmp, *.jpg| *.bmp;*.jpg";
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 picSelected = true;
                 pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
                 pictureBox1.Image = new Bitmap(openFileDialog1.FileName);
                 tempImage = new Image<Bgr, byte>(openFileDialog1.FileName);
+
+                if (ImageHandler.GetFaceFromImage(tempImage) == null)
+                {
+                    textBox2.Text = "Picture is not suitable for face recognition";
+                }
+                else
+                {
+                    textBox2.Text = "Write new name here";
+                    textBox2.Enabled = true;
+                    listBox1.Show();
+                }
+                textBox2.Show();
             }
-
-            textBox2.Show();
-            if (ImageHandler.GetFaceFromImage(tempImage) == null)
-            {
-                textBox2.Text = "Picture is not suitable for face recognition";
-            }
-            else
-            {
-                textBox2.Text = "Write new name here";
-                textBox2.Enabled = true;
-                listBox1.Show();
-            }
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -115,7 +96,8 @@ namespace nightOwl
                 var newFace = ImageHandler.GetFaceFromImage(tempImage);
                 ImageHandler.SaveFacetoFile(newName, newFace);
                 listBox1.Items.Add(newName);
-                MainForm.names.Add(newName);
+                Recognizer.names.Add(newName);
+                Console.WriteLine("Naujas persona prideta");
                 textBox2.Text = "A new person was added to database";
 
             }
@@ -145,7 +127,7 @@ namespace nightOwl
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            if ((textBox2.Text != "") && (!MainForm.names.Contains(textBox2.Text))&&(picSelected == true))
+            if ((textBox2.Text != "") && (!Recognizer.GetNamesArray().Contains(textBox2.Text))&&(picSelected == true))
             {
                 button3.Text = "Add new person";
                 button3.Enabled = true;

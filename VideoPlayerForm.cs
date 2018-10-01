@@ -83,7 +83,7 @@ namespace nightOwl
                             var result = Recognizer.RecognizeFace(grayFace);
                             if(result != 0)
                             {
-                                string name = MainForm.names.ElementAt(result + 1);
+                                string name = Recognizer.GetNamesArray().ElementAt(result + 1);
                                 Emgu.CV.CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
                                     face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
                             }

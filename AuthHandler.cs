@@ -35,7 +35,7 @@ namespace nightOwl
                     }
                 }
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
                 MessageBox.Show("Sistema neveikia! Prisijungti neįmanoma!");
             }

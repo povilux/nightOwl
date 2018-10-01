@@ -16,7 +16,7 @@ namespace nightOwl
 {
     public partial class MainForm : Form
     {
-        public static List<String> names = new List<String>();
+       
         //public static List<Byte[]> photos = new List<Byte[]>();
 
         public static MainForm self;
@@ -30,7 +30,9 @@ namespace nightOwl
             else
                 userRoleLabel.Text = "Admin";
 
-            if (!Directory.Exists(Application.StartupPath + "/data"))
+            Recognizer.PrepareInformation();
+
+            /*if (!Directory.Exists(Application.StartupPath + "/data"))
             {
                 Directory.CreateDirectory(Application.StartupPath + "/data");
             }
@@ -48,7 +50,7 @@ namespace nightOwl
                 {
                     names.Add(sr.ReadLine());
                 }
-            }
+            }*/
 
             
             // read binary data to List<Byte[]>
@@ -74,7 +76,7 @@ namespace nightOwl
 
         public static void closeMainForm()
         {
-            ImageHandler.WriteNamesToFile(names);
+            ImageHandler.WriteNamesToFile(Recognizer.GetNamesArray());
             /*
             foreach (string name in names)
             {
