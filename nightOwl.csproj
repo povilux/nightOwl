@@ -120,6 +120,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -174,6 +175,14 @@
     <Content Include="NewPerson.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\background1.png" />
+    <None Include="Resources\background2.png" />
+    <None Include="Resources\atsisiųsti.png" />
+    <None Include="Resources\bgWebCamForm.png" />
+    <None Include="Resources\bgWebCam.png" />
+    <None Include="Resources\background3.png" />
+    <None Include="Resources\Exiit.png" />
+    <None Include="Resources\Back.png" />
     <Content Include="rightArrow.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
