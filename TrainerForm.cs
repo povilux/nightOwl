@@ -97,7 +97,6 @@ namespace nightOwl
                 ImageHandler.SaveFacetoFile(newName, newFace);
                 listBox1.Items.Add(newName);
                 Recognizer.names.Add(newName);
-                Console.WriteLine("Naujas persona prideta");
                 textBox2.Text = "A new person was added to database";
 
             }
