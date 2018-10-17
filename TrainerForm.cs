@@ -19,6 +19,7 @@ namespace nightOwl
         bool picSelected = false;
         bool personSelected = false;
         Image<Bgr, byte> tempImage;
+        List<string> picFilenames;
 
         public TrainerForm()
         {
@@ -68,24 +69,30 @@ namespace nightOwl
             openFileDialog1.InitialDirectory = @"D:\";
             openFileDialog1.Title = "Open picture location";
             openFileDialog1.Filter = "Image Files (*.bmp, *.jpg| *.bmp;*.jpg";
+            openFileDialog1.Multiselect = true;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 picSelected = true;
                 pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
-                pictureBox1.Image = new Bitmap(openFileDialog1.FileName);
-                tempImage = new Image<Bgr, byte>(openFileDialog1.FileName);
-            }
-
-            textBox2.Show();
-            if (ImageHandler.GetFaceFromImage(tempImage) == null)
-            {
-                textBox2.Text = "Picture is not suitable for face recognition";
-            }
-            else
-            {
+                pictureBox1.Image = new Bitmap(openFileDialog1.FileNames[0]);
+                tempImage = new Image<Bgr, byte>(openFileDialog1.FileNames[0]);
+                textBox2.Show();
+                /*
+                if (ImageHandler.GetFaceFromImage(tempImage) == null)
+                {
+                    textBox2.Text = "Picture is not suitable for face recognition";
+                }
+                else
+                {
+                    textBox2.Text = "Write new name here";
+                    textBox2.Enabled = true;
+                    listBox1.Show();
+                }
+                */
                 textBox2.Text = "Write new name here";
                 textBox2.Enabled = true;
                 listBox1.Show();
+                picFilenames = openFileDialog1.FileNames.ToList();
             }
         }
 
@@ -102,6 +109,8 @@ namespace nightOwl
         private void button3_Click(object sender, EventArgs e)
         {
             textBox2.Enabled = false;
+            int viablePicsCount = 0;
+            int notViablePicsCount = 0;
 
             if ((picSelected == true) && (personSelected == false))
             {
@@ -112,19 +121,71 @@ namespace nightOwl
                 {
                     ImageHandler.SaveRepresentativePic(tempImage.ToBitmap(), newName);
                 }
-                var newFace = ImageHandler.GetFaceFromImage(tempImage);
-                ImageHandler.SaveFacetoFile(newName, newFace);
-                textBox2.Text = "A new person was added to database";
+                foreach(string filename in picFilenames)
+                {
+                    tempImage = new Image<Bgr, byte>(filename);
+                    if(ImageHandler.GetFaceFromImage(tempImage) == null)
+                    {
+                        notViablePicsCount++;
+                    } else
+                    {
+                        var newFace = ImageHandler.GetFaceFromImage(tempImage);
+                        var newGrayFace = newFace.Convert<Gray, Byte>();
+                        ImageHandler.SaveGrayFacetoFile(newName, newGrayFace);
+                        viablePicsCount++;
+                    }
+                    
+                }
+                
+                if(viablePicsCount > 0)
+                {
+                    listBox1.Items.Add(newName);
+                    MainForm.names.Add(newName);
+                    ImageHandler.WriteNamesToFile(MainForm.names);
+                    textBox2.Text = String.Format("{0} was added to database. ({1}/{2} pics passed)", newName, viablePicsCount,
+                        picFilenames.Count);
+                } else
+                {
+                    textBox2.Text = "All pics were unsuitable. New person was not created.";
+                }
+                
 
-            }
-            if((picSelected == true) && (personSelected == true))
+            } else if((picSelected == true) && (personSelected == true))
             {
                 picSelected = false;
                 personSelected = false;
-                var newFace = ImageHandler.GetFaceFromImage(tempImage);
+
+                foreach (string filename in picFilenames)
+                {
+                    tempImage = new Image<Bgr, byte>(filename);
+                    if (ImageHandler.GetFaceFromImage(tempImage) == null)
+                    {
+                        notViablePicsCount++;
+                    }
+                    else
+                    {
+                        var face = ImageHandler.GetFaceFromImage(tempImage);
+                        var grayFace = face.Convert<Gray, Byte>();
+                        ImageHandler.SaveGrayFacetoFile(listBox1.GetItemText(listBox1.SelectedItem), grayFace);
+                        viablePicsCount++;
+                    }
+                }
+
+                textBox2.Text = String.Format("{0}/{1} pics were added", viablePicsCount, picFilenames.Count);
+
+                /*
+                // save coloured face version to file
+                Image<Bgr, Byte> newFace = ImageHandler.GetFaceFromImage(tempImage);            
                 ImageHandler.SaveFacetoFile(listBox1.GetItemText(listBox1.SelectedItem), newFace);
 
-                textBox2.Text = "A new pic of existing person was added to database";
+                // save gray face version to file
+                /*
+                Image<Gray, Byte> newGrayFace = newFace.Convert<Gray, Byte>();                  
+                ImageHandler.SaveGrayFacetoFile(listBox1.GetItemText(listBox1.SelectedItem), newGrayFace);
+                */
+
+                // which one is better ?
+                
             }
             button3.Text = "";
             button3.Enabled = false;
@@ -152,8 +213,12 @@ namespace nightOwl
 
         private void button4_Click(object sender, EventArgs e)
         {
-            EigenFaceRecognizer eigen = Recognizer.OldEigen();
-            Recognizer.TrainRecognizer(eigen, ImageHandler.GetFaceArrayFromFiles(),ImageHandler.GetLabelArrayFromFiles());
+            EigenFaceRecognizer eigen = Recognizer.NewEigen();
+            bool success = Recognizer.TrainRecognizer(eigen, ImageHandler.GetGrayFaceArrayFromFiles(),ImageHandler.GetLabelArrayFromFiles());
+            if(success == false)
+            {
+                MessageBox.Show("Corrupted data");
+            }
         }
     }
 }

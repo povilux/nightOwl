@@ -25,6 +25,12 @@ namespace nightOwl
             return resizedImage;
         }
 
+        public static Image<Gray, byte> ResizeGrayImage(Image<Gray, byte> image)
+        {
+            Image<Gray, byte> resizedImage = image.Resize(imageDimension, imageDimension, Emgu.CV.CvEnum.Inter.Cubic);
+            return resizedImage;
+        }
+
         public static void SaveFacetoFile(string name, Image<Bgr, byte> image)
         {
             if (!Directory.Exists(Application.StartupPath + "/data/" + name + "/"))
@@ -34,6 +40,21 @@ namespace nightOwl
             image = ResizeImage(image);
             int picNumber = 1;
             while(File.Exists(Application.StartupPath + "/data/" + name + "/" + picNumber + ".bmp"))
+            {
+                picNumber++;
+            }
+            image.Save(Application.StartupPath + "/data/" + name + "/" + picNumber + ".bmp");
+        }
+
+        public static void SaveGrayFacetoFile(string name, Image<Gray, byte> image)
+        {
+            if (!Directory.Exists(Application.StartupPath + "/data/" + name + "/"))
+            {
+                Directory.CreateDirectory(Application.StartupPath + "/data/" + name + "/");
+            }
+            image = ResizeGrayImage(image);
+            int picNumber = 1;
+            while (File.Exists(Application.StartupPath + "/data/" + name + "/" + picNumber + ".bmp"))
             {
                 picNumber++;
             }
@@ -116,7 +137,34 @@ namespace nightOwl
             faceArray = faceList.ToArray();
             return faceArray;
         }
-        
+
+        public static Image<Gray, byte>[] GetGrayFaceArrayFromFiles()
+        {
+            Image<Gray, byte>[] faceArray;
+            List<Image<Gray, byte>> faceList = new List<Image<Gray, byte>>();
+
+            List<string> names = new List<string>();
+            using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
+            {
+                while (sr.Peek() >= 0)
+                {
+                    names.Add(sr.ReadLine());
+                }
+            }
+            foreach (string name in names)
+            {
+                int picNumber = 1;
+                while (File.Exists(Application.StartupPath + "/data/" + name + "/" + picNumber + ".bmp"))
+                {
+                    faceList.Add(new Image<Gray, byte>(Application.StartupPath + "/data/" + name + "/" + picNumber + ".bmp"));
+                    picNumber++;
+                }
+            }
+
+            faceArray = faceList.ToArray();
+            return faceArray;
+        }
+
         public static Image<Bgr, byte> GetFaceFromImage(Image<Bgr, byte> image)
         {
             CascadeClassifier _cascadeClassifier;
@@ -130,6 +178,20 @@ namespace nightOwl
             {
                 Image<Bgr, byte> faceImage = image.Copy(faces[0]);
                 return faceImage;
+            }
+        }
+
+        public static void WriteNamesToFile(List<string> names)
+        {
+            if (File.Exists(Application.StartupPath + "/data/names.txt"))
+            {
+                using (StreamWriter sw = new StreamWriter(Application.StartupPath + "/data/names.txt"))
+                {
+                    foreach(string name in names)
+                    {
+                        sw.WriteLine(name);
+                    }
+                }
             }
         }
         
