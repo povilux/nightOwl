@@ -1,0 +1,29 @@
+%YAML:1.0
+---
+opencv_eigenfaces:
+   threshold: .Inf
+   num_components: 80
+   mean: !!opencv-matrix
+      rows: 0
+      cols: 0
+      dt: u
+      data: []
+   eigenvalues: !!opencv-matrix
+      rows: 0
+      cols: 0
+      dt: u
+      data: []
+   eigenvectors: !!opencv-matrix
+      rows: 0
+      cols: 0
+      dt: u
+      data: []
+   projections:
+      []
+   labels: !!opencv-matrix
+      rows: 0
+      cols: 0
+      dt: u
+      data: []
+   labelsInfo:
+      []
