@@ -1,10 +1,7 @@
-/build/
 *.suo
 *.user
 _ReSharper.*/
 *.sdf
-obj/
-Release/
 *.opensdf
 *.tlog
 *.log
