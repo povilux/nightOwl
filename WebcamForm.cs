@@ -38,7 +38,7 @@ namespace nightOwl
                         faceImage = ImageHandler.ResizeImage(faceImage);
                         var grayFace = faceImage.Convert<Gray, Byte>();
                         var result = Recognizer.RecognizeFace(grayFace);
-                        if (result != 0)
+                        if (result > 0)
                         {
                             string name = MainForm.names.ElementAt(result - 1);
                             Emgu.CV.CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
