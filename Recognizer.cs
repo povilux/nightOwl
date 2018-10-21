@@ -62,8 +62,15 @@ namespace nightOwl
         {
             image = ImageHandler.ResizeGrayImage(image);
             EigenFaceRecognizer eigen = OldEigen();
-            var result = eigen.Predict(image);
-            return result.Label;
+
+            try
+            {
+                var result = eigen.Predict(image);
+                return result.Label;
+            } catch(Emgu.CV.Util.CvException ex)
+            {
+                throw;
+            }
         }
 
     }
