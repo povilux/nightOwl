@@ -117,5 +117,12 @@ namespace nightOwl
             secondForm.Show();
             this.Hide();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            LastSeenMapForm lsmForm = new LastSeenMapForm();
+            lsmForm.Show();
+            this.Hide();
+        }
     }
 }
