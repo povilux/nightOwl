@@ -70,7 +70,8 @@ namespace nightOwl
             }
             catch (FileNotFoundException)
             {
-                throw;
+                MessageBox.Show("Šis asmuo neegzistuoja duomenų bazėje!");
+                return null;
             }
         }
 

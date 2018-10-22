@@ -17,6 +17,8 @@ namespace nightOwl
     public partial class MainForm : Form
     {
         public static List<String> names = new List<String>();
+        public static List<Person> persons = new List<Person>();
+
         //public static List<Byte[]> photos = new List<Byte[]>();
 
         public static MainForm self;
@@ -36,22 +38,15 @@ namespace nightOwl
                 newFile.Close();
             }
 
-          /*  if (!File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
-            {
-                var newFile = File.Create(Application.StartupPath + "/data/recognizer.yaml");
-                newFile.Close();
-            }*/
+            /*  if (!File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
+              {
+                  var newFile = File.Create(Application.StartupPath + "/data/recognizer.yaml");
+                  newFile.Close();
+              }*/
 
-                // read names from file to List<String>
-                using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
-            {
-                while(sr.Peek() >= 0)
-                {
-                    names.Add(sr.ReadLine());
-                }
-            }
+         }
 
-            
+
             // read binary data to List<Byte[]>
             /*
             foreach(string name in names)
@@ -71,7 +66,7 @@ namespace nightOwl
             }
             */
 
-        }
+        
 
         public static void closeMainForm()
         {

@@ -15,7 +15,7 @@ namespace nightOwl
 {
     public class Recognizer
     {
-        private static readonly int threshold = 10000;
+      //  private static readonly int threshold = 10000;
         // higher threshold - more chances to recognize a face (sometimes incorrectly);
 
         public static EigenFaceRecognizer NewEigen()

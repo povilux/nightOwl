@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageHandler.cs" />
+    <Compile Include="Person.cs" />
     <Compile Include="Recognizer.cs" />
     <Compile Include="VideoPlayerForm.cs">
       <SubType>Form</SubType>
