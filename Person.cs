@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace nightOwl
 {
-    public struct Person
+    public class Person
     {
         public string Name { get; set; }
         public string BirthDate { get; set; }
