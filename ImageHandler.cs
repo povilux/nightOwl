@@ -208,14 +208,14 @@ namespace nightOwl
                 {
                     var personsQuery =
                         from p in persons
-                        select new { p.Name, p.BirthDate, p.MissingDate, p.AdditionalInfo };
+                        select new { p.Name, p.BirthDate, p.MissingDate, p.CoordX, p.CoordY, p.LastSeenDate, p.AdditionalInfo };
 
                     string line = "";
 
                     foreach (var person in personsQuery)
                     {
-                        line = "{0}|{1}|{2}|{3}";
-                        line = String.Format(line, person.Name, person.BirthDate, person.MissingDate, person.AdditionalInfo);
+                        line = "{0}|{1}|{2}|{3}|{4}|{5}|{6}";
+                        line = String.Format(line, person.Name, person.BirthDate, person.MissingDate, person.CoordX, person.CoordY, person.LastSeenDate, person.AdditionalInfo);
                         sw.WriteLine(line);
                     }
                 }
