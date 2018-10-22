@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace nightOwl
 {
@@ -93,7 +94,9 @@ namespace nightOwl
 
                 string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
 
-                if (!String.IsNullOrWhiteSpace(newName) && !String.IsNullOrWhiteSpace(birthDate) && !String.IsNullOrWhiteSpace(missingDate))
+                DateTime dt;
+               if (!String.IsNullOrWhiteSpace(newName) && DateTime.TryParseExact(birthDate, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) &&
+                       DateTime.TryParseExact(missingDate, "yyyy-MM-dd hh:mm", new CultureInfo("lt-LT"), DateTimeStyles.AssumeLocal, out dt))
                 {
                     picSelected = false;
 
@@ -138,7 +141,7 @@ namespace nightOwl
                         MessageBox.Show("No good photos for face recognition!");  
                 }
                 else
-                    MessageBox.Show("Please insert data!");
+                    MessageBox.Show("Please insert correct information!");
 
             }
             else
@@ -152,37 +155,47 @@ namespace nightOwl
                 string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
 
                 var person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
-                person.BirthDate = birthDateField.Text;
-                person.MissingDate = missingDateField.Text;
-                person.AdditionalInfo = additionalInfoField.Text;
 
-                string updateMessage = "Information updated!";
-
-                if (picSelected)
-                {
-                    int viablePicsCount = 0;
-                    int notViablePicsCount = 0;
-
-                    picSelected = false;
-
-                    foreach (string filename in picFilenames)
-                    {
-                        tempImage = new Image<Bgr, byte>(filename);
-
-                        if (ImageHandler.GetFaceFromImage(tempImage) == null)
-                            notViablePicsCount++;
-                        else
-                        {
-                            var face = ImageHandler.GetFaceFromImage(tempImage);
-                            var grayFace = face.Convert<Gray, Byte>();
-                            ImageHandler.SaveGrayFacetoFile(chosenName, grayFace);
-
-                            viablePicsCount++;
-                        }
-                    }
-                    updateMessage = String.Format("{0}/{1} pics was added, information was updated", viablePicsCount, picFilenames.Count);
+                DateTime dt;
+                if (!DateTime.TryParseExact(birthDateField.Text, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) ||
+                    !DateTime.TryParseExact(missingDateField.Text, "yyyy-MM-dd hh:mm", new CultureInfo("lt-LT"), DateTimeStyles.AssumeLocal, out dt))
+                   {
+                    MessageBox.Show("The missing or birth date is not correct!");
                 }
-                MessageBox.Show(updateMessage);
+                else
+                {
+                    person.BirthDate = birthDateField.Text;
+                    person.MissingDate = missingDateField.Text;
+                    person.AdditionalInfo = additionalInfoField.Text;
+
+                    string updateMessage = "Information updated!";
+
+                    if (picSelected)
+                    {
+                        int viablePicsCount = 0;
+                        int notViablePicsCount = 0;
+
+                        picSelected = false;
+
+                        foreach (string filename in picFilenames)
+                        {
+                            tempImage = new Image<Bgr, byte>(filename);
+
+                            if (ImageHandler.GetFaceFromImage(tempImage) == null)
+                                notViablePicsCount++;
+                            else
+                            {
+                                var face = ImageHandler.GetFaceFromImage(tempImage);
+                                var grayFace = face.Convert<Gray, Byte>();
+                                ImageHandler.SaveGrayFacetoFile(chosenName, grayFace);
+
+                                viablePicsCount++;
+                            }
+                        }
+                        updateMessage = String.Format("{0}/{1} pics was added, information was updated", viablePicsCount, picFilenames.Count);
+                    }
+                    MessageBox.Show(updateMessage);
+                }
             }
             else
                 MessageBox.Show("Select person from the list.");

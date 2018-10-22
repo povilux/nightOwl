@@ -43,7 +43,7 @@ namespace nightOwl
                 while ((line = sr.ReadLine()) != null)
                 {
                     splitedLine = line.Split("|".ToCharArray(), StringSplitOptions.None);   
-                    persons.Add(new Person(splitedLine[0], splitedLine[1], splitedLine[2], splitedLine[3]));
+                    persons.Add(new Person(splitedLine[0], splitedLine[1], splitedLine[2], coordx:Convert.ToDouble(splitedLine[3]), coordy:Convert.ToDouble(splitedLine[4]), lastseendate: splitedLine[5], add:splitedLine[6]));
                 }
             }
          
