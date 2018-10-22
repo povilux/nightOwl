@@ -75,7 +75,21 @@ namespace nightOwl
                     {
                         var grayframe = imageFrame.Convert<Gray, Byte>();
                         var faces = _cascadeClassifier.DetectMultiScale(grayframe, 1.1, 10, Size.Empty); //the actual face detection happens here
-                        foreach (var face in faces)
+                        Parallel.ForEach(faces, face =>
+                            {
+                                Image<Bgr, byte> faceImage = imageFrame.Copy(face);
+                                faceImage = ImageHandler.ResizeImage(faceImage);
+                                var grayFace = faceImage.Convert<Gray, Byte>();
+                                var result = Recognizer.RecognizeFace(grayFace);
+                                if (result > 0)
+                                {
+                                    string name = MainForm.names.ElementAt(result - 1);
+                                    Emgu.CV.CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
+                                        face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
+                                }
+                            });
+                        /*
+                        foreach(var face in faces)
                         {
                             Image<Bgr, byte> faceImage = imageFrame.Copy(face);
                             faceImage = ImageHandler.ResizeImage(faceImage);
@@ -90,6 +104,7 @@ namespace nightOwl
                             //imageFrame.Draw(face, new Bgr(Color.BurlyWood), 3); //the detected face(s) is highlighted here using a box that is drawn around it/them
 
                         }
+                        */
                     }
 
                     CurrentFrame = imageFrame.Mat;                  // convert Emgu.CV.IImage back to Mat

@@ -15,19 +15,19 @@ namespace nightOwl
 {
     public class Recognizer
     {
-        private static readonly int threshold = 10000;
+        private static readonly int threshold = 4000;
         // higher threshold - more chances to recognize a face (sometimes incorrectly);
 
         public static EigenFaceRecognizer NewEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, threshold);
             eigenRec.Write(Application.StartupPath + "/data/recognizer.yaml");
             return eigenRec;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, threshold);
             if (File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
             {
                 try

@@ -58,6 +58,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataStorage.cs" />
+    <Compile Include="PictureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PictureForm.Designer.cs">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImageHandler.cs" />
     <Compile Include="Recognizer.cs" />
     <Compile Include="VideoPlayerForm.cs">
@@ -86,6 +93,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="PictureForm.resx">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VideoPlayerForm.resx">
       <DependentUpon>VideoPlayerForm.cs</DependentUpon>
     </EmbeddedResource>
