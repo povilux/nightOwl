@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace nightOwl
 {
-    public struct Person
+    public class Person
     {
         public string Name { get; set; }
         public string BirthDate { get; set; }
+        public string MissingDate { get; set; }
         public string AdditionalInfo { get; set; }
 
-        public Person(string name, string birth, string add)
+        public Person(string name, string birth, string missingd, string add)
         {
             this.Name = name;
             this.BirthDate = birth;
+            this.MissingDate = missingd;
             this.AdditionalInfo = add;
         }
+
     }
 }

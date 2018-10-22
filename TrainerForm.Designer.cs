@@ -45,6 +45,8 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.label4 = new System.Windows.Forms.Label();
             this.additionalInfoField = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.missingDateField = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -88,7 +90,7 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(797, 299);
+            this.pictureBox2.Location = new System.Drawing.Point(685, 299);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(165, 158);
@@ -97,7 +99,7 @@
             // 
             // addPhotoButton
             // 
-            this.addPhotoButton.Location = new System.Drawing.Point(797, 485);
+            this.addPhotoButton.Location = new System.Drawing.Point(685, 485);
             this.addPhotoButton.Name = "addPhotoButton";
             this.addPhotoButton.Size = new System.Drawing.Size(165, 46);
             this.addPhotoButton.TabIndex = 14;
@@ -127,7 +129,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(982, 299);
+            this.label3.Location = new System.Drawing.Point(889, 299);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(112, 17);
             this.label3.TabIndex = 17;
@@ -135,14 +137,14 @@
             // 
             // nameField
             // 
-            this.nameField.Location = new System.Drawing.Point(1106, 299);
+            this.nameField.Location = new System.Drawing.Point(1031, 299);
             this.nameField.Name = "nameField";
             this.nameField.Size = new System.Drawing.Size(171, 22);
             this.nameField.TabIndex = 18;
             // 
             // updateInfoButton
             // 
-            this.updateInfoButton.Location = new System.Drawing.Point(797, 555);
+            this.updateInfoButton.Location = new System.Drawing.Point(685, 551);
             this.updateInfoButton.Name = "updateInfoButton";
             this.updateInfoButton.Size = new System.Drawing.Size(165, 47);
             this.updateInfoButton.TabIndex = 19;
@@ -162,7 +164,7 @@
             // 
             // createNewPersonDataButton
             // 
-            this.createNewPersonDataButton.Location = new System.Drawing.Point(797, 553);
+            this.createNewPersonDataButton.Location = new System.Drawing.Point(685, 551);
             this.createNewPersonDataButton.Name = "createNewPersonDataButton";
             this.createNewPersonDataButton.Size = new System.Drawing.Size(165, 51);
             this.createNewPersonDataButton.TabIndex = 21;
@@ -173,7 +175,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(982, 351);
+            this.label2.Location = new System.Drawing.Point(889, 351);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(94, 34);
             this.label2.TabIndex = 22;
@@ -181,7 +183,7 @@
             // 
             // birthDateField
             // 
-            this.birthDateField.Location = new System.Drawing.Point(1106, 351);
+            this.birthDateField.Location = new System.Drawing.Point(1031, 351);
             this.birthDateField.Name = "birthDateField";
             this.birthDateField.Size = new System.Drawing.Size(171, 22);
             this.birthDateField.TabIndex = 23;
@@ -193,7 +195,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(982, 413);
+            this.label4.Location = new System.Drawing.Point(889, 416);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(82, 34);
             this.label4.TabIndex = 24;
@@ -201,11 +203,27 @@
             // 
             // additionalInfoField
             // 
-            this.additionalInfoField.Location = new System.Drawing.Point(1106, 413);
+            this.additionalInfoField.Location = new System.Drawing.Point(1031, 416);
             this.additionalInfoField.Multiline = true;
             this.additionalInfoField.Name = "additionalInfoField";
             this.additionalInfoField.Size = new System.Drawing.Size(171, 79);
             this.additionalInfoField.TabIndex = 25;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(888, 533);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(95, 34);
+            this.label5.TabIndex = 26;
+            this.label5.Text = "Dingimo data:\r\n(yyyy-mm-dd)\r\n";
+            // 
+            // missingDateField
+            // 
+            this.missingDateField.Location = new System.Drawing.Point(1031, 533);
+            this.missingDateField.Name = "missingDateField";
+            this.missingDateField.Size = new System.Drawing.Size(171, 22);
+            this.missingDateField.TabIndex = 27;
             // 
             // TrainerForm
             // 
@@ -213,7 +231,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::nightOwl.Properties.Resources.bgWebCam;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1685, 838);
+            this.ClientSize = new System.Drawing.Size(1850, 838);
+            this.Controls.Add(this.missingDateField);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.additionalInfoField);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.birthDateField);
@@ -260,5 +280,7 @@
         private System.Windows.Forms.PrintDialog printDialog1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox additionalInfoField;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox missingDateField;
     }
 }

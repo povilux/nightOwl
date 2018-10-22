@@ -32,10 +32,10 @@ namespace nightOwl
             createNewPersonDataButton.Hide();
             updateInfoButton.Show();
 
-            var personsDataQuery = from name in MainForm.names select name;
+            var personsDataQuery = from p in MainForm.persons select new { p.Name };
 
-            foreach (var name in personsDataQuery)
-                listBox1.Items.Add(name);
+            foreach (var person in personsDataQuery)
+                listBox1.Items.Add(person.Name);
         }
 
  
@@ -50,6 +50,10 @@ namespace nightOwl
 
                 pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
                 nameField.Text = "";
+                missingDateField.Text = "";
+                birthDateField.Text = "";
+                additionalInfoField.Text = "";
+
                 nameField.Enabled = true;
 
                 addNewPersonButton.Text = "Select person from the list";
@@ -83,8 +87,13 @@ namespace nightOwl
             if (picSelected)
             {
                 string newName = nameField.Text;
+                string birthDate = birthDateField.Text;
+                string missingDate = missingDateField.Text;
+                string additionalInfo = additionalInfoField.Text;
 
-                if (!String.IsNullOrWhiteSpace(newName))
+                string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
+
+                if (!String.IsNullOrWhiteSpace(newName) && !String.IsNullOrWhiteSpace(birthDate) && !String.IsNullOrWhiteSpace(missingDate))
                 {
                     picSelected = false;
 
@@ -112,20 +121,24 @@ namespace nightOwl
                     if (viablePicsCount > 0)
                     {
                         listBox1.Items.Add(newName);
-                        MainForm.names.Add(newName);
-                        ImageHandler.WriteNamesToFile(MainForm.names);
+                        MainForm.persons.Add(new Person(newName, birthDate, missingDate, additionalInfo));
+                        ImageHandler.WriteDataToFile(MainForm.persons);
 
                         MessageBox.Show(String.Format("{0} was added to database. ({1}/{2} pics was suitable.)", newName, viablePicsCount, picFilenames.Count));
 
                         pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
                         nameField.Text = "";
+                        missingDateField.Text = "";
+                        birthDateField.Text = "";
+                        additionalInfoField.Text = "";
+                       
                         nameField.Enabled = true;
                     }
                     else
                         MessageBox.Show("No good photos for face recognition!");  
                 }
                 else
-                    MessageBox.Show("Please insert name and surname!");
+                    MessageBox.Show("Please insert data!");
 
             }
             else
@@ -134,8 +147,15 @@ namespace nightOwl
 
         private void updateInfoButton_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < MainForm.names.Count)
+            if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < MainForm.persons.Count)
             {
+                string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
+
+                var person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
+                person.BirthDate = birthDateField.Text;
+                person.MissingDate = missingDateField.Text;
+                person.AdditionalInfo = additionalInfoField.Text;
+
                 string updateMessage = "Information updated!";
 
                 if (picSelected)
@@ -155,7 +175,7 @@ namespace nightOwl
                         {
                             var face = ImageHandler.GetFaceFromImage(tempImage);
                             var grayFace = face.Convert<Gray, Byte>();
-                            ImageHandler.SaveGrayFacetoFile(listBox1.GetItemText(listBox1.SelectedItem), grayFace);
+                            ImageHandler.SaveGrayFacetoFile(chosenName, grayFace);
 
                             viablePicsCount++;
                         }
@@ -173,14 +193,20 @@ namespace nightOwl
         {
             int selectedItem = listBox1.SelectedIndex;
 
-            if (selectedItem >= 0 && selectedItem < MainForm.names.Count)
+            if (selectedItem >= 0 && selectedItem < MainForm.persons.Count)
             {
                 personSelected = true;
 
-                nameField.Text = listBox1.GetItemText(listBox1.SelectedItem);
+                nameField.Text = listBox1.GetItemText(listBox1.SelectedItem);              
                 string chosenName = nameField.Text;
-                chosenName = chosenName.Replace(" ", "_");
 
+                Person person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
+             
+                birthDateField.Text = person.BirthDate;
+                missingDateField.Text = person.MissingDate;
+                additionalInfoField.Text = person.AdditionalInfo;               
+            
+                chosenName = chosenName.Replace(" ", "_");
                 pictureBox2.Image = ImageHandler.LoadRepresentativePic(chosenName);
             }
         }
