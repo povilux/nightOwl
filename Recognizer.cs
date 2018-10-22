@@ -1,33 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.UI;
 using Emgu.CV.Face;
 using System.IO;
-using System.Drawing;
 using Emgu.CV.Structure;
 
 namespace nightOwl
 {
     public class Recognizer
     {
+      //  private static readonly int threshold = 10000;
+        // higher threshold - more chances to recognize a face (sometimes incorrectly);
+
         public static EigenFaceRecognizer NewEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, double.PositiveInfinity);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
             eigenRec.Write(Application.StartupPath + "/data/recognizer.yaml");
             return eigenRec;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, double.PositiveInfinity);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
             if (File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
             {
-                eigenRec.Read(Application.StartupPath + "/data/recognizer.yaml");
+                try
+                {
+                    eigenRec.Read(Application.StartupPath + "/data/recognizer.yaml");
+                }
+                catch
+                {
+
+                }
             } else
             {
                 eigenRec = NewEigen();
@@ -62,15 +66,19 @@ namespace nightOwl
         {
             image = ImageHandler.ResizeGrayImage(image);
             EigenFaceRecognizer eigen = OldEigen();
-
-            try
+            EigenFaceRecognizer.PredictionResult result = eigen.Predict(image);
+            
+            /*
+            if(result.Distance > threshold)
             {
-                var result = eigen.Predict(image);
                 return result.Label;
-            } catch(Emgu.CV.Util.CvException ex)
+            } else
             {
-                throw;
+                return 0;
             }
+            */        
+
+            return result.Label;
         }
 
     }

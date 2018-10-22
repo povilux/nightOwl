@@ -70,7 +70,8 @@ namespace nightOwl
             }
             catch (FileNotFoundException)
             {
-                throw;
+                MessageBox.Show("Šis asmuo neegzistuoja duomenų bazėje!");
+                return null;
             }
         }
 
@@ -89,9 +90,15 @@ namespace nightOwl
             List<string> names = new List<string>();
             using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
             {
+                string line;
+                string[] splitedLine;
+
                 while (sr.Peek() >= 0)
                 {
-                    names.Add(sr.ReadLine());
+                    line = sr.ReadLine();
+                    splitedLine = line.Split("|".ToCharArray(), StringSplitOptions.None);
+                    splitedLine[0] = splitedLine[0].Replace(" ", "_");
+                    names.Add(splitedLine[0]);
                 }
             }
             int labelNumber = 1;
@@ -119,9 +126,15 @@ namespace nightOwl
             List<string> names = new List<string>();
             using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
             {
+                string line;
+                string[] splitedLine;
+
                 while (sr.Peek() >= 0)
                 {
-                    names.Add(sr.ReadLine());
+                    line = sr.ReadLine();
+                    splitedLine = line.Split("|".ToCharArray(), StringSplitOptions.None);
+                    splitedLine[0] = splitedLine[0].Replace(" ", "_");
+                    names.Add(splitedLine[0]);
                 }
             }
             foreach(string name in names)
@@ -146,9 +159,15 @@ namespace nightOwl
             List<string> names = new List<string>();
             using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
             {
+                string line;
+                string[] splitedLine;
+
                 while (sr.Peek() >= 0)
                 {
-                    names.Add(sr.ReadLine());
+                    line = sr.ReadLine();
+                    splitedLine = line.Split("|".ToCharArray(), StringSplitOptions.None);
+                    splitedLine[0] = splitedLine[0].Replace(" ", "_");
+                    names.Add(splitedLine[0]);
                 }
             }
             foreach (string name in names)
@@ -181,15 +200,23 @@ namespace nightOwl
             }
         }
 
-        public static void WriteNamesToFile(List<string> names)
+        public static void WriteDataToFile(List<Person> persons)
         {
             if (File.Exists(Application.StartupPath + "/data/names.txt"))
             {
                 using (StreamWriter sw = new StreamWriter(Application.StartupPath + "/data/names.txt"))
                 {
-                    foreach(string name in names)
+                    var personsQuery =
+                        from p in persons
+                        select new { p.Name, p.BirthDate, p.MissingDate, p.CoordX, p.CoordY, p.LastSeenDate, p.AdditionalInfo };
+
+                    string line = "";
+
+                    foreach (var person in personsQuery)
                     {
-                        sw.WriteLine(name);
+                        line = "{0}|{1}|{2}|{3}|{4}|{5}|{6}";
+                        line = String.Format(line, person.Name, person.BirthDate, person.MissingDate, person.CoordX, person.CoordY, person.LastSeenDate, person.AdditionalInfo);
+                        sw.WriteLine(line);
                     }
                 }
             }
