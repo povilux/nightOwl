@@ -214,9 +214,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(888, 533);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(95, 34);
+            this.label5.Size = new System.Drawing.Size(140, 34);
             this.label5.TabIndex = 26;
-            this.label5.Text = "Dingimo data:\r\n(yyyy-mm-dd)\r\n";
+            this.label5.Text = "Missing date:\r\n(yyyy-MM-dd hh:mm)";
             // 
             // missingDateField
             // 
