@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageHandler.cs" />
+    <Compile Include="Person.cs" />
     <Compile Include="LastSeenMapForm.cs">
       <SubType>Form</SubType>
     </Compile>

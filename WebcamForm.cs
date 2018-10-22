@@ -40,8 +40,15 @@ namespace nightOwl
                         var result = Recognizer.RecognizeFace(grayFace);
                         if (result > 0)
                         {
-                            string name = MainForm.names.ElementAt(result - 1);
-                            Emgu.CV.CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
+                            List<String> names = new List<String>();
+                            var personsDataQuery = from p in MainForm.persons select new { p.Name };
+
+                            foreach (var person in personsDataQuery)
+                                names.Add(person.Name);
+
+                            string name = names.ElementAt(result - 1);
+
+                            CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
                                 face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
                         }
                         imageFrame.Draw(face, new Bgr(Color.BurlyWood), 3); //the detected face(s) is highlighted here using a box that is drawn around it/them
