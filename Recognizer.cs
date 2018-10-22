@@ -15,19 +15,29 @@ namespace nightOwl
 {
     public class Recognizer
     {
+      //  private static readonly int threshold = 10000;
+        // higher threshold - more chances to recognize a face (sometimes incorrectly);
+
         public static EigenFaceRecognizer NewEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, double.PositiveInfinity);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
             eigenRec.Write(Application.StartupPath + "/data/recognizer.yaml");
             return eigenRec;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, double.PositiveInfinity);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
             if (File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
             {
-                eigenRec.Read(Application.StartupPath + "/data/recognizer.yaml");
+                try
+                {
+                    eigenRec.Read(Application.StartupPath + "/data/recognizer.yaml");
+                }
+                catch
+                {
+
+                }
             } else
             {
                 eigenRec = NewEigen();
@@ -62,7 +72,18 @@ namespace nightOwl
         {
             image = ImageHandler.ResizeGrayImage(image);
             EigenFaceRecognizer eigen = OldEigen();
-            var result = eigen.Predict(image);
+            EigenFaceRecognizer.PredictionResult result = eigen.Predict(image);
+            
+            /*
+            if(result.Distance > threshold)
+            {
+                return result.Label;
+            } else
+            {
+                return 0;
+            }
+            */        
+
             return result.Label;
         }
 

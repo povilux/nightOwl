@@ -16,8 +16,7 @@ namespace nightOwl
 {
     public partial class MainForm : Form
     {
-        public static List<String> names = new List<String>();
-        //public static List<Byte[]> photos = new List<Byte[]>();
+        public static List<Person> persons = new List<Person>();
 
         public static MainForm self;
         public MainForm()
@@ -36,64 +35,23 @@ namespace nightOwl
                 newFile.Close();
             }
 
-            if (!File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
-            {
-                var newFile = File.Create(Application.StartupPath + "/data/recognizer.yaml");
-                newFile.Close();
-            }
+            string line;
+            string[] splitedLine;
 
-                // read names from file to List<String>
-                using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
+            using (StreamReader sr = new StreamReader(Application.StartupPath + "/data/names.txt"))
             {
-                while(sr.Peek() >= 0)
+                while ((line = sr.ReadLine()) != null)
                 {
-                    names.Add(sr.ReadLine());
+                    splitedLine = line.Split("|".ToCharArray(), StringSplitOptions.None);   
+                    persons.Add(new Person(splitedLine[0], splitedLine[1], splitedLine[2], splitedLine[3]));
                 }
             }
-
-            
-            // read binary data to List<Byte[]>
-            /*
-            foreach(string name in names)
-            {
-                if(File.Exists(Application.StartupPath + "/data/" + name + ".txt"))
-                    {
-                    
-                        using (FileStream fs = File.OpenRead(Application.StartupPath + "/data/" + name + ".txt"))
-                        {
-                            BinaryReader br = new BinaryReader(fs);
-                            br.Read();
-                        }
-                    
-                        File.ReadAllBytes(Application.StartupPath + "/data/" + name + ".txt");
-                    }
-                
-            }
-            */
-
+         
         }
 
         public static void closeMainForm()
         {
-            ImageHandler.WriteNamesToFile(names);
-            /*
-            foreach (string name in names)
-            {
-                using (StreamWriter sw = new StreamWriter(Application.StartupPath + "/data/names.txt"))
-                {
-                    sw.WriteLine(name);
-                }
-                if(photos.Count == names.Count)
-                {
-                    using (BinaryWriter br =
-                    new BinaryWriter(File.Open(Application.StartupPath + "/data/" + name + ".txt", FileMode.Create)))
-                    {
-                        int index = names.IndexOf("name");
-                        br.Write(photos.ElementAt(index));
-                    }
-                }
-            }
-            */
+            ImageHandler.WriteDataToFile(persons);
             MainForm.self.Close();
         }
 
