@@ -142,4 +142,31 @@
   <data name="Exiit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Exiit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Capone_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Capone_dark.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NewPerson" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NewPerson.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AddPersonInfoUpdatedMsg" xml:space="preserve">
+    <value>Information updated.</value>
+  </data>
+  <data name="AddPersonNoPhotosError" xml:space="preserve">
+    <value>Please add some photos!</value>
+  </data>
+  <data name="AddPersonNoSelectedPersonError" xml:space="preserve">
+    <value>Select person from the list.</value>
+  </data>
+  <data name="AddPersonNotValidInfoError" xml:space="preserve">
+    <value>Please insert correct information!</value>
+  </data>
+  <data name="AddPersonPhotosAddedMsg" xml:space="preserve">
+    <value>{0} was added to database. ({1}/{2} pics was suitable.)</value>
+  </data>
+  <data name="AddPersonPicturesUpdated" xml:space="preserve">
+    <value>{0}/{1} pics was added, {2}</value>
+  </data>
+  <data name="AddPersonsNoValidPersonsError" xml:space="preserve">
+    <value>No good photos for face recognition!</value>
+  </data>
 </root>

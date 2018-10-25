@@ -11,6 +11,7 @@ using System.IO;
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.Face;
+using nightOwl.Views;
 
 namespace nightOwl
 {
@@ -71,7 +72,7 @@ namespace nightOwl
 
         private void button2_Click(object sender, EventArgs e)
         {
-            TrainerForm secondForm = new TrainerForm();
+            AddPersonView secondForm = new AddPersonView();
             secondForm.Show();
             this.Hide();
         }

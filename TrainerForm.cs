@@ -27,15 +27,13 @@ namespace nightOwl
             InitializeComponent();
 
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox2.Image = Image.FromFile(Application.StartupPath + "/Capone_dark.bmp");
+            pictureBox2.Image = nightOwl.Properties.Resources.Capone_dark;
             nameField.Enabled = false;
 
             createNewPersonDataButton.Hide();
             updateInfoButton.Show();
 
-            var personsDataQuery = from p in MainForm.persons select new { p.Name };
-
-            foreach (var person in personsDataQuery)
+            foreach (var person in MainForm.persons)
                 listBox1.Items.Add(person.Name);
         }
 
@@ -49,7 +47,8 @@ namespace nightOwl
                 listBox1.Hide();
                 listBoxLabel.Hide();
 
-                pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
+                pictureBox2.Image = nightOwl.Properties.Resources.NewPerson;
+            
                 nameField.Text = "";
                 missingDateField.Text = "";
                 birthDateField.Text = "";
@@ -70,7 +69,7 @@ namespace nightOwl
                 listBox1.Show();
                 listBoxLabel.Show();
 
-                pictureBox2.Image = Image.FromFile(Application.StartupPath + "/Capone_dark.bmp");
+                pictureBox2.Image = nightOwl.Properties.Resources.Capone_dark;
                 nameField.Enabled = false;
 
                 addNewPersonButton.Text = "Add new person";
@@ -129,7 +128,7 @@ namespace nightOwl
 
                         MessageBox.Show(String.Format("{0} was added to database. ({1}/{2} pics was suitable.)", newName, viablePicsCount, picFilenames.Count));
 
-                        pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
+                        pictureBox2.Image = nightOwl.Properties.Resources.NewPerson;
                         nameField.Text = "";
                         missingDateField.Text = "";
                         birthDateField.Text = "";
