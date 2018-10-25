@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.UI;
 using Emgu.CV.Face;
 using System.IO;
-using System.Drawing;
 using Emgu.CV.Structure;
 
 namespace nightOwl

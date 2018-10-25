@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace nightOwl
 {
@@ -91,10 +92,10 @@ namespace nightOwl
                 string missingDate = missingDateField.Text;
                 string additionalInfo = additionalInfoField.Text;
 
-                string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
-
                 DateTime dt;
-               if (!String.IsNullOrWhiteSpace(newName) && DateTime.TryParseExact(birthDate, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) &&
+                Regex regx = new Regex(@"^[\p{L}\p{M}' \.\-]+$");
+              
+               if (regx.IsMatch(newName) && DateTime.TryParseExact(birthDate, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) &&
                        DateTime.TryParseExact(missingDate, "yyyy-MM-dd hh:mm", new CultureInfo("lt-LT"), DateTimeStyles.AssumeLocal, out dt))
                 {
                     picSelected = false;
