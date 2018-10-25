@@ -24,19 +24,21 @@ namespace nightOwl.Presenters
         {
             _view = view;
             //_model = new List<PersonModel>();
-
             Initialize();
         }
 
         private void Initialize()
         {
-            this._view.BackButtonClicked += new EventHandler(OnBackButtonClicked);
+            _view.BackButtonClicked += new EventHandler(OnBackButtonClicked);
             this._view.CloseButtonClicked += new EventHandler(OnCloseButtonClicked);
             this._view.CreateNewPersonDataButtonClicked += new EventHandler(OnCreateNewPersonClicked);
             this._view.PersonSelectedFromList += new EventHandler(OnPersonSelected);
             this._view.NewPersonCreatingClicked += new EventHandler(OnNewPersonCreatingClicked);
             this._view.UpdatePersonCliked += new EventHandler(OnUpdatePersonCliked);
             this._view.SelectPersonButtonClicked += new EventHandler(OnSelectPersonButtonClicked);
+
+            foreach(var person in MainForm.persons)
+                _view.AddPersonToList(person.Name);
         }
 
         public void OnBackButtonClicked(object sender, EventArgs e)
@@ -72,12 +74,12 @@ namespace nightOwl.Presenters
         {
             _view.PersonsListEnabled = true;
             _view.PersonsListTitle = true;
-            _view.PersonImage =Properties.Resources.Capone_dark;
+            _view.PersonImage = Properties.Resources.Capone_dark;
             _view.NameSurnameEnabled = false;
 
             _view.AddNewPersonBtnEnabled = true;
             _view.SelectPersonBtnEnabled = false;
-
+ 
             _view.UpdateInfoBtnEnabled = true;
             _view.CreateNewPersonDataBtnEnabled = false;
         }

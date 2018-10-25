@@ -13,55 +13,23 @@ namespace nightOwl.Views
 {
     public partial class AddPersonView : Form, IAddPersonView
     {
-      
         private readonly AddPersonPresenter _presenter;
 
         public AddPersonView()
         {
             InitializeComponent();
             _presenter = new AddPersonPresenter(this);
-        
-            foreach (var person in MainForm.persons)
-                PersonsList.Items.Add(person.Name);
         }
 
-        public void ShowMessage(string message)
-        {
-            MessageBox.Show(message, @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        public void ShowMessage(string message) { MessageBox.Show(message, @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information); }
 
-        private void BackButton_Click(object sender, EventArgs e)
-        {
-            this.BackButtonClicked(sender, e);
-        }
-        private void CloseButton_Click(object sender, EventArgs e)
-        {
-            this.CloseButtonClicked(sender, e);
-        }
-
-        private void CreateNewPersonDataButton_Click(object sender, EventArgs e)
-        {
-            this.CreateNewPersonDataButtonClicked(sender, e);
-        }
-
-        private void PersonsList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.PersonSelectedFromList(sender, e);
-        }
-
-        private void AddNewPersonButton_Click(object sender, EventArgs e)
-        {
-            this.NewPersonCreatingClicked(sender, e);
-        }
-        private void SelectPersonButton_Click(object sender, EventArgs e)
-        {
-            this.SelectPersonButtonClicked(sender, e);
-        }
-
-        private void UpdateInfoButton_Click(object sender, EventArgs e)
-        {
-            this.UpdatePersonCliked(sender, e);
-        }
+        private void BackButton_Click(object sender, EventArgs e) { BackButtonClicked(sender, e); }
+        private void CloseButton_Click(object sender, EventArgs e) { CloseButtonClicked(sender, e); }
+        private void CreateNewPersonDataButton_Click(object sender, EventArgs e) { CreateNewPersonDataButtonClicked(sender, e); }
+        private void PersonsList_SelectedIndexChanged(object sender, EventArgs e) { PersonSelectedFromList(sender, e); }
+        private void AddNewPersonButton_Click(object sender, EventArgs e) { NewPersonCreatingClicked(sender, e); }
+        private void SelectPersonButton_Click(object sender, EventArgs e) { SelectPersonButtonClicked(sender, e); }
+        private void UpdateInfoButton_Click(object sender, EventArgs e) { UpdatePersonCliked(sender, e); }
 
         public void AddPersonToList(string item) { PersonsList.Items.Add(item); }
         public string NameSurname { get { return NameField.Text; } set { NameField.Text = value; } }
