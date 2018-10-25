@@ -111,6 +111,7 @@ namespace nightOwl.Presenters
 
                 var person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
 
+                // TO DO: make a date time picker for dates
                 DateTime dt;
                 if (!DateTime.TryParseExact(_view.BirthDate, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) ||
                     !DateTime.TryParseExact(_view.MissingDate, "yyyy-MM-dd hh:mm", new CultureInfo("lt-LT"), DateTimeStyles.AssumeLocal, out dt))
@@ -163,6 +164,7 @@ namespace nightOwl.Presenters
 
             if (picSelected)
             {
+                // TO DO: make a date time picker for dates
                 DateTime dt;
                 if (!String.IsNullOrWhiteSpace(_view.NameSurname) && DateTime.TryParseExact(_view.BirthDate, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) &&
                         DateTime.TryParseExact(_view.MissingDate, "yyyy-MM-dd hh:mm", new CultureInfo("lt-LT"), DateTimeStyles.AssumeLocal, out dt))
@@ -192,7 +194,7 @@ namespace nightOwl.Presenters
 
                     if (viablePicsCount > 0)
                     {
-                        //listBox1.Items.Add(_view.NameSurname);
+                        _view.AddPersonToList(_view.NameSurname);
                         MainForm.persons.Add(new Person(_view.NameSurname, _view.BirthDate, _view.MissingDate, _view.AdditionalInfo));
                         ImageHandler.WriteDataToFile(MainForm.persons);
 

@@ -63,6 +63,7 @@ namespace nightOwl.Views
             this.UpdatePersonCliked(sender, e);
         }
 
+        public void AddPersonToList(string item) { PersonsList.Items.Add(item); }
         public string NameSurname { get { return NameField.Text; } set { NameField.Text = value; } }
         public string BirthDate { get { return BirthDateField.Text; } set { BirthDateField.Text = value; } }
         public string MissingDate { get { return MissingDateField.Text; } set { MissingDateField.Text = value; } }
