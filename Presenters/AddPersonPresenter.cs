@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using nightOwl.Logic;
+using nightOwl.Models;
 using nightOwl.Views;
 
 namespace nightOwl.Presenters
@@ -18,12 +21,12 @@ namespace nightOwl.Presenters
         List<string> picFilenames;
 
         private readonly IAddPersonView _view;
-        //  private readonly List<PersonModel> _models;
+        private readonly IPersonModel _model;
 
-        public AddPersonPresenter(IAddPersonView view)
+        public AddPersonPresenter(IAddPersonView view, IPersonModel model)
         {
             _view = view;
-            //_model = new List<PersonModel>();
+            _model = model;
             Initialize();
         }
 
@@ -197,8 +200,10 @@ namespace nightOwl.Presenters
                     if (viablePicsCount > 0)
                     {
                         _view.AddPersonToList(_view.NameSurname);
-                        MainForm.persons.Add(new Person(_view.NameSurname, _view.BirthDate, _view.MissingDate, _view.AdditionalInfo));
-                        ImageHandler.WriteDataToFile(MainForm.persons);
+
+                        // to do : fix persons list..
+                        /*MainForm.persons.Add(new PersonModel(_view.NameSurname, _view.BirthDate, _view.MissingDate, _view.AdditionalInfo, PersonsPhotos););*/
+                      //  ImageHandler.WriteDataToFile(MainForm.persons);
 
                         _view.ShowMessage(String.Format(Properties.Resources.AddPersonPhotosAddedMsg, _view.NameSurname, viablePicsCount, picFilenames.Count));
 

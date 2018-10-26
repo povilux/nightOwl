@@ -1,4 +1,5 @@
-﻿using nightOwl.Presenters;
+﻿using nightOwl.Models;
+using nightOwl.Presenters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,8 @@ namespace nightOwl.Views
         public AddPersonView()
         {
             InitializeComponent();
-            _presenter = new AddPersonPresenter(this);
+            IPersonModel model = new PersonModel();
+            _presenter = new AddPersonPresenter(this, model);
         }
 
         public void ShowMessage(string message) { MessageBox.Show(message, @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information); }
