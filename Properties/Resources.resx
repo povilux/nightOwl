@@ -169,4 +169,10 @@
   <data name="AddPersonsNoValidPersonsError" xml:space="preserve">
     <value>No good photos for face recognition!</value>
   </data>
+  <data name="BrowserTitle" xml:space="preserve">
+    <value>Open picture location</value>
+  </data>
+  <data name="AddPersonNotValidDatesError" xml:space="preserve">
+    <value>The missing date cannot be earlier than birth date!</value>
+  </data>
 </root>

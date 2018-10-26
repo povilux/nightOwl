@@ -1,4 +1,6 @@
-﻿namespace nightOwl.Views
+﻿using System.Windows.Forms;
+
+namespace nightOwl.Views
 {
     partial class AddPersonView
     {
@@ -41,12 +43,12 @@
             this.AddNewPersonButton = new System.Windows.Forms.Button();
             this.CreateNewPersonDataButton = new System.Windows.Forms.Button();
             this.BirthDateLabel = new System.Windows.Forms.Label();
-            this.BirthDateField = new System.Windows.Forms.TextBox();
             this.InfoLabel = new System.Windows.Forms.Label();
             this.AdditionalInfoField = new System.Windows.Forms.TextBox();
             this.MissingDateLabel = new System.Windows.Forms.Label();
-            this.MissingDateField = new System.Windows.Forms.TextBox();
             this.SelectPersonButton = new System.Windows.Forms.Button();
+            this.BirthDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.MissingDatePicker = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.PersonImageBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -107,6 +109,7 @@
             this.AddPhotoButton.TabIndex = 14;
             this.AddPhotoButton.Text = "Add photo";
             this.AddPhotoButton.UseVisualStyleBackColor = true;
+            this.AddPhotoButton.Click += new System.EventHandler(this.AddPhotoButton_Click);
             // 
             // TitleLabel
             // 
@@ -180,16 +183,9 @@
             this.BirthDateLabel.AutoSize = true;
             this.BirthDateLabel.Location = new System.Drawing.Point(889, 351);
             this.BirthDateLabel.Name = "BirthDateLabel";
-            this.BirthDateLabel.Size = new System.Drawing.Size(94, 34);
+            this.BirthDateLabel.Size = new System.Drawing.Size(77, 17);
             this.BirthDateLabel.TabIndex = 22;
-            this.BirthDateLabel.Text = "Birth date :\r\n(yyyy-mm-dd)";
-            // 
-            // BirthDateField
-            // 
-            this.BirthDateField.Location = new System.Drawing.Point(1031, 351);
-            this.BirthDateField.Name = "BirthDateField";
-            this.BirthDateField.Size = new System.Drawing.Size(171, 22);
-            this.BirthDateField.TabIndex = 23;
+            this.BirthDateLabel.Text = "Birth date :\r\n";
             // 
             // InfoLabel
             // 
@@ -213,16 +209,9 @@
             this.MissingDateLabel.AutoSize = true;
             this.MissingDateLabel.Location = new System.Drawing.Point(888, 533);
             this.MissingDateLabel.Name = "MissingDateLabel";
-            this.MissingDateLabel.Size = new System.Drawing.Size(140, 34);
+            this.MissingDateLabel.Size = new System.Drawing.Size(91, 17);
             this.MissingDateLabel.TabIndex = 26;
-            this.MissingDateLabel.Text = "Missing date:\r\n(yyyy-MM-dd hh:mm)";
-            // 
-            // MissingDateField
-            // 
-            this.MissingDateField.Location = new System.Drawing.Point(1031, 533);
-            this.MissingDateField.Name = "MissingDateField";
-            this.MissingDateField.Size = new System.Drawing.Size(171, 22);
-            this.MissingDateField.TabIndex = 27;
+            this.MissingDateLabel.Text = "Missing date:\r\n";
             // 
             // SelectPersonButton
             // 
@@ -235,6 +224,24 @@
             this.SelectPersonButton.Visible = false;
             this.SelectPersonButton.Click += new System.EventHandler(this.SelectPersonButton_Click);
             // 
+            // BirthDatePicker
+            // 
+            this.BirthDatePicker.CustomFormat = "yyyy MM dd";
+            this.BirthDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.BirthDatePicker.Location = new System.Drawing.Point(1031, 351);
+            this.BirthDatePicker.Name = "BirthDatePicker";
+            this.BirthDatePicker.Size = new System.Drawing.Size(200, 22);
+            this.BirthDatePicker.TabIndex = 29;
+            // 
+            // MissingDatePicker
+            // 
+            this.MissingDatePicker.CustomFormat = "yyyy MM dd hh:mm";
+            this.MissingDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.MissingDatePicker.Location = new System.Drawing.Point(1031, 533);
+            this.MissingDatePicker.Name = "MissingDatePicker";
+            this.MissingDatePicker.Size = new System.Drawing.Size(200, 22);
+            this.MissingDatePicker.TabIndex = 30;
+            // 
             // AddPersonView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -242,12 +249,12 @@
             this.BackgroundImage = global::nightOwl.Properties.Resources.bgWebCam;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1850, 838);
+            this.Controls.Add(this.MissingDatePicker);
+            this.Controls.Add(this.BirthDatePicker);
             this.Controls.Add(this.SelectPersonButton);
-            this.Controls.Add(this.MissingDateField);
             this.Controls.Add(this.MissingDateLabel);
             this.Controls.Add(this.AdditionalInfoField);
             this.Controls.Add(this.InfoLabel);
-            this.Controls.Add(this.BirthDateField);
             this.Controls.Add(this.BirthDateLabel);
             this.Controls.Add(this.CreateNewPersonDataButton);
             this.Controls.Add(this.AddNewPersonButton);
@@ -286,11 +293,11 @@
         private System.Windows.Forms.Button AddNewPersonButton;
         private System.Windows.Forms.Button CreateNewPersonDataButton;
         private System.Windows.Forms.Label BirthDateLabel;
-        private System.Windows.Forms.TextBox BirthDateField;
         private System.Windows.Forms.Label InfoLabel;
         private System.Windows.Forms.TextBox AdditionalInfoField;
         private System.Windows.Forms.Label MissingDateLabel;
-        private System.Windows.Forms.TextBox MissingDateField;
         private System.Windows.Forms.Button SelectPersonButton;
+        private System.Windows.Forms.DateTimePicker BirthDatePicker;
+        private System.Windows.Forms.DateTimePicker MissingDatePicker;
     }
 }

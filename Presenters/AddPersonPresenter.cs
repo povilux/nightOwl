@@ -10,18 +10,28 @@ using Emgu.CV.Structure;
 using nightOwl.Logic;
 using nightOwl.Models;
 using nightOwl.Views;
+using System.Configuration;
 
 namespace nightOwl.Presenters
 {
     public class AddPersonPresenter
     {
         bool picSelected = false;
-        bool personSelected = true;
         Image<Bgr, byte> tempImage;
         List<string> picFilenames;
 
         private readonly IAddPersonView _view;
         private readonly IPersonModel _model;
+
+        /* modelis turetu gauti Person duomenis is view per presenteri, padaryti veiksmus su Person ir grazinti atgal presenteriui
+         pvz: keiciami Person duomenis
+         View persiuncia presenteriui Person duomenis: name, birth date, missing date.
+         Presenteris siuncia duomenis modeliui ir igyvendina metoda "Update".
+         Modelis konkreciam Person atnaujina informacija ir grazina presenteriui kad pavyko/nepavyko tai padaryti.
+         Presenteris tai parodo i view
+         */
+
+            // ATEICIAI: datos kol kas saugomos kaip string (nors is view gaunamos kaip datetime). Galbut galima saugoti kaip datetime
 
         public AddPersonPresenter(IAddPersonView view, IPersonModel model)
         {
@@ -33,43 +43,62 @@ namespace nightOwl.Presenters
         private void Initialize()
         {
             _view.BackButtonClicked += new EventHandler(OnBackButtonClicked);
-            this._view.CloseButtonClicked += new EventHandler(OnCloseButtonClicked);
-            this._view.CreateNewPersonDataButtonClicked += new EventHandler(OnCreateNewPersonClicked);
-            this._view.PersonSelectedFromList += new EventHandler(OnPersonSelected);
-            this._view.NewPersonCreatingClicked += new EventHandler(OnNewPersonCreatingClicked);
-            this._view.UpdatePersonCliked += new EventHandler(OnUpdatePersonCliked);
-            this._view.SelectPersonButtonClicked += new EventHandler(OnSelectPersonButtonClicked);
+            _view.CloseButtonClicked += new EventHandler(OnCloseButtonClicked);
+            _view.CreateNewPersonDataButtonClicked += new EventHandler(OnCreateNewPersonClicked);
+            _view.PersonSelectedFromList += new EventHandler(OnPersonSelected);
+            _view.NewPersonCreatingClicked += new EventHandler(OnNewPersonCreatingClicked);
+            _view.UpdatePersonCliked += new EventHandler(OnUpdatePersonCliked);
+            _view.SelectPersonButtonClicked += new EventHandler(OnSelectPersonButtonClicked);
+            _view.AddPhotoButtonClicked += new EventHandler(OnAddPhotoButtonCicked);
 
-            foreach(var person in MainForm.persons)
+            foreach(var person in FirstPageView.persons)
                 _view.AddPersonToList(person.Name);
         }
 
         public void OnBackButtonClicked(object sender, EventArgs e)
         {
             _view.Close();
+            FirstPageView.self.Show();
         }
         public void OnCloseButtonClicked(object sender, EventArgs e)
         {
-            _view.Close();
+            Application.Exit();
         }
 
         public void OnPersonSelected(object sender, EventArgs e)
         {
-            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < MainForm.persons.Count)
+            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < FirstPageView.persons.Count)
             {
-                personSelected = true;
                 _view.NameSurname = _view.SelectedPersonName;
 
-                Person person = MainForm.persons.Where(p => String.Equals(p.Name, _view.NameSurname)).First();
+                _model.FindPerson(_view.NameSurname);
+                _view.BirthDate = DateTime.Parse(_model.CurrentPerson.BirthDate);
+                _view.MissingDate = DateTime.Parse(_model.CurrentPerson.MissingDate);
+                _view.AdditionalInfo = _model.CurrentPerson.AdditionalInfo;
 
-                _view.BirthDate = person.BirthDate;
-                _view.MissingDate = person.MissingDate;
-                _view.AdditionalInfo = person.AdditionalInfo;
-
+                // to do: something...
                 string chosenName = _view.NameSurname;
                 chosenName = chosenName.Replace(" ", "_");
-
                 _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
+            }
+        }
+
+        public void OnAddPhotoButtonCicked(object sender, EventArgs e)
+        {
+            OpenFileDialog browser = new OpenFileDialog
+            {
+                Filter = ConfigurationManager.AppSettings["BrowserFilterPhoto"],
+                Title = Properties.Resources.BrowserTitle,
+                Multiselect = true
+            };
+
+            if (browser.ShowDialog() == DialogResult.OK)
+            {
+                // to do: do something about this... separate to another class
+                picSelected = true;
+                _view.PersonImage = new Bitmap(browser.FileNames[0]);
+                tempImage = new Image<Bgr, byte>(browser.FileNames[0]);
+                picFilenames = browser.FileNames.ToList();
             }
         }
 
@@ -97,8 +126,8 @@ namespace nightOwl.Presenters
             _view.NameSurname = "";
             _view.NameSurnameEnabled = true;
 
-            _view.MissingDate = "";
-            _view.BirthDate = "";
+            _view.MissingDate = new DateTime(); 
+            _view.BirthDate = new DateTime();
             _view.AdditionalInfo = "";
 
             _view.AddNewPersonBtnEnabled = false;
@@ -110,45 +139,32 @@ namespace nightOwl.Presenters
 
         public void OnUpdatePersonCliked(object sender, EventArgs e)
         {
-            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < MainForm.persons.Count)
+            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < FirstPageView.persons.Count)
             {
-                string chosenName = _view.SelectedPersonName;
-
-                var person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
-
-                // TO DO: make a date time picker for dates
-                DateTime dt;
-                if (!DateTime.TryParseExact(_view.BirthDate, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) ||
-                    !DateTime.TryParseExact(_view.MissingDate, "yyyy-MM-dd hh:mm", new CultureInfo("lt-LT"), DateTimeStyles.AssumeLocal, out dt))
-                {
-                    _view.ShowMessage("The missing or birth date is not correct!");
-                }
-                else
-                {
-                    person.BirthDate = _view.BirthDate;
-                    person.MissingDate = _view.MissingDate;
-                    person.AdditionalInfo = _view.AdditionalInfo;
-
+                if(DateTime.Compare(_view.BirthDate, _view.MissingDate) <= 0)
+                {              
+                    _model.FindPerson(_view.SelectedPersonName);
+                    _model.CurrentPerson.BirthDate = _view.BirthDate.ToString();
+                    _model.CurrentPerson.MissingDate = _view.MissingDate.ToString();
+                    _model.CurrentPerson.AdditionalInfo = _view.AdditionalInfo;
+ 
                     string updateMessage = Properties.Resources.AddPersonInfoUpdatedMsg;
 
+                    // to do: class with method 'checkphotosvalidation'
                     if (picSelected)
                     {
                         int viablePicsCount = 0;
-                        int notViablePicsCount = 0;
-
                         picSelected = false;
 
                         foreach (string filename in picFilenames)
                         {
                             tempImage = new Image<Bgr, byte>(filename);
 
-                            if (ImageHandler.GetFaceFromImage(tempImage) == null)
-                                notViablePicsCount++;
-                            else
+                            if (ImageHandler.GetFaceFromImage(tempImage) != null)
                             {
                                 var face = ImageHandler.GetFaceFromImage(tempImage);
                                 var grayFace = face.Convert<Gray, Byte>();
-                                ImageHandler.SaveGrayFacetoFile(chosenName, grayFace);
+                                ImageHandler.SaveGrayFacetoFile(_view.SelectedPersonName, grayFace);
 
                                 viablePicsCount++;
                             }
@@ -157,6 +173,8 @@ namespace nightOwl.Presenters
                     }
                     _view.ShowMessage(updateMessage);
                 }
+                else
+                    _view.ShowMessage(Properties.Resources.AddPersonNotValidDatesError);
             }
             else
                 _view.ShowMessage(Properties.Resources.AddPersonNoSelectedPersonError);
@@ -164,31 +182,26 @@ namespace nightOwl.Presenters
 
         public void OnCreateNewPersonClicked(object sender, EventArgs e)
         {
-            int viablePicsCount = 0;
-            int notViablePicsCount = 0;
-
             if (picSelected)
             {
-                // TO DO: make a date time picker for dates
-                DateTime dt;
-                if (!String.IsNullOrWhiteSpace(_view.NameSurname) && DateTime.TryParseExact(_view.BirthDate, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) &&
-                        DateTime.TryParseExact(_view.MissingDate, "yyyy-MM-dd hh:mm", new CultureInfo("lt-LT"), DateTimeStyles.AssumeLocal, out dt))
+                if (!String.IsNullOrWhiteSpace(_view.NameSurname) && DateTime.Compare(_view.BirthDate, _view.MissingDate) <= 0)
                 {
                     picSelected = false;
 
+                    // to do: make another class and method for photos validation
                     string directory = _view.NameSurname;
                     directory = directory.Replace(" ", "_");
 
                     if (!File.Exists(Application.StartupPath + "/data/" + directory + "/rep.bmp"))
                         ImageHandler.SaveRepresentativePic(tempImage.ToBitmap(), directory);
 
+                    int viablePicsCount = 0;
+
                     foreach (string filename in picFilenames)
                     {
                         tempImage = new Image<Bgr, byte>(filename);
 
-                        if (ImageHandler.GetFaceFromImage(tempImage) == null)
-                            notViablePicsCount++;
-                        else
+                        if (ImageHandler.GetFaceFromImage(tempImage) != null)
                         {
                             var newFace = ImageHandler.GetFaceFromImage(tempImage);
                             var newGrayFace = newFace.Convert<Gray, Byte>();
@@ -196,24 +209,22 @@ namespace nightOwl.Presenters
                             viablePicsCount++;
                         }
                     }
-
                     if (viablePicsCount > 0)
                     {
                         _view.AddPersonToList(_view.NameSurname);
-
-                        // to do : fix persons list..
-                        /*MainForm.persons.Add(new PersonModel(_view.NameSurname, _view.BirthDate, _view.MissingDate, _view.AdditionalInfo, PersonsPhotos););*/
-                      //  ImageHandler.WriteDataToFile(MainForm.persons);
+                        _model.Add(_view.NameSurname, _view.BirthDate.ToString(), _view.MissingDate.ToString(), _view.AdditionalInfo);
+                           
+                        // to do: load/save data doing on start/exit program
+                         ImageHandler.WriteDataToFile(FirstPageView.persons);
 
                         _view.ShowMessage(String.Format(Properties.Resources.AddPersonPhotosAddedMsg, _view.NameSurname, viablePicsCount, picFilenames.Count));
-
                         _view.PersonImage = Properties.Resources.NewPerson;
 
                         _view.NameSurname = "";
                         _view.NameSurnameEnabled = true;
 
-                        _view.MissingDate = "";
-                        _view.BirthDate = "";
+                        _view.MissingDate = new DateTime();
+                        _view.BirthDate = new DateTime();
                         _view.AdditionalInfo = "";
                     }
                     else
@@ -226,31 +237,5 @@ namespace nightOwl.Presenters
             else
                 _view.ShowMessage(Properties.Resources.AddPersonNoPhotosError);
         }
-
-        /* public void OnSaveButtonClicked()
-         {
-             var person = new PersonModel(_view.InputFirstName, _view.InputLastName, GetGender());
-
-             _view.AddButtonEnabled = false;
-             _view.InputFirstName = null;
-             _view.InputLastName = null;
-
-             _models.Add(person);
-
-             _view.ShowMessage("Successfully added person '" + person.FirstName + @"'.");
-
-             RefreshTable();
-         }
-         public void OnTextChanged()
-         {
-             if (_view.InputFirstName == string.Empty || _view.InputLastName == string.Empty)
-             {
-                 _view.AddButtonEnabled = false;
-             }
-             else
-             {
-                 _view.AddButtonEnabled = true;
-             }
-         }*/
     }
 }

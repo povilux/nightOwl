@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.Util;
 using Emgu.CV.Structure;
+using nightOwl.Views;
 
 namespace nightOwl
 {
@@ -41,7 +42,7 @@ namespace nightOwl
                         if (result > 0)
                         {
                             List<String> names = new List<String>();
-                            var personsDataQuery = from p in MainForm.persons select new { p.Name };
+                            var personsDataQuery = from p in FirstPageView.persons select new { p.Name };
 
                             foreach (var person in personsDataQuery)
                                 names.Add(person.Name);
@@ -95,12 +96,12 @@ namespace nightOwl
         private void button1_Click_1(object sender, EventArgs e)
         {
             Close();
-            MainForm.self.Show();
+            FirstPageView.self.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MainForm.closeMainForm();
+            FirstPageView.CloseMainForm();
         }
     }
 }

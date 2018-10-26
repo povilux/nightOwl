@@ -88,6 +88,15 @@ namespace nightOwl.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The missing date cannot be earlier than birth date!.
+        /// </summary>
+        internal static string AddPersonNotValidDatesError {
+            get {
+                return ResourceManager.GetString("AddPersonNotValidDatesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please insert correct information!.
         /// </summary>
         internal static string AddPersonNotValidInfoError {
@@ -190,6 +199,15 @@ namespace nightOwl.Properties {
             get {
                 object obj = ResourceManager.GetObject("bgWebCamForm", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open picture location.
+        /// </summary>
+        internal static string BrowserTitle {
+            get {
+                return ResourceManager.GetString("BrowserTitle", resourceCulture);
             }
         }
         

@@ -16,10 +16,9 @@ namespace nightOwl.Views
     {
         private readonly AddPersonPresenter _presenter;
 
-        public AddPersonView()
+        public AddPersonView(IPersonModel model)
         {
             InitializeComponent();
-            IPersonModel model = new PersonModel();
             _presenter = new AddPersonPresenter(this, model);
         }
 
@@ -35,8 +34,8 @@ namespace nightOwl.Views
 
         public void AddPersonToList(string item) { PersonsList.Items.Add(item); }
         public string NameSurname { get { return NameField.Text; } set { NameField.Text = value; } }
-        public string BirthDate { get { return BirthDateField.Text; } set { BirthDateField.Text = value; } }
-        public string MissingDate { get { return MissingDateField.Text; } set { MissingDateField.Text = value; } }
+        public DateTime BirthDate { get { return BirthDatePicker.Value; } set { BirthDatePicker.Value = value; } }
+        public DateTime MissingDate { get { return MissingDatePicker.Value; } set { MissingDatePicker.Value = value; } }
         public string AdditionalInfo { get { return AdditionalInfoField.Text; } set { AdditionalInfoField.Text = value; } }
         public string SelectedPersonName { get { return PersonsList.SelectedItem.ToString(); } set { } }
         public int SelectedPersonIndex { get { return PersonsList.SelectedIndex; } set { } }
@@ -56,5 +55,11 @@ namespace nightOwl.Views
         public event EventHandler NewPersonCreatingClicked;
         public event EventHandler UpdatePersonCliked;
         public event EventHandler SelectPersonButtonClicked;
+        public event EventHandler AddPhotoButtonClicked;
+
+        private void AddPhotoButton_Click(object sender, EventArgs e)
+        {
+            AddPhotoButtonClicked(sender, e);
+        }
     }
 }

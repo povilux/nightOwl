@@ -10,8 +10,8 @@ namespace nightOwl.Views
         void Close();
 
         string NameSurname { get; set; }
-        string BirthDate { get ; set;  }
-        string MissingDate { get; set; }
+        DateTime BirthDate { get ; set;  }
+        DateTime MissingDate { get; set; }
         string AdditionalInfo { get; set; }
         string SelectedPersonName { get; set; }
         bool NameSurnameEnabled { get; set; }
@@ -31,5 +31,6 @@ namespace nightOwl.Views
         event EventHandler NewPersonCreatingClicked;
         event EventHandler UpdatePersonCliked;
         event EventHandler SelectPersonButtonClicked;
+        event EventHandler AddPhotoButtonClicked;
     }
 }
