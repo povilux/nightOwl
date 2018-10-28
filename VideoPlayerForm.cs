@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using nightOwl.Views;
 
 namespace nightOwl
 {
@@ -85,7 +86,7 @@ namespace nightOwl
                             if(result != 0)
                             {
                                 List<String> names = new List<String>();
-                                var personsDataQuery = from p in MainForm.persons select new { p.Name };
+                                var personsDataQuery = from p in FirstPageView.persons select new { p.Name };
 
                                 foreach (var person in personsDataQuery)
                                     names.Add(person.Name);
@@ -121,13 +122,13 @@ namespace nightOwl
         {
             IsPlaying = false;
             Close();
-            MainForm.self.Show();
+            FirstPageView.self.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             IsPlaying = false;
-            MainForm.closeMainForm();
+            FirstPageView.CloseMainForm();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

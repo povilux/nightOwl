@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using nightOwl.Views;
 
 namespace nightOwl
 {
@@ -28,15 +29,13 @@ namespace nightOwl
             InitializeComponent();
 
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox2.Image = Image.FromFile(Application.StartupPath + "/Capone_dark.bmp");
+            pictureBox2.Image = nightOwl.Properties.Resources.Capone_dark;
             nameField.Enabled = false;
 
             createNewPersonDataButton.Hide();
             updateInfoButton.Show();
 
-            var personsDataQuery = from p in MainForm.persons select new { p.Name };
-
-            foreach (var person in personsDataQuery)
+            foreach (var person in FirstPageView.persons)
                 listBox1.Items.Add(person.Name);
         }
 
@@ -50,7 +49,8 @@ namespace nightOwl
                 listBox1.Hide();
                 listBoxLabel.Hide();
 
-                pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
+                pictureBox2.Image = nightOwl.Properties.Resources.NewPerson;
+            
                 nameField.Text = "";
                 missingDateField.Text = "";
                 birthDateField.Text = "";
@@ -71,7 +71,7 @@ namespace nightOwl
                 listBox1.Show();
                 listBoxLabel.Show();
 
-                pictureBox2.Image = Image.FromFile(Application.StartupPath + "/Capone_dark.bmp");
+                pictureBox2.Image = nightOwl.Properties.Resources.Capone_dark;
                 nameField.Enabled = false;
 
                 addNewPersonButton.Text = "Add new person";
@@ -125,12 +125,12 @@ namespace nightOwl
                     if (viablePicsCount > 0)
                     {
                         listBox1.Items.Add(newName);
-                        MainForm.persons.Add(new Person(newName, birthDate, missingDate, additionalInfo));
-                        ImageHandler.WriteDataToFile(MainForm.persons);
+                        FirstPageView.persons.Add(new Person(newName, birthDate, missingDate, additionalInfo));
+                        ImageHandler.WriteDataToFile(FirstPageView.persons);
 
                         MessageBox.Show(String.Format("{0} was added to database. ({1}/{2} pics was suitable.)", newName, viablePicsCount, picFilenames.Count));
 
-                        pictureBox2.Image = Image.FromFile(Application.StartupPath + "/NewPerson.bmp");
+                        pictureBox2.Image = nightOwl.Properties.Resources.NewPerson;
                         nameField.Text = "";
                         missingDateField.Text = "";
                         birthDateField.Text = "";
@@ -151,11 +151,11 @@ namespace nightOwl
 
         private void updateInfoButton_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < MainForm.persons.Count)
+            if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < FirstPageView.persons.Count)
             {
                 string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
 
-                var person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
+                var person = FirstPageView.persons.Where(p => String.Equals(p.Name, chosenName)).First();
 
                 DateTime dt;
                 if (!DateTime.TryParseExact(birthDateField.Text, "yyyy-MM-dd", new CultureInfo("lt-LT"), DateTimeStyles.None, out dt) ||
@@ -207,14 +207,14 @@ namespace nightOwl
         {
             int selectedItem = listBox1.SelectedIndex;
 
-            if (selectedItem >= 0 && selectedItem < MainForm.persons.Count)
+            if (selectedItem >= 0 && selectedItem < FirstPageView.persons.Count)
             {
                 personSelected = true;
 
                 nameField.Text = listBox1.GetItemText(listBox1.SelectedItem);              
                 string chosenName = nameField.Text;
 
-                Person person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
+                Person person = FirstPageView.persons.Where(p => String.Equals(p.Name, chosenName)).First();
              
                 birthDateField.Text = person.BirthDate;
                 missingDateField.Text = person.MissingDate;
@@ -244,12 +244,12 @@ namespace nightOwl
         private void closeButton_Click(object sender, EventArgs e)
         {
             Close();
-            MainForm.closeMainForm();
+            FirstPageView.CloseMainForm();
         }
         private void backButton_Click(object sender, EventArgs e)
         {
             Close();
-            MainForm.self.Show();
+            FirstPageView.self.Show();
         }
         private void TrainerForm_FormClosing(object sender, FormClosingEventArgs e)
         {

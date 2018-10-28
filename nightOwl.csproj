@@ -62,6 +62,7 @@
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SQLite.Core.1.0.109.1\lib\net46\System.Data.SQLite.dll</HintPath>
@@ -87,6 +88,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageHandler.cs" />
+    <Compile Include="Logic\Catalog.cs" />
+    <Compile Include="Logic\DataManagement.cs" />
+    <Compile Include="Logic\PhotoList.cs" />
+    <Compile Include="Models\IPersonModel.cs" />
+    <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="LastSeenMapForm.cs">
       <SubType>Form</SubType>
@@ -94,6 +100,7 @@
     <Compile Include="LastSeenMapForm.Designer.cs">
       <DependentUpon>LastSeenMapForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presenters\AddPersonPresenter.cs" />
     <Compile Include="Recognizer.cs" />
     <Compile Include="VideoPlayerForm.cs">
       <SubType>Form</SubType>
@@ -107,17 +114,24 @@
     <Compile Include="TrainerForm.Designer.cs">
       <DependentUpon>TrainerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\AddPersonView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\AddPersonView.Designer.cs">
+      <DependentUpon>AddPersonView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IAddPersonView.cs" />
     <Compile Include="WebcamForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="WebcamForm.Designer.cs">
       <DependentUpon>WebcamForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Views\FirstPageView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="Views\FirstPageView.Designer.cs">
+      <DependentUpon>FirstPageView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,11 +144,14 @@
     <EmbeddedResource Include="TrainerForm.resx">
       <DependentUpon>TrainerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\AddPersonView.resx">
+      <DependentUpon>AddPersonView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WebcamForm.resx">
       <DependentUpon>WebcamForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\FirstPageView.resx">
+      <DependentUpon>FirstPageView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -172,10 +189,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Capone.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Capone_dark.bmp">
+    <Content Include="Resources\Capone_dark.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="haarcascade_frontalface_alt_tree.xml">
@@ -185,10 +199,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="License-LGPL.txt" />
-    <Content Include="names.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="NewPerson.bmp">
+    <Content Include="Resources\NewPerson.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\background1.png" />
@@ -199,10 +210,8 @@
     <None Include="Resources\background3.png" />
     <None Include="Resources\Exiit.png" />
     <None Include="Resources\Back.png" />
-    <Content Include="rightArrow.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets" Condition="Exists('packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
