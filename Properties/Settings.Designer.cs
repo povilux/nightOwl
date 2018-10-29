@@ -49,7 +49,7 @@ namespace nightOwl.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\Data")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Data")]
         public string DataFolder {
             get {
                 return ((string)(this["DataFolder"]));
@@ -61,7 +61,7 @@ namespace nightOwl.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\Persons.json")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Persons.json")]
         public string PersonsFile {
             get {
                 return ((string)(this["PersonsFile"]));
@@ -73,7 +73,7 @@ namespace nightOwl.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\Data\\\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Data\\")]
         public string DataFolderPath {
             get {
                 return ((string)(this["DataFolderPath"]));
@@ -100,7 +100,7 @@ namespace nightOwl.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Pictures\\\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Pictures\\")]
         public string ImagesFolderPath {
             get {
                 return ((string)(this["ImagesFolderPath"]));

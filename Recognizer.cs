@@ -5,6 +5,7 @@ using Emgu.CV.Face;
 using System.IO;
 using Emgu.CV.Structure;
 using System.Configuration;
+using nightOwl.Properties;
 
 namespace nightOwl
 {
@@ -13,8 +14,8 @@ namespace nightOwl
         //  private static readonly int threshold = 10000;
         // higher threshold - more chances to recognize a face (sometimes incorrectly);
 
-        private static readonly string RecognizerDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + 
-            ConfigurationManager.AppSettings["DataFolderPath"] + ConfigurationManager.AppSettings["RecognizerFilePath"];
+        private static readonly string RecognizerDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+             Settings.Default.DataFolderPath + Settings.Default.RecognizerFilePath;
 
         public static EigenFaceRecognizer NewEigen()
         {

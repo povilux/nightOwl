@@ -14,6 +14,7 @@ using nightOwl.Views;
 using nightOwl.Data;
 using System.Configuration;
 using System.IO;
+using nightOwl.Properties;
 
 namespace nightOwl
 {
@@ -29,8 +30,10 @@ namespace nightOwl
             imgCamUser.Image = ImageFrame;
             */
             CascadeClassifier _cascadeClassifier;
+            Console.WriteLine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
             _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
-    ConfigurationManager.AppSettings["DataFolderPath"] + ConfigurationManager.AppSettings["ImagesFolderPath"] + ConfigurationManager.AppSettings["FaceInformationFilePath"]);
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
             using (var imageFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
             {
                 if (imageFrame != null)

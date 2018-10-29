@@ -87,13 +87,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Person.cs" />
+    <Compile Include="Data\DataManagement.cs" />
+    <Compile Include="Data\IDataManagement.cs" />
     <Compile Include="ImageHandler.cs" />
-    <Compile Include="Logic\Catalog.cs" />
-    <Compile Include="Logic\DataManagement.cs" />
-    <Compile Include="Logic\PhotoList.cs" />
     <Compile Include="Models\IPersonModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
-    <Compile Include="Person.cs" />
     <Compile Include="Presenters\MapPresenter.cs" />
     <Compile Include="Views\IMapView.cs" />
     <Compile Include="Views\MapView.cs">
@@ -109,12 +108,6 @@
     </Compile>
     <Compile Include="VideoPlayerForm.Designer.cs">
       <DependentUpon>VideoPlayerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TrainerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TrainerForm.Designer.cs">
-      <DependentUpon>TrainerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\AddPersonView.cs">
       <SubType>Form</SubType>
@@ -143,9 +136,6 @@
     <EmbeddedResource Include="VideoPlayerForm.resx">
       <DependentUpon>VideoPlayerForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrainerForm.resx">
-      <DependentUpon>TrainerForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\AddPersonView.resx">
       <DependentUpon>AddPersonView.cs</DependentUpon>
     </EmbeddedResource>
@@ -165,6 +155,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Data\Persons.json" />
+    <None Include="Data\recognizer.yaml" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -191,13 +183,26 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\1.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\10.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\11.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\12.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\2.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\3.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\4.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\5.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\6.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\7.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\8.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\9.bmp" />
+    <Content Include="Data\Pictures\Aurimas_Skorupskas\rep.bmp" />
+    <Content Include="Data\Pictures\haarcascade_frontalface_alt_tree.xml" />
+    <Content Include="Data\Pictures\haarcascade_frontalface_default.xml" />
+    <Content Include="Data\Pictures\Povilas_Zaremba\1.bmp" />
+    <Content Include="Data\Pictures\Povilas_Zaremba\2.bmp" />
+    <Content Include="Data\Pictures\Povilas_Zaremba\3.bmp" />
+    <Content Include="Data\Pictures\Povilas_Zaremba\rep.bmp" />
     <Content Include="Resources\Capone_dark.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="haarcascade_frontalface_alt_tree.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="haarcascade_frontalface_default.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="License-LGPL.txt" />
@@ -213,7 +218,9 @@
     <None Include="Resources\Exiit.png" />
     <None Include="Resources\Back.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Logic\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets" Condition="Exists('packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

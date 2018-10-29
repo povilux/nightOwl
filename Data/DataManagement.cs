@@ -11,8 +11,8 @@ namespace nightOwl.Data
     public class DataManagement : IDataManagement
     {
         public List<Person> PersonsCatalog = new List<Person>();
-        private string DirectoryPath { get; set; } = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + ConfigurationManager.AppSettings["DataFolderPath"];
-        private string PersonsPath = ConfigurationManager.AppSettings["PersonsFileName"];
+        private string DirectoryPath { get; set; } = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + Settings.Default.DataFolderPath;
+        private string PersonsPath = Settings.Default.PersonsFileName;
 
         protected static DataManagement _obj;
 

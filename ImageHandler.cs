@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using nightOwl.Data;
+using nightOwl.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,7 +23,7 @@ namespace nightOwl
         private const int imageDimension = 100;       // default image dimension for EigenRecognizer 
 
         private static readonly string ImageDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
-    ConfigurationManager.AppSettings["DataFolderPath"] + ConfigurationManager.AppSettings["ImagesFolderPath"];
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath;
 
         public static Image<Bgr, byte> ResizeImage(Image<Bgr, byte> image)
         {
@@ -217,7 +218,7 @@ namespace nightOwl
         public static Image<Bgr, byte> GetFaceFromImage(Image<Bgr, byte> image)
         {
             CascadeClassifier _cascadeClassifier;
-            _cascadeClassifier = new CascadeClassifier(ImageDataPath + ConfigurationManager.AppSettings["FaceInformationFilePath"]);
+            _cascadeClassifier = new CascadeClassifier(ImageDataPath + Settings.Default.FaceInformationFilePath);
             var grayImage = image.Convert<Gray, byte>();
             var faces = _cascadeClassifier.DetectMultiScale(grayImage, 1.1, 10, Size.Empty);
             if(faces.Length != 1)

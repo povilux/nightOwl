@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using nightOwl.Data;
+using nightOwl.Properties;
 using nightOwl.Views;
 
 namespace nightOwl
@@ -66,7 +67,7 @@ namespace nightOwl
 
             CascadeClassifier _cascadeClassifier;
             _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
-    ConfigurationManager.AppSettings["DataFolderPath"] + ConfigurationManager.AppSettings["ImagesFolderPath"] + ConfigurationManager.AppSettings["FaceInformationFilePath"]);
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
 
             try
             {
