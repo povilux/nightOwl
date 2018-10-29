@@ -30,8 +30,7 @@ namespace nightOwl
             imgCamUser.Image = ImageFrame;
             */
             CascadeClassifier _cascadeClassifier;
-            Console.WriteLine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
-     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
+           
             _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
      Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
             using (var imageFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
