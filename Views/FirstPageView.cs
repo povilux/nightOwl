@@ -53,34 +53,42 @@ namespace nightOwl.Views
         private void SelectVideoButton_Click(object sender, EventArgs e)
         {
          //   Close();
-            VideoPlayerForm firstForm = new VideoPlayerForm();
-            firstForm.Show();
+            VideoPlayerForm videoForm = new VideoPlayerForm();
+            videoForm.StartPosition = FormStartPosition.Manual;
+            videoForm.Location = Location;
+            videoForm.Show();
             this.Hide();
         }
 
         private void WatchCameraButton_Click(object sender, EventArgs e)
         {
             //Close();
-            WebcamForm thirdForm = new WebcamForm();
-            thirdForm.Show();
+            WebcamForm webCamForm = new WebcamForm();
+            webCamForm.StartPosition = FormStartPosition.Manual;
+            webCamForm.Location = Location;
+            webCamForm.Show();
             this.Hide();
         }
 
         private void ShowMapButton_Click(object sender, EventArgs e)
         {
             //Close();
-            LastSeenMapForm lsmForm = new LastSeenMapForm();
+            MapView lsmForm = new MapView(new PersonModel());
+            lsmForm.StartPosition = FormStartPosition.Manual;
+            lsmForm.Location = Location;
             lsmForm.Show();
             this.Hide();
         }
 
         private void AddPersonButton_Click(object sender, EventArgs e)
         { 
-            new AddPersonView(new PersonModel()).Show();
+            new AddPersonView(new PersonModel()).Show(); //čia reiktų paeditint kaip viršuj
+            //.StartPosition = FormStartPosition.Manual;
+            //.Location = Location;
             this.Hide();
         }
 
-        private void FirstPageView_FormClosing(object sender, FormClosingEventArgs e)
+       /* private void FirstPageView_FormClosing(object sender, FormClosingEventArgs e)
         {
             Settings.Default.WindowLocation = this.Location;
 
@@ -96,6 +104,6 @@ namespace nightOwl.Views
         {
             this.Size = Settings.Default.WindowSize;
             this.Location = Settings.Default.WindowLocation;
-        }
+        }*/
     }
 }
