@@ -94,11 +94,13 @@
     <Compile Include="Models\IPersonModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Person.cs" />
-    <Compile Include="LastSeenMapForm.cs">
+    <Compile Include="Presenters\MapPresenter.cs" />
+    <Compile Include="Views\IMapView.cs" />
+    <Compile Include="Views\MapView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LastSeenMapForm.Designer.cs">
-      <DependentUpon>LastSeenMapForm.cs</DependentUpon>
+    <Compile Include="Views\MapView.Designer.cs">
+      <DependentUpon>MapView.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\AddPersonPresenter.cs" />
     <Compile Include="Recognizer.cs" />
@@ -135,8 +137,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="LastSeenMapForm.resx">
-      <DependentUpon>LastSeenMapForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\MapView.resx">
+      <DependentUpon>MapView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VideoPlayerForm.resx">
       <DependentUpon>VideoPlayerForm.cs</DependentUpon>
