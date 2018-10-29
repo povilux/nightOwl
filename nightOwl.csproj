@@ -155,8 +155,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="Data\Persons.json" />
-    <None Include="Data\recognizer.yaml" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -183,25 +181,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\1.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\10.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\11.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\12.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\2.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\3.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\4.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\5.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\6.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\7.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\8.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\9.bmp" />
-    <Content Include="Data\Pictures\Aurimas_Skorupskas\rep.bmp" />
-    <Content Include="Data\Pictures\haarcascade_frontalface_alt_tree.xml" />
-    <Content Include="Data\Pictures\haarcascade_frontalface_default.xml" />
-    <Content Include="Data\Pictures\Povilas_Zaremba\1.bmp" />
-    <Content Include="Data\Pictures\Povilas_Zaremba\2.bmp" />
-    <Content Include="Data\Pictures\Povilas_Zaremba\3.bmp" />
-    <Content Include="Data\Pictures\Povilas_Zaremba\rep.bmp" />
     <Content Include="Resources\Capone_dark.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
