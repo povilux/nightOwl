@@ -87,15 +87,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Person.cs" />
+    <Compile Include="Components\PersonComparer.cs" />
+    <Compile Include="Components\User.cs" />
+    <Compile Include="Data\DataManagement.cs" />
+    <Compile Include="Data\IDataManagement.cs" />
     <Compile Include="ImageHandler.cs" />
-    <Compile Include="Logic\Catalog.cs" />
-    <Compile Include="Logic\DataManagement.cs" />
-    <Compile Include="Logic\PhotoList.cs" />
     <Compile Include="Models\IPersonModel.cs" />
+    <Compile Include="Models\IUserModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
-    <Compile Include="Person.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="PictureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PictureForm.Designer.cs">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MapPresenter.cs" />
+    <Compile Include="Presenters\RegisterPresenter.cs" />
+    <Compile Include="RecognitionHandler.cs" />
+    <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMapView.cs" />
+    <Compile Include="Views\IRegisterView.cs" />
+    <Compile Include="Views\LoginFormView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\LoginFormView.Designer.cs">
+      <DependentUpon>LoginFormView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\MapView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,12 +130,6 @@
     <Compile Include="VideoPlayerForm.Designer.cs">
       <DependentUpon>VideoPlayerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TrainerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TrainerForm.Designer.cs">
-      <DependentUpon>TrainerForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\AddPersonView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +137,12 @@
       <DependentUpon>AddPersonView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\IAddPersonView.cs" />
+    <Compile Include="Views\RegisterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\RegisterView.Designer.cs">
+      <DependentUpon>RegisterView.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebcamForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,17 +157,23 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="PictureForm.resx">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LoginFormView.resx">
+      <DependentUpon>LoginFormView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\MapView.resx">
       <DependentUpon>MapView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VideoPlayerForm.resx">
       <DependentUpon>VideoPlayerForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrainerForm.resx">
-      <DependentUpon>TrainerForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\AddPersonView.resx">
       <DependentUpon>AddPersonView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RegisterView.resx">
+      <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WebcamForm.resx">
       <DependentUpon>WebcamForm.cs</DependentUpon>
@@ -194,12 +220,6 @@
     <Content Include="Resources\Capone_dark.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="haarcascade_frontalface_alt_tree.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="haarcascade_frontalface_default.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="License-LGPL.txt" />
     <Content Include="Resources\NewPerson.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -213,7 +233,9 @@
     <None Include="Resources\Exiit.png" />
     <None Include="Resources\Back.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Logic\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets" Condition="Exists('packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

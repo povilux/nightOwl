@@ -32,7 +32,9 @@ namespace nightOwl.Views
         private void SelectPersonButton_Click(object sender, EventArgs e) { SelectPersonButtonClicked(sender, e); }
         private void UpdateInfoButton_Click(object sender, EventArgs e) { UpdatePersonCliked(sender, e); }
 
-        public void AddPersonToList(string item) { PersonsList.Items.Add(item); }
+        public void AddPersonToList(Person item) { PersonsList.Items.Add(item); }
+        public Person SelectedPerson { get { return (Person)PersonsList.SelectedItem; } }
+
         public string NameSurname { get { return NameField.Text; } set { NameField.Text = value; } }
         public DateTime BirthDate { get { return BirthDatePicker.Value; } set { BirthDatePicker.Value = value; } }
         public DateTime MissingDate { get { return MissingDatePicker.Value; } set { MissingDatePicker.Value = value; } }
@@ -61,5 +63,7 @@ namespace nightOwl.Views
         {
             AddPhotoButtonClicked(sender, e);
         }
+
+ 
     }
 }

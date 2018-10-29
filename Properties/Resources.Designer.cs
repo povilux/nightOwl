@@ -222,6 +222,15 @@ namespace nightOwl.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error while training recognizer! (Corrupted data).
+        /// </summary>
+        internal static string ErrorWhileTrainingRecognizer {
+            get {
+                return ResourceManager.GetString("ErrorWhileTrainingRecognizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Exiit {

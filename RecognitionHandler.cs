@@ -9,6 +9,9 @@ using Emgu.CV.Structure;
 using System.Windows.Forms;
 using System.Drawing;
 using nightOwl.Views;
+using nightOwl.Data;
+using nightOwl.Properties;
+using System.IO;
 
 namespace nightOwl
 {
@@ -34,7 +37,8 @@ namespace nightOwl
             imgCamUser.Image = ImageFrame;
             */
             CascadeClassifier _cascadeClassifier;
-            _cascadeClassifier = new CascadeClassifier(Application.StartupPath + "/haarcascade_frontalface_default.xml");
+            _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
             using (var imageFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
             {
                 if (imageFrame != null)
@@ -50,9 +54,8 @@ namespace nightOwl
                         if (result > 0)
                         {
                             List<String> names = new List<String>();
-                            var personsDataQuery = from p in FirstPageView.persons select new { p.Name };
 
-                            foreach (var person in personsDataQuery)
+                            foreach (Person person in DataManagement.GetInstance().GetPersonsCatalog())
                                 names.Add(person.Name);
 
                             string name = names.ElementAt(result - 1);
@@ -75,7 +78,8 @@ namespace nightOwl
                 return;
             }
             CascadeClassifier _cascadeClassifier;
-            _cascadeClassifier = new CascadeClassifier(Application.StartupPath + "/haarcascade_frontalface_default.xml");
+            _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
             using (var imageFrame = PictureForm.image)
             {
                 if (imageFrame != null)
@@ -91,9 +95,8 @@ namespace nightOwl
                         if (result > 0)
                         {
                             List<String> names = new List<String>();
-                            var personsDataQuery = from p in FirstPageView.persons select new { p.Name };
 
-                            foreach (var person in personsDataQuery)
+                            foreach (Person person in DataManagement.GetInstance().GetPersonsCatalog())
                                 names.Add(person.Name);
 
                             string name = names.ElementAt(result - 1);

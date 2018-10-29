@@ -16,9 +16,8 @@ namespace nightOwl.Views
         void Close();
 
         int SelectedPersonIndex { get; set; }
-        string SelectedPersonName { get; set; }
         GMapControl Map { get; }
-
+        Person SelectedPerson { get; } 
 
         event EventHandler MapLoaded;
         event EventHandler BackButtonClicked;

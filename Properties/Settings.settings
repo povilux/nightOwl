@@ -8,5 +8,32 @@
     <Setting Name="WindowSize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">1685, 838</Value>
     </Setting>
+    <Setting Name="DataFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\Data</Value>
+    </Setting>
+    <Setting Name="PersonsFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\Persons.json</Value>
+    </Setting>
+    <Setting Name="DataFolderPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\Data\</Value>
+    </Setting>
+    <Setting Name="PersonsFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Persons.json</Value>
+    </Setting>
+    <Setting Name="RecognizerFilePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">recognizer.yaml</Value>
+    </Setting>
+    <Setting Name="ImagesFolderPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Pictures\</Value>
+    </Setting>
+    <Setting Name="FaceInformationFilePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">haarcascade_frontalface_default.xml</Value>
+    </Setting>
+    <Setting Name="BrowserFilterPhoto" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Image Files (*.bmp, *.jpg| *.bmp;*.jpg</Value>
+    </Setting>
+    <Setting Name="UsersFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\Users.json</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

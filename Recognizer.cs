@@ -4,29 +4,34 @@ using Emgu.CV;
 using Emgu.CV.Face;
 using System.IO;
 using Emgu.CV.Structure;
+using System.Configuration;
+using nightOwl.Properties;
 
 namespace nightOwl
 {
     public class Recognizer
     {
-      //  private static readonly int threshold = 10000;
+        //  private static readonly int threshold = 10000;
         // higher threshold - more chances to recognize a face (sometimes incorrectly);
+
+        private static readonly string RecognizerDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+             Settings.Default.DataFolderPath + Settings.Default.RecognizerFilePath;
 
         public static EigenFaceRecognizer NewEigen()
         {
             EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
-            eigenRec.Write(Application.StartupPath + "/data/recognizer.yaml");
+            eigenRec.Write(RecognizerDataPath);
             return eigenRec;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
             EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
-            if (File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
+            if (File.Exists(RecognizerDataPath))
             {
                 try
                 {
-                    eigenRec.Read(Application.StartupPath + "/data/recognizer.yaml");
+                    eigenRec.Read(RecognizerDataPath);
                 }
                 catch
                 {
@@ -39,27 +44,33 @@ namespace nightOwl
             return eigenRec;
         }
 
-        public static bool TrainRecognizer(EigenFaceRecognizer rec, Image<Gray, byte>[] faceArray, int[] labelArray)
+        public static bool TrainRecognizer()
         {
-            if(faceArray.Length != labelArray.Length)
+            EigenFaceRecognizer eigen = NewEigen();
+
+            Image<Gray, byte>[] faceArray = ImageHandler.GetGrayFaceArrayFromFiles();
+            int[] labelArray = ImageHandler.GetLabelArrayFromFiles();
+
+            if (faceArray.Length != labelArray.Length)
             {
                 return false;
             }
             else
             {
-                for(int i = 0; i < faceArray.Length; i++)
+                for (int i = 0; i < faceArray.Length; i++)
                 {
                     faceArray[i] = ImageHandler.ResizeGrayImage(faceArray[i]);
                 }
-                rec.Train(faceArray, labelArray);
-                SaveRecognizer(rec);
+                eigen.Train(faceArray, labelArray);
+                SaveRecognizer(eigen);
                 return true;
             }
         }
+      
 
         public static void SaveRecognizer(EigenFaceRecognizer rec)
         {
-            rec.Write(Application.StartupPath + "/data/recognizer.yaml");
+            rec.Write(RecognizerDataPath);
         }
 
         public static int RecognizeFace(Image<Gray, byte> image)

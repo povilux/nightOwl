@@ -46,5 +46,92 @@ namespace nightOwl.Properties {
                 this["WindowSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Data")]
+        public string DataFolder {
+            get {
+                return ((string)(this["DataFolder"]));
+            }
+            set {
+                this["DataFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Persons.json")]
+        public string PersonsFile {
+            get {
+                return ((string)(this["PersonsFile"]));
+            }
+            set {
+                this["PersonsFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Data\\")]
+        public string DataFolderPath {
+            get {
+                return ((string)(this["DataFolderPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Persons.json")]
+        public string PersonsFileName {
+            get {
+                return ((string)(this["PersonsFileName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("recognizer.yaml")]
+        public string RecognizerFilePath {
+            get {
+                return ((string)(this["RecognizerFilePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Pictures\\")]
+        public string ImagesFolderPath {
+            get {
+                return ((string)(this["ImagesFolderPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("haarcascade_frontalface_default.xml")]
+        public string FaceInformationFilePath {
+            get {
+                return ((string)(this["FaceInformationFilePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Image Files (*.bmp, *.jpg| *.bmp;*.jpg")]
+        public string BrowserFilterPhoto {
+            get {
+                return ((string)(this["BrowserFilterPhoto"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Users.json")]
+        public string UsersFileName {
+            get {
+                return ((string)(this["UsersFileName"]));
+            }
+        }
     }
 }

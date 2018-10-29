@@ -10,6 +10,7 @@ using GMap.NET;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET.MapProviders;
 using nightOwl.Models;
+using nightOwl.Data;
 
 namespace nightOwl.Presenters
 {
@@ -17,12 +18,15 @@ namespace nightOwl.Presenters
     {
         private readonly IMapView _view;
         private readonly IPersonModel _model;
+        private readonly IDataManagement _data;
+
         GMapOverlay markers = new GMapOverlay("markers");
 
         public MapPresenter(IMapView view, IPersonModel model)
         {
             _view = view;
             _model = model;
+            _data = DataManagement.GetInstance();
             Initialize();
         }
 
@@ -33,8 +37,7 @@ namespace nightOwl.Presenters
             _view.PersonSelectedFromList += new EventHandler(OnPersonSelected);
             _view.MapLoaded += new EventHandler(OnMapLoaded);
 
-        var personsDataQuery = from p in FirstPageView.persons select new { p.Name };
-            foreach (var person in FirstPageView.persons)
+            foreach (var person in _data.GetPersonsCatalog())
                 _view.AddPersonToList(person.Name);
         }
 
@@ -61,13 +64,12 @@ namespace nightOwl.Presenters
         public void OnPersonSelected(object sender, EventArgs e)
         {
             GMapMarker marker;
-            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < FirstPageView.persons.Count)
+            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < _data.GetPersonsCount())
             {
-                string chosenName = _view.SelectedPersonName;
-                _model.FindPerson(chosenName);
+                _model.CurrentPerson = _view.SelectedPerson;
                 _view.Map.Position = new PointLatLng(_model.CurrentPerson.CoordX, _model.CurrentPerson.CoordY);
                 marker = new GMarkerGoogle(new PointLatLng(_model.CurrentPerson.CoordX, _model.CurrentPerson.CoordY), GMarkerGoogleType.blue_pushpin);
-                marker.ToolTipText = chosenName + "\n" + _model.CurrentPerson.BirthDate + "\n" + _model.CurrentPerson.MissingDate + "\n" + _model.CurrentPerson.AdditionalInfo;
+                marker.ToolTipText = _model.CurrentPerson.Name + "\n" + _model.CurrentPerson.BirthDate + "\n" + _model.CurrentPerson.MissingDate + "\n" + _model.CurrentPerson.AdditionalInfo;
                 markers.Markers.Add(marker);
                 _view.Map.Overlays.Add(markers);
             }

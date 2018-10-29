@@ -32,9 +32,9 @@ namespace nightOwl
         private void CloseButton_Click(object sender, EventArgs e) { CloseButtonClicked(sender, e); }
         private void PeoplesList_SelectedIndexChanged(object sender, EventArgs e){ PersonSelectedFromList(sender, e); }
 
+        public Person SelectedPerson { get { return (Person)PeoplesList.SelectedItem; } }
         public int SelectedPersonIndex { get { return PeoplesList.SelectedIndex; } set { } }
         public void AddPersonToList(string item) { PeoplesList.Items.Add(item); }
-        public string SelectedPersonName { get { return PeoplesList.SelectedItem.ToString(); } set { } }
         public GMapControl Map { get { return gmap; } }
 
         public event EventHandler BackButtonClicked;
