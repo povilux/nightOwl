@@ -32,5 +32,8 @@
     <Setting Name="BrowserFilterPhoto" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Image Files (*.bmp, *.jpg| *.bmp;*.jpg</Value>
     </Setting>
+    <Setting Name="UsersFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\Users.json</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -18,17 +18,19 @@ namespace nightOwl
         public double CoordX { get; set; }
         public double CoordY { get; set; }
         public string LastSeenDate { get; set; }
+        public int CreatorID { get; private set; }
 
-        public Person(string name, string birth, string missingd, string add, double coordx=0.0, double coordy=0.0, string lastseendate="-")
+        public Person(int CreatorID, string Name, string BirthDate, string MissingDate, string AdditionalInfo="-", double CoordX=0.0, double CoordY=0.0, string LastSeenDate="-")
         {
             ID = ++Count;
-            Name = name;
-            BirthDate = birth;
-            MissingDate = missingd;
-            AdditionalInfo = add;
-            CoordX = coordx;
-            CoordY = coordy;
-            LastSeenDate = lastseendate;
+            this.CreatorID = CreatorID;
+            this.Name = Name;
+            this.BirthDate = BirthDate;
+            this.MissingDate = MissingDate;
+            this.AdditionalInfo = AdditionalInfo;
+            this.CoordX = CoordX;
+            this.CoordY = CoordY;
+            this.LastSeenDate = LastSeenDate;
         }
 
         public override string ToString() { return Name; }

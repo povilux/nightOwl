@@ -124,5 +124,14 @@ namespace nightOwl.Properties {
                 return ((string)(this["BrowserFilterPhoto"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Users.json")]
+        public string UsersFileName {
+            get {
+                return ((string)(this["UsersFileName"]));
+            }
+        }
     }
 }

@@ -5,14 +5,20 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using nightOwl.Properties;
+using nightOwl.Components;
 
 namespace nightOwl.Data
 {
     public class DataManagement : IDataManagement
     {
         public List<Person> PersonsCatalog = new List<Person>();
+        public List<User> UsersCatalog = new List<User>();
+        public int UserID = 0;
+
         private string DirectoryPath { get; set; } = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + Settings.Default.DataFolderPath;
         private string PersonsPath = Settings.Default.PersonsFileName;
+        private string UsersPath = Settings.Default.UsersFileName;
+
 
         protected static DataManagement _obj;
 
@@ -24,8 +30,16 @@ namespace nightOwl.Data
             if (!File.Exists(DirectoryPath + PersonsPath))
             {
                 var newFile = File.Create(DirectoryPath + PersonsPath);
-                File.WriteAllText(DirectoryPath + PersonsPath, "[]");
                 newFile.Close();
+
+                File.WriteAllText(DirectoryPath + PersonsPath, "[]");
+            }
+            if (!File.Exists(DirectoryPath + UsersPath))
+            {
+                var newFile = File.Create(DirectoryPath + UsersPath);
+                newFile.Close();
+
+                File.WriteAllText(DirectoryPath + UsersPath, "[]");
             }
         }
 
@@ -42,10 +56,10 @@ namespace nightOwl.Data
             return PersonsCatalog;
         }
 
-        /*public List<Person> GetPersonsCatalog()
+        public List<User> GetUsersCatalog()
         {
-            return PersonsCatalog;
-        }*/
+            return UsersCatalog;
+        }
 
         public void SaveData()
         {
@@ -53,7 +67,7 @@ namespace nightOwl.Data
             File.WriteAllText(DirectoryPath + PersonsPath, JsonConvert.SerializeObject(PersonsCatalog));
 
             // Save users
-       //     File.WriteAllText(DirectoryPath + UsersPath, JsonConvert.SerializeObject(UsersCatalog));
+            File.WriteAllText(DirectoryPath + UsersPath, JsonConvert.SerializeObject(UsersCatalog));
         }
 
         public void LoadData()
@@ -61,7 +75,7 @@ namespace nightOwl.Data
             try
             {
                 PersonsCatalog = JsonConvert.DeserializeObject<List<Person>>(File.ReadAllText(DirectoryPath + PersonsPath));
-         //    UsersPath = JsonConvert.DeserializeObject<Catalog<User>>(File.ReadAllText(DirectoryPath + PersonsPath));
+                UsersCatalog = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(DirectoryPath + UsersPath));
             }
             catch (Exception e)
             {
@@ -69,69 +83,30 @@ namespace nightOwl.Data
             }
         }
 
-     public void AddPerson(Person person)
-     {
-         PersonsCatalog.Add(person);
-     }
-        public int GetPersonsCount() { return PersonsCatalog.Count; }
-
-        /* public void AddUser(User user)
+         public void AddPerson(Person person)
          {
-             UsersCatalog.Add(user);
-         }*/
+                PersonsCatalog.Add(person);
+         }
+        public void AddUser(User user)
+        {
+            UsersCatalog.Add(user);
+        }
+        public int GetPersonsCount() { return PersonsCatalog.Count; }
+        public int GetUsersCount() { return UsersCatalog.Count; }
 
         public Person FindPerson(int ID)
         {
             return PersonsCatalog.Where(p => p.ID == ID).First();
         }
+
+        public object FindUserByName(string name)
+        {
+            return UsersCatalog.Where(u => String.Equals(u.Username, name)).FirstOrDefault();
+        }
+
+        public object FindUserByEmail(string email)
+        {
+            return UsersCatalog.Where(u => String.Equals(u.Email, email)).FirstOrDefault();
+        }
     }
-
-    /*
-
-    public void AddBook(IBookModel book)
-    {
-        Books.Add(book);
-        SerializeBooks();
-    }
-
-    public void RemoveBook(IBookModel book)
-    {
-        //TODO logic for taken books here or in the book class
-        Books.Remove(book);
-        SerializeBooks();
-    }
-
-    public void AddUser(IUserModel user)
-    {
-        Users.Add(user);
-        SerializeUsers();
-    }
-
-    public void RemoveUser(IUserModel user)
-    {
-        Users.Remove(user);
-        SerializeUsers();
-    }
-
-    public void AddAuthor(Author author)
-    {
-        Authors.Add(author);
-        SerializeAuthors();
-    }
-
-    public void RemoveAuthor(Author author)
-    {
-        Authors.Remove(author);
-        SerializeAuthors();
-    }
-
-    public IUserModel FindUser(string label)
-    {
-        return Instance.Users.Find(x => x.ID == int.Parse(label));
-    }
-
-    public IBookModel FindBook(string label)
-    {
-        return Instance.Books.Find(x => x.ID == int.Parse(label));
-    }*/
 }

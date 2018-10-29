@@ -63,5 +63,7 @@ namespace nightOwl.Views
         {
             AddPhotoButtonClicked(sender, e);
         }
+
+ 
     }
 }

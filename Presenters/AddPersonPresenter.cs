@@ -12,6 +12,7 @@ using nightOwl.Models;
 using nightOwl.Views;
 using System.Configuration;
 using Emgu.CV.Face;
+using nightOwl.Components;
 
 namespace nightOwl.Presenters
 {
@@ -47,7 +48,16 @@ namespace nightOwl.Presenters
             _view.SelectPersonButtonClicked += new EventHandler(OnSelectPersonButtonClicked);
             _view.AddPhotoButtonClicked += new EventHandler(OnAddPhotoButtonCicked);
 
-            foreach(var person in _data.GetPersonsCatalog())
+            // Make the appropriate comparer.
+            PersonComparer pc = new PersonComparer
+            {
+                SortBy = PersonComparer.CompareField.BirthDate
+            };
+
+            List<Person> SortedList = _data.GetPersonsCatalog().ToList();
+            SortedList.Sort(pc);
+       
+            foreach (var person in SortedList)
                 _view.AddPersonToList(person);
         }
 
@@ -70,6 +80,8 @@ namespace nightOwl.Presenters
 
         public void OnPersonSelected(object sender, EventArgs e)
         {
+            _model.GroupPersonsByCreator();
+
             if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < _data.GetPersonsCount())
             {
                 _model.CurrentPerson = _view.SelectedPerson;
@@ -84,6 +96,8 @@ namespace nightOwl.Presenters
                 _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
             }
         }
+
+   
 
         public void OnAddPhotoButtonCicked(object sender, EventArgs e)
         {

@@ -24,7 +24,6 @@ namespace nightOwl.Views
         bool UpdateInfoBtnEnabled { get; set; }
         bool CreateNewPersonDataBtnEnabled { get;  set; }
         Person SelectedPerson { get; }
-
         event EventHandler BackButtonClicked;
         event EventHandler CloseButtonClicked;
         event EventHandler CreateNewPersonDataButtonClicked;

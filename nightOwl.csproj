@@ -88,13 +88,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Person.cs" />
+    <Compile Include="Components\PersonComparer.cs" />
+    <Compile Include="Components\User.cs" />
     <Compile Include="Data\DataManagement.cs" />
     <Compile Include="Data\IDataManagement.cs" />
     <Compile Include="ImageHandler.cs" />
     <Compile Include="Models\IPersonModel.cs" />
+    <Compile Include="Models\IUserModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="PictureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PictureForm.Designer.cs">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MapPresenter.cs" />
+    <Compile Include="Presenters\RegisterPresenter.cs" />
+    <Compile Include="RecognitionHandler.cs" />
+    <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMapView.cs" />
+    <Compile Include="Views\IRegisterView.cs" />
+    <Compile Include="Views\LoginFormView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\LoginFormView.Designer.cs">
+      <DependentUpon>LoginFormView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\MapView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +137,12 @@
       <DependentUpon>AddPersonView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\IAddPersonView.cs" />
+    <Compile Include="Views\RegisterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\RegisterView.Designer.cs">
+      <DependentUpon>RegisterView.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebcamForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +157,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="PictureForm.resx">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LoginFormView.resx">
+      <DependentUpon>LoginFormView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\MapView.resx">
       <DependentUpon>MapView.cs</DependentUpon>
     </EmbeddedResource>
@@ -138,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\AddPersonView.resx">
       <DependentUpon>AddPersonView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RegisterView.resx">
+      <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WebcamForm.resx">
       <DependentUpon>WebcamForm.cs</DependentUpon>

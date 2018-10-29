@@ -21,7 +21,7 @@ namespace nightOwl
             DataManagement DataManagementInstance = DataManagement.GetInstance();
             DataManagementInstance.LoadData();
 
-            Application.Run(new FirstPageView());
+            Application.Run(new LoginFormView());
         }
 
         static void OnProgramExit(object sender, EventArgs e)
