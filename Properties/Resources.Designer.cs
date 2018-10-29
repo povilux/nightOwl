@@ -61,6 +61,78 @@ namespace nightOwl.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Information updated..
+        /// </summary>
+        internal static string AddPersonInfoUpdatedMsg {
+            get {
+                return ResourceManager.GetString("AddPersonInfoUpdatedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please add some photos!.
+        /// </summary>
+        internal static string AddPersonNoPhotosError {
+            get {
+                return ResourceManager.GetString("AddPersonNoPhotosError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select person from the list..
+        /// </summary>
+        internal static string AddPersonNoSelectedPersonError {
+            get {
+                return ResourceManager.GetString("AddPersonNoSelectedPersonError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The missing date cannot be earlier than birth date!.
+        /// </summary>
+        internal static string AddPersonNotValidDatesError {
+            get {
+                return ResourceManager.GetString("AddPersonNotValidDatesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please insert correct information!.
+        /// </summary>
+        internal static string AddPersonNotValidInfoError {
+            get {
+                return ResourceManager.GetString("AddPersonNotValidInfoError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} was added to database. ({1}/{2} pics was suitable.).
+        /// </summary>
+        internal static string AddPersonPhotosAddedMsg {
+            get {
+                return ResourceManager.GetString("AddPersonPhotosAddedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/{1} pics was added, {2}.
+        /// </summary>
+        internal static string AddPersonPicturesUpdated {
+            get {
+                return ResourceManager.GetString("AddPersonPicturesUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No good photos for face recognition!.
+        /// </summary>
+        internal static string AddPersonsNoValidPersonsError {
+            get {
+                return ResourceManager.GetString("AddPersonsNoValidPersonsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap atsisiųsti {
@@ -131,11 +203,49 @@ namespace nightOwl.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open picture location.
+        /// </summary>
+        internal static string BrowserTitle {
+            get {
+                return ResourceManager.GetString("BrowserTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Capone_dark {
+            get {
+                object obj = ResourceManager.GetObject("Capone_dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while training recognizer! (Corrupted data).
+        /// </summary>
+        internal static string ErrorWhileTrainingRecognizer {
+            get {
+                return ResourceManager.GetString("ErrorWhileTrainingRecognizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Exiit {
             get {
                 object obj = ResourceManager.GetObject("Exiit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NewPerson {
+            get {
+                object obj = ResourceManager.GetObject("NewPerson", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

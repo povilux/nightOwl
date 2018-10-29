@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using nightOwl.Data;
+using nightOwl.Views;
+using System;
 using System.Windows.Forms;
 
 namespace nightOwl
@@ -14,10 +13,21 @@ namespace nightOwl
         [STAThread]
         static void Main()
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProgramExit);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
 
+            DataManagement DataManagementInstance = DataManagement.GetInstance();
+            DataManagementInstance.LoadData();
+
+            Application.Run(new LoginFormView());
+        }
+
+        static void OnProgramExit(object sender, EventArgs e)
+        {
+            DataManagement DataManagementInstance = DataManagement.GetInstance();
+            DataManagementInstance.SaveData();
         }
     }
 }

@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using nightOwl.Data;
+using nightOwl.Properties;
+using nightOwl.Views;
 
 namespace nightOwl
 {
@@ -61,7 +66,8 @@ namespace nightOwl
             }
 
             CascadeClassifier _cascadeClassifier;
-            _cascadeClassifier = new CascadeClassifier(Application.StartupPath + "/haarcascade_frontalface_default.xml");
+            _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
 
             try
             {
@@ -85,13 +91,12 @@ namespace nightOwl
                             if(result != 0)
                             {
                                 List<String> names = new List<String>();
-                                var personsDataQuery = from p in MainForm.persons select new { p.Name };
 
-                                foreach (var person in personsDataQuery)
+                                foreach (var person in DataManagement.GetInstance().GetPersonsCatalog())
                                     names.Add(person.Name);
 
                                 string name = names.ElementAt(result - 1);
-                                Emgu.CV.CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
+                                CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
                                     face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
                             }
                             //imageFrame.Draw(face, new Bgr(Color.BurlyWood), 3); //the detected face(s) is highlighted here using a box that is drawn around it/them
@@ -121,13 +126,13 @@ namespace nightOwl
         {
             IsPlaying = false;
             Close();
-            MainForm.self.Show();
+            FirstPageView.self.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             IsPlaying = false;
-            MainForm.closeMainForm();
+            FirstPageView.CloseMainForm();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

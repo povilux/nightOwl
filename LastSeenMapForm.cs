@@ -11,6 +11,7 @@ using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET.MapProviders;
+using nightOwl.Views;
 
 namespace nightOwl
 {
@@ -22,7 +23,7 @@ namespace nightOwl
         public LastSeenMapForm()
         {
             InitializeComponent();
-            var personsDataQuery = from p in MainForm.persons select new { p.Name };
+            var personsDataQuery = from p in FirstPageView.persons select new { p.Name };
             foreach (var person in personsDataQuery)
                 listBox1.Items.Add(person.Name);
         }
@@ -39,24 +40,24 @@ namespace nightOwl
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
-            MainForm.self.Show();
+            FirstPageView.self.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             Close();
-            MainForm.closeMainForm();
+            FirstPageView.CloseMainForm();
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedItem = listBox1.SelectedIndex;
             GMapMarker marker;
-            if (selectedItem >= 0 && selectedItem < MainForm.persons.Count)
+            if (selectedItem >= 0 && selectedItem < FirstPageView.persons.Count)
             {
                 personSelected = true;
                 string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
-                Person person = MainForm.persons.Where(p => String.Equals(p.Name, chosenName)).First();
+                Person person = FirstPageView.persons.Where(p => String.Equals(p.Name, chosenName)).First();
                 gmap.Position = new PointLatLng(54.733521, 25.260810);
                 marker = new GMarkerGoogle(new PointLatLng(54.733521, 25.260810), GMarkerGoogleType.blue_pushpin);
                 marker.ToolTipText = chosenName + "\n" + person.BirthDate + "\n" + person.MissingDate + "\n" + person.AdditionalInfo;
