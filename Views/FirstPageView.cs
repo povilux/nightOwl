@@ -52,7 +52,6 @@ namespace nightOwl.Views
 
         private void SelectVideoButton_Click(object sender, EventArgs e)
         {
-         //   Close();
             VideoPlayerForm firstForm = new VideoPlayerForm();
             firstForm.Show();
             this.Hide();
@@ -60,7 +59,6 @@ namespace nightOwl.Views
 
         private void WatchCameraButton_Click(object sender, EventArgs e)
         {
-            //Close();
             WebcamForm thirdForm = new WebcamForm();
             thirdForm.Show();
             this.Hide();
@@ -68,7 +66,6 @@ namespace nightOwl.Views
 
         private void ShowMapButton_Click(object sender, EventArgs e)
         {
-            //Close();
             LastSeenMapForm lsmForm = new LastSeenMapForm();
             lsmForm.Show();
             this.Hide();
