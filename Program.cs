@@ -15,11 +15,12 @@ namespace nightOwl
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProgramExit);
 
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             DataManagement DataManagementInstance = DataManagement.GetInstance();
             DataManagementInstance.LoadData();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FirstPageView());
         }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
+using nightOwl.Properties;
 
 namespace nightOwl.Data
 {
@@ -12,7 +13,7 @@ namespace nightOwl.Data
         public List<Person> PersonsCatalog = new List<Person>();
         private string DirectoryPath { get; set; } = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + ConfigurationManager.AppSettings["DataFolderPath"];
         private string PersonsPath = ConfigurationManager.AppSettings["PersonsFileName"];
-        
+
         protected static DataManagement _obj;
 
         private DataManagement()

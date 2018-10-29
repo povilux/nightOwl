@@ -55,6 +55,8 @@ namespace nightOwl
 
         public static void SaveGrayFacetoFile(string name, Image<Gray, byte> image)
         {
+            Console.WriteLine(ImageDataPath);
+
             string faceFile = ImageDataPath + name + "/";
 
             if (!Directory.Exists(faceFile))
