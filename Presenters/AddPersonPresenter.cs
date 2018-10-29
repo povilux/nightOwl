@@ -7,10 +7,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using nightOwl.Logic;
+using nightOwl.Data;
 using nightOwl.Models;
 using nightOwl.Views;
 using System.Configuration;
+using Emgu.CV.Face;
 
 namespace nightOwl.Presenters
 {
@@ -22,21 +23,16 @@ namespace nightOwl.Presenters
 
         private readonly IAddPersonView _view;
         private readonly IPersonModel _model;
+        private readonly IDataManagement _data;
 
-        /* modelis turetu gauti Person duomenis is view per presenteri, padaryti veiksmus su Person ir grazinti atgal presenteriui
-         pvz: keiciami Person duomenis
-         View persiuncia presenteriui Person duomenis: name, birth date, missing date.
-         Presenteris siuncia duomenis modeliui ir igyvendina metoda "Update".
-         Modelis konkreciam Person atnaujina informacija ir grazina presenteriui kad pavyko/nepavyko tai padaryti.
-         Presenteris tai parodo i view
-         */
 
-            // ATEICIAI: datos kol kas saugomos kaip string (nors is view gaunamos kaip datetime). Galbut galima saugoti kaip datetime
+        // ATEICIAI: datos kol kas saugomos kaip string (nors is view gaunamos kaip datetime). Galbut galima saugoti kaip datetime
 
         public AddPersonPresenter(IAddPersonView view, IPersonModel model)
         {
             _view = view;
             _model = model;
+            _data = DataManagement.GetInstance();
             Initialize();
         }
 
@@ -51,33 +47,39 @@ namespace nightOwl.Presenters
             _view.SelectPersonButtonClicked += new EventHandler(OnSelectPersonButtonClicked);
             _view.AddPhotoButtonClicked += new EventHandler(OnAddPhotoButtonCicked);
 
-            foreach(var person in FirstPageView.persons)
-                _view.AddPersonToList(person.Name);
+            foreach(var person in _data.GetPersonsCatalog())
+                _view.AddPersonToList(person);
         }
 
         public void OnBackButtonClicked(object sender, EventArgs e)
         {
             _view.Close();
+
+            if (!Recognizer.TrainRecognizer())
+                Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
+
             FirstPageView.self.Show();
         }
         public void OnCloseButtonClicked(object sender, EventArgs e)
         {
+            if (!Recognizer.TrainRecognizer())
+                Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
+
             Application.Exit();
         }
 
         public void OnPersonSelected(object sender, EventArgs e)
         {
-            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < FirstPageView.persons.Count)
+            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < _data.GetPersonsCount())
             {
-                _view.NameSurname = _view.SelectedPersonName;
-
-                _model.FindPerson(_view.NameSurname);
+                _model.CurrentPerson = _view.SelectedPerson;
+                _view.NameSurname = _model.CurrentPerson.Name;
                 _view.BirthDate = DateTime.Parse(_model.CurrentPerson.BirthDate);
                 _view.MissingDate = DateTime.Parse(_model.CurrentPerson.MissingDate);
                 _view.AdditionalInfo = _model.CurrentPerson.AdditionalInfo;
 
                 // to do: something...
-                string chosenName = _view.NameSurname;
+                string chosenName = _model.CurrentPerson.Name;
                 chosenName = chosenName.Replace(" ", "_");
                 _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
             }
@@ -126,8 +128,8 @@ namespace nightOwl.Presenters
             _view.NameSurname = "";
             _view.NameSurnameEnabled = true;
 
-            _view.MissingDate = new DateTime(); 
-            _view.BirthDate = new DateTime();
+            _view.MissingDate = DateTime.Today;
+            _view.BirthDate = DateTime.Today;
             _view.AdditionalInfo = "";
 
             _view.AddNewPersonBtnEnabled = false;
@@ -139,11 +141,11 @@ namespace nightOwl.Presenters
 
         public void OnUpdatePersonCliked(object sender, EventArgs e)
         {
-            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < FirstPageView.persons.Count)
+            if (_view.SelectedPersonIndex >= 0 && _view.SelectedPersonIndex < _data.GetPersonsCount())
             {
                 if(DateTime.Compare(_view.BirthDate, _view.MissingDate) <= 0)
-                {              
-                    _model.FindPerson(_view.SelectedPersonName);
+                {
+                    _model.CurrentPerson = _view.SelectedPerson;
                     _model.CurrentPerson.BirthDate = _view.BirthDate.ToString();
                     _model.CurrentPerson.MissingDate = _view.MissingDate.ToString();
                     _model.CurrentPerson.AdditionalInfo = _view.AdditionalInfo;
@@ -156,6 +158,9 @@ namespace nightOwl.Presenters
                         int viablePicsCount = 0;
                         picSelected = false;
 
+                        string personName = _model.CurrentPerson.Name;
+                        personName = personName.Replace(" ", "_");
+
                         foreach (string filename in picFilenames)
                         {
                             tempImage = new Image<Bgr, byte>(filename);
@@ -164,7 +169,7 @@ namespace nightOwl.Presenters
                             {
                                 var face = ImageHandler.GetFaceFromImage(tempImage);
                                 var grayFace = face.Convert<Gray, Byte>();
-                                ImageHandler.SaveGrayFacetoFile(_view.SelectedPersonName, grayFace);
+                                ImageHandler.SaveGrayFacetoFile(personName, grayFace);
 
                                 viablePicsCount++;
                             }
@@ -211,11 +216,8 @@ namespace nightOwl.Presenters
                     }
                     if (viablePicsCount > 0)
                     {
-                        _view.AddPersonToList(_view.NameSurname);
                         _model.Add(_view.NameSurname, _view.BirthDate.ToString(), _view.MissingDate.ToString(), _view.AdditionalInfo);
-                           
-                        // to do: load/save data doing on start/exit program
-                         ImageHandler.WriteDataToFile(FirstPageView.persons);
+                        _view.AddPersonToList(_model.CurrentPerson);
 
                         _view.ShowMessage(String.Format(Properties.Resources.AddPersonPhotosAddedMsg, _view.NameSurname, viablePicsCount, picFilenames.Count));
                         _view.PersonImage = Properties.Resources.NewPerson;
@@ -223,8 +225,8 @@ namespace nightOwl.Presenters
                         _view.NameSurname = "";
                         _view.NameSurnameEnabled = true;
 
-                        _view.MissingDate = new DateTime();
-                        _view.BirthDate = new DateTime();
+                        _view.MissingDate = DateTime.Today;
+                        _view.BirthDate = DateTime.Today;
                         _view.AdditionalInfo = "";
                     }
                     else

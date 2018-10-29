@@ -175,4 +175,7 @@
   <data name="AddPersonNotValidDatesError" xml:space="preserve">
     <value>The missing date cannot be earlier than birth date!</value>
   </data>
+  <data name="ErrorWhileTrainingRecognizer" xml:space="preserve">
+    <value>Error while training recognizer! (Corrupted data)</value>
+  </data>
 </root>

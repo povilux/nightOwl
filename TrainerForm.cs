@@ -126,7 +126,7 @@ namespace nightOwl
                     {
                         listBox1.Items.Add(newName);
                         FirstPageView.persons.Add(new Person(newName, birthDate, missingDate, additionalInfo));
-                        ImageHandler.WriteDataToFile(FirstPageView.persons);
+                      //  ImageHandler.WriteDataToFile(FirstPageView.persons);
 
                         MessageBox.Show(String.Format("{0} was added to database. ({1}/{2} pics was suitable.)", newName, viablePicsCount, picFilenames.Count));
 
@@ -151,7 +151,7 @@ namespace nightOwl
 
         private void updateInfoButton_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < FirstPageView.persons.Count)
+            if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < FirstPageView.persons.Count())
             {
                 string chosenName = listBox1.GetItemText(listBox1.SelectedItem);
 
@@ -207,7 +207,7 @@ namespace nightOwl
         {
             int selectedItem = listBox1.SelectedIndex;
 
-            if (selectedItem >= 0 && selectedItem < FirstPageView.persons.Count)
+            if (selectedItem >= 0 && selectedItem < FirstPageView.persons.Count())
             {
                 personSelected = true;
 

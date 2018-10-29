@@ -11,6 +11,9 @@ using Emgu.CV;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using nightOwl.Views;
+using nightOwl.Data;
+using System.Configuration;
+using System.IO;
 
 namespace nightOwl
 {
@@ -26,7 +29,8 @@ namespace nightOwl
             imgCamUser.Image = ImageFrame;
             */
             CascadeClassifier _cascadeClassifier;
-            _cascadeClassifier = new CascadeClassifier(Application.StartupPath + "/haarcascade_frontalface_default.xml");
+            _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+    ConfigurationManager.AppSettings["DataFolderPath"] + ConfigurationManager.AppSettings["ImagesFolderPath"] + ConfigurationManager.AppSettings["FaceInformationFilePath"]);
             using (var imageFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
             {
                 if (imageFrame != null)
@@ -42,9 +46,8 @@ namespace nightOwl
                         if (result > 0)
                         {
                             List<String> names = new List<String>();
-                            var personsDataQuery = from p in FirstPageView.persons select new { p.Name };
 
-                            foreach (var person in personsDataQuery)
+                            foreach (var person in DataManagement.GetInstance().GetPersonsCatalog())
                                 names.Add(person.Name);
 
                             string name = names.ElementAt(result - 1);

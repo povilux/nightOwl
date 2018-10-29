@@ -8,5 +8,11 @@
     <Setting Name="WindowSize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">1685, 838</Value>
     </Setting>
+    <Setting Name="DataFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\Data</Value>
+    </Setting>
+    <Setting Name="PersonsFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\Persons.json</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

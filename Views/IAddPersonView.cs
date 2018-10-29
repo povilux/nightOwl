@@ -6,7 +6,7 @@ namespace nightOwl.Views
     public interface IAddPersonView
     {
         void ShowMessage(string message);
-        void AddPersonToList(string item);
+        void AddPersonToList(Person item);
         void Close();
 
         string NameSurname { get; set; }
@@ -23,6 +23,7 @@ namespace nightOwl.Views
         bool SelectPersonBtnEnabled { get; set; }
         bool UpdateInfoBtnEnabled { get; set; }
         bool CreateNewPersonDataBtnEnabled { get;  set; }
+        Person SelectedPerson { get; }
 
         event EventHandler BackButtonClicked;
         event EventHandler CloseButtonClicked;

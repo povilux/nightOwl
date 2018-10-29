@@ -46,5 +46,29 @@ namespace nightOwl.Properties {
                 this["WindowSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\Data")]
+        public string DataFolder {
+            get {
+                return ((string)(this["DataFolder"]));
+            }
+            set {
+                this["DataFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\Persons.json")]
+        public string PersonsFile {
+            get {
+                return ((string)(this["PersonsFile"]));
+            }
+            set {
+                this["PersonsFile"] = value;
+            }
+        }
     }
 }
