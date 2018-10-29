@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Windows.Forms;
 using Emgu.CV;
-using Emgu.CV.UI;
 using Emgu.CV.Face;
 using System.IO;
-using System.Drawing;
 using Emgu.CV.Structure;
 
 namespace nightOwl
 {
     public class Recognizer
     {
-        private static readonly int threshold = 4000;
+      //  private static readonly int threshold = 10000;
         // higher threshold - more chances to recognize a face (sometimes incorrectly);
 
         public static EigenFaceRecognizer NewEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, threshold);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
             eigenRec.Write(Application.StartupPath + "/data/recognizer.yaml");
             return eigenRec;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, threshold);
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 4000);
             if (File.Exists(Application.StartupPath + "/data/recognizer.yaml"))
             {
                 try

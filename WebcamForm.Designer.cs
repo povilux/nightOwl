@@ -32,7 +32,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.imgCamUser = new Emgu.CV.UI.ImageBox();
-            this.ButtonToPictureFrame = new System.Windows.Forms.Button();
+            this.AnalyzeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imgCamUser)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,15 +72,15 @@
             this.imgCamUser.TabStop = false;
             this.imgCamUser.Click += new System.EventHandler(this.imageBox1_Click);
             // 
-            // ButtonToPictureFrame
+            // AnalyzeButton
             // 
-            this.ButtonToPictureFrame.Location = new System.Drawing.Point(837, 43);
-            this.ButtonToPictureFrame.Name = "ButtonToPictureFrame";
-            this.ButtonToPictureFrame.Size = new System.Drawing.Size(193, 62);
-            this.ButtonToPictureFrame.TabIndex = 5;
-            this.ButtonToPictureFrame.Text = "Analyze";
-            this.ButtonToPictureFrame.UseVisualStyleBackColor = true;
-            this.ButtonToPictureFrame.Click += new System.EventHandler(this.ButtonToPictureFrame_Click);
+            this.AnalyzeButton.Location = new System.Drawing.Point(677, 43);
+            this.AnalyzeButton.Name = "AnalyzeButton";
+            this.AnalyzeButton.Size = new System.Drawing.Size(321, 62);
+            this.AnalyzeButton.TabIndex = 5;
+            this.AnalyzeButton.Text = "Analyze Picture";
+            this.AnalyzeButton.UseVisualStyleBackColor = true;
+            this.AnalyzeButton.Click += new System.EventHandler(this.AnalyzeButton_Click);
             // 
             // WebcamForm
             // 
@@ -89,7 +89,7 @@
             this.BackgroundImage = global::nightOwl.Properties.Resources.bgWebCam;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1685, 838);
-            this.Controls.Add(this.ButtonToPictureFrame);
+            this.Controls.Add(this.AnalyzeButton);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.imgCamUser);
@@ -108,6 +108,6 @@
         private Emgu.CV.UI.ImageBox imgCamUser;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button ButtonToPictureFrame;
+        private System.Windows.Forms.Button AnalyzeButton;
     }
 }
