@@ -191,7 +191,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -220,7 +219,6 @@
     <Content Include="Resources\Capone_dark.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="License-LGPL.txt" />
     <Content Include="Resources\NewPerson.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
