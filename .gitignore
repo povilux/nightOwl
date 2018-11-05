@@ -7,6 +7,9 @@
 Data/Pictures
 *.json
 *.yaml
+bin/
+obj/
+Debug/
 
 # User-specific files
 *.rsuser

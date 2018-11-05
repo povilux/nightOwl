@@ -10,12 +10,10 @@ namespace nightOwl.Presenters
     public class RegisterPresenter
     {
         private readonly IRegisterView _view;
-        private readonly UserModel _model;
 
-        public RegisterPresenter(IRegisterView view, UserModel model)
+        public RegisterPresenter(IRegisterView view)
         {
             _view = view;
-            _model = model;
 
             _view.UserRegistered += new EventHandler(OnUserRegisterClicked);
         }
@@ -24,13 +22,13 @@ namespace nightOwl.Presenters
         {
             if (!String.IsNullOrWhiteSpace(_view.Username) && !String.IsNullOrWhiteSpace(_view.Password) && !String.IsNullOrWhiteSpace(_view.Email))
             {
-                if (DataManagement.GetInstance().FindUserByName(_view.Username) != null)
+                if (DataManagement.Instance.FindUserByName(_view.Username) != null)
                 {
-                    if (DataManagement.GetInstance().FindUserByEmail(_view.Email) != null)
+                    if (DataManagement.Instance.FindUserByEmail(_view.Email) != null)
                     {
                         // register user
                         User NewUser = new User(_view.Username, _view.Password, _view.Email);
-                        DataManagement.GetInstance().AddUser(NewUser);
+                        DataManagement.Instance.AddUser(NewUser);
 
                         LoginFormView.self.Show();
                         _view.Hide();

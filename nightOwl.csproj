@@ -34,11 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.CV.UI, Version=3.4.1.2976, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\EMGU.CV.3.4.1.2976\lib\net35\Emgu.CV.UI.dll</HintPath>
+    <Reference Include="Emgu.CV, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Emgu.CV.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.CV.World, Version=3.4.1.2976, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\EMGU.CV.3.4.1.2976\lib\net35\Emgu.CV.World.dll</HintPath>
+    <Reference Include="Emgu.CV.UI, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Emgu.CV.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Emgu.Util.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -73,6 +79,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SQLite.Linq.1.0.109.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -82,34 +89,28 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
-      <HintPath>packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\EigenObjectRecognizer.cs" />
+    <Compile Include="BusinessLogic\PersonRecognizer.cs" />
+    <Compile Include="Components\Face.cs" />
     <Compile Include="Components\Person.cs" />
-    <Compile Include="Components\PersonComparer.cs" />
+    <Compile Include="BusinessLogic\PersonComparer.cs" />
     <Compile Include="Components\User.cs" />
     <Compile Include="Data\DataManagement.cs" />
     <Compile Include="Data\IDataManagement.cs" />
-    <Compile Include="ImageHandler.cs" />
     <Compile Include="Models\IPersonModel.cs" />
-    <Compile Include="Models\IUserModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="PictureForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PictureForm.Designer.cs">
-      <DependentUpon>PictureForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MapPresenter.cs" />
+    <Compile Include="Presenters\RecognitionPresenter.cs" />
     <Compile Include="Presenters\RegisterPresenter.cs" />
-    <Compile Include="RecognitionHandler.cs" />
+    <Compile Include="Presenters\VideoRecognitionPresenter.cs" />
+    <Compile Include="Views\ILiveView.cs" />
     <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMapView.cs" />
     <Compile Include="Views\IRegisterView.cs" />
+    <Compile Include="Views\IVideoRecognitionView.cs" />
     <Compile Include="Views\LoginFormView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,13 +124,6 @@
       <DependentUpon>MapView.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\AddPersonPresenter.cs" />
-    <Compile Include="Recognizer.cs" />
-    <Compile Include="VideoPlayerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="VideoPlayerForm.Designer.cs">
-      <DependentUpon>VideoPlayerForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\AddPersonView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,11 +137,11 @@
     <Compile Include="Views\RegisterView.Designer.cs">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebcamForm.cs">
+    <Compile Include="Views\LiveView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WebcamForm.Designer.cs">
-      <DependentUpon>WebcamForm.cs</DependentUpon>
+    <Compile Include="Views\LiveView.Designer.cs">
+      <DependentUpon>LiveView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\FirstPageView.cs">
       <SubType>Form</SubType>
@@ -157,17 +151,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="PictureForm.resx">
-      <DependentUpon>PictureForm.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Views\VideoRecognitionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\VideoRecognitionView.Designer.cs">
+      <DependentUpon>VideoRecognitionView.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Views\LoginFormView.resx">
       <DependentUpon>LoginFormView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\MapView.resx">
       <DependentUpon>MapView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VideoPlayerForm.resx">
-      <DependentUpon>VideoPlayerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\AddPersonView.resx">
       <DependentUpon>AddPersonView.cs</DependentUpon>
@@ -175,8 +169,8 @@
     <EmbeddedResource Include="Views\RegisterView.resx">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WebcamForm.resx">
-      <DependentUpon>WebcamForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\LiveView.resx">
+      <DependentUpon>LiveView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\FirstPageView.resx">
       <DependentUpon>FirstPageView.cs</DependentUpon>
@@ -191,6 +185,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Views\VideoRecognitionView.resx">
+      <DependentUpon>VideoRecognitionView.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -220,7 +217,6 @@
     <Content Include="Resources\Capone_dark.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="License-LGPL.txt" />
     <Content Include="Resources\NewPerson.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -233,16 +229,12 @@
     <None Include="Resources\Exiit.png" />
     <None Include="Resources\Back.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logic\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets" Condition="Exists('packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets'))" />
     <Error Condition="!Exists('packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
   <Import Project="packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets')" />

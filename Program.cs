@@ -18,15 +18,17 @@ namespace nightOwl
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DataManagement DataManagementInstance = DataManagement.GetInstance();
+            DataManagement DataManagementInstance = DataManagement.Instance;
+            Console.WriteLine("krauna");
             DataManagementInstance.LoadData();
+            Console.WriteLine("uzkrauna");
 
             Application.Run(new LoginFormView());
         }
 
         static void OnProgramExit(object sender, EventArgs e)
         {
-            DataManagement DataManagementInstance = DataManagement.GetInstance();
+            DataManagement DataManagementInstance = DataManagement.Instance;
             DataManagementInstance.SaveData();
         }
     }

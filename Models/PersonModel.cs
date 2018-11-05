@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Drawing;
 using System.Linq;
 using nightOwl.Data;
 using nightOwl.Views;
@@ -14,14 +13,14 @@ namespace nightOwl.Models
 
         public void Add(string name, string birthdate, string missingdate, string addinfo)
         {
-            CurrentPerson = new Person(DataManagement.GetInstance().UserID, name, MissingDate:missingdate, BirthDate:birthdate, AdditionalInfo:addinfo);
-            DataManagement.GetInstance().AddPerson(CurrentPerson);
+            CurrentPerson = new Person(DataManagement.Instance.UserID, name, MissingDate:missingdate, BirthDate:birthdate, AdditionalInfo:addinfo);
+            DataManagement.Instance.AddPerson(CurrentPerson);
         }
 
         public void GroupPersonsByCreator()
         {
-                var query = (DataManagement.GetInstance().GetUsersCatalog()).
-                GroupJoin(DataManagement.GetInstance().GetPersonsCatalog(),
+                var query = (DataManagement.Instance.GetUsersCatalog()).
+                GroupJoin(DataManagement.Instance.GetPersonsCatalog(),
                 u => u.ID,
                 p => p.CreatorID,
                 (u, personsGroup) => new
