@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using nightOwl.Properties;
 using nightOwl.Components;
+using System.Windows.Forms;
 
 namespace nightOwl.Data
 {
@@ -25,7 +26,14 @@ namespace nightOwl.Data
         private DataManagement()
         {
             if (!Directory.Exists(DirectoryPath))
-                Directory.CreateDirectory(DirectoryPath);
+                try
+                {
+                    Directory.CreateDirectory(DirectoryPath);
+                } catch
+                {
+                    DialogResult result = MessageBox.Show("Fatal error. Application closing.", "Error", MessageBoxButtons.OK);
+                }
+                
 
             if (!File.Exists(DirectoryPath + PersonsPath))
             {
@@ -61,16 +69,24 @@ namespace nightOwl.Data
             return UsersCatalog;
         }
 
-        public void SaveData()
+        public bool SaveData()
         {
-            // Save persons
-            File.WriteAllText(DirectoryPath + PersonsPath, JsonConvert.SerializeObject(PersonsCatalog));
+            try
+            {
+                // Save persons
+                File.WriteAllText(DirectoryPath + PersonsPath, JsonConvert.SerializeObject(PersonsCatalog));
 
-            // Save users
-            File.WriteAllText(DirectoryPath + UsersPath, JsonConvert.SerializeObject(UsersCatalog));
+                // Save users
+                File.WriteAllText(DirectoryPath + UsersPath, JsonConvert.SerializeObject(UsersCatalog));
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
-        public void LoadData()
+        public bool LoadData()
         {
             try
             {
@@ -80,7 +96,9 @@ namespace nightOwl.Data
             catch (Exception e)
             {
                 Console.Write(e.Message);
+                return false;
             }
+            return true;
         }
 
          public void AddPerson(Person person)
