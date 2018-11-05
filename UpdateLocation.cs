@@ -10,8 +10,8 @@ namespace nightOwl
     class UpdateLocation
     {
         private GeoCoordinateWatcher Watcher = null;
-        double CordX;
-        double CordY;
+        private double CordX;
+        private double CordY;
 
         public void Update(Person person)
         {
