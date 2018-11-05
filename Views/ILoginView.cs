@@ -11,6 +11,7 @@ namespace nightOwl.Views
         event EventHandler LoginUserClicked;
         string UserName { get; }
         string Password { get; set; }
+        System.Drawing.Point Loc { get; }
 
         void Hide();
     }

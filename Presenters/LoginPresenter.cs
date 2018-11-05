@@ -38,7 +38,7 @@ namespace nightOwl.Presenters
 
                     FirstPageView firstPage = new FirstPageView();
                     firstPage.StartPosition = FormStartPosition.Manual;
-                    //firstPage.Location = Location;
+                    firstPage.Location = _view.Loc;
                     firstPage.Show();
                     _view.Hide();
                 }

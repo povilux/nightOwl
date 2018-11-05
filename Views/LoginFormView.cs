@@ -43,5 +43,6 @@ namespace nightOwl.Views
         public event EventHandler LoginUserClicked;
         public string UserName { get { return UserNameField.Text; } }
         public string Password { get { return PasswordField.Text; } set { PasswordField.Text = value;  } }
+        public System.Drawing.Point Loc { get { return this.Location; } }
     }
 }

@@ -73,6 +73,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SQLite.Linq.1.0.109.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Device" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -107,6 +108,7 @@
     <Compile Include="Presenters\MapPresenter.cs" />
     <Compile Include="Presenters\RegisterPresenter.cs" />
     <Compile Include="RecognitionHandler.cs" />
+    <Compile Include="UpdateLocation.cs" />
     <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMapView.cs" />
     <Compile Include="Views\IRegisterView.cs" />
