@@ -71,7 +71,6 @@ namespace nightOwl.BusinessLogic
             }
         }
 
-        Timer timer;
 
         public void StartCapture(Action<Bitmap> onFrameUpdate, bool fromVideo, string CurrentVideoFile = "")
         {
@@ -148,22 +147,6 @@ namespace nightOwl.BusinessLogic
                 return DetectedFace.Resize(int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]), 
                                         int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]), INTER.CV_INTER_CUBIC).ToBitmap();
             }
-        /*    DetectedFace = Result.Resize(int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
-                                            int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
-                            INTER.CV_INTER_CUBIC);
-
-            return DetectedFace.ToBitmap();
-
-            Console.WriteLine(facesDetected.Length);
-            if (facesDetected.Length != 1)
-            {
-                return null;
-            }
-            else
-            {
-                Image<Gray, byte> faceImage = grayFrame.Copy(facesDetected[0].rect);
-                return faceImage;
-            }*/
         }
 
         /// Return an array of all faces in current frame
