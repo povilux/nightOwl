@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace nightOwl.Components
+namespace nightOwl.BusinessLogic
 {
         class PersonNameComparer : IComparer<Person>
         {

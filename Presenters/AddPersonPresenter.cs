@@ -11,8 +11,9 @@ using nightOwl.Data;
 using nightOwl.Models;
 using nightOwl.Views;
 using System.Configuration;
-using Emgu.CV.Face;
 using nightOwl.Components;
+using nightOwl.BusinessLogic;
+using nightOwl.Properties;
 
 namespace nightOwl.Presenters
 {
@@ -33,7 +34,7 @@ namespace nightOwl.Presenters
         {
             _view = view;
             _model = model;
-            _data = DataManagement.GetInstance();
+            _data = DataManagement.Instance;
             Initialize();
         }
 
@@ -64,17 +65,10 @@ namespace nightOwl.Presenters
         public void OnBackButtonClicked(object sender, EventArgs e)
         {
             _view.Close();
-
-            if (!Recognizer.TrainRecognizer())
-                Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
-
             FirstPageView.self.Show();
         }
         public void OnCloseButtonClicked(object sender, EventArgs e)
         {
-            if (!Recognizer.TrainRecognizer())
-                Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
-
             Application.Exit();
         }
 
@@ -93,7 +87,7 @@ namespace nightOwl.Presenters
                 // to do: something...
                 string chosenName = _model.CurrentPerson.Name;
                 chosenName = chosenName.Replace(" ", "_");
-                _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
+                //_view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
             }
         }
 
@@ -178,13 +172,10 @@ namespace nightOwl.Presenters
                         foreach (string filename in picFilenames)
                         {
                             tempImage = new Image<Bgr, byte>(filename);
-
-                            if (ImageHandler.GetFaceFromImage(tempImage) != null)
-                            {
-                                var face = ImageHandler.GetFaceFromImage(tempImage);
-                                var grayFace = face.Convert<Gray, Byte>();
-                                ImageHandler.SaveGrayFacetoFile(personName, grayFace);
-
+                            var faceImage = PersonRecognizer.Instance.GetFaceFromImage(tempImage);
+                            if (faceImage != null)
+                            {           
+                                // ImageHandler.SaveGrayFacetoFile(personName, grayFace);
                                 viablePicsCount++;
                             }
                         }
@@ -211,20 +202,29 @@ namespace nightOwl.Presenters
                     string directory = _view.NameSurname;
                     directory = directory.Replace(" ", "_");
 
-                    if (!File.Exists(Application.StartupPath + "/data/" + directory + "/rep.bmp"))
-                        ImageHandler.SaveRepresentativePic(tempImage.ToBitmap(), directory);
+                    Image representitiveImage = tempImage.ToBitmap();
 
                     int viablePicsCount = 0;
 
                     foreach (string filename in picFilenames)
                     {
                         tempImage = new Image<Bgr, byte>(filename);
-
-                        if (ImageHandler.GetFaceFromImage(tempImage) != null)
+                        var face = PersonRecognizer.Instance.GetFaceFromImage(tempImage);
+                        
+                        if (face != null)
                         {
-                            var newFace = ImageHandler.GetFaceFromImage(tempImage);
-                            var newGrayFace = newFace.Convert<Gray, Byte>();
-                            ImageHandler.SaveGrayFacetoFile(directory, newGrayFace);
+                            string faceFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+                                             Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + directory + "/";
+
+                            if (!Directory.Exists(faceFile))
+                                Directory.CreateDirectory(faceFile);
+
+                            int picNumber = 1;
+                            while (File.Exists(faceFile + picNumber + ConfigurationManager.AppSettings["PictureFormat"]))
+                                picNumber++;
+
+                            face.Save(faceFile + picNumber + ConfigurationManager.AppSettings["PictureFormat"]);
+
                             viablePicsCount++;
                         }
                     }
@@ -234,7 +234,7 @@ namespace nightOwl.Presenters
                         _view.AddPersonToList(_model.CurrentPerson);
 
                         _view.ShowMessage(String.Format(Properties.Resources.AddPersonPhotosAddedMsg, _view.NameSurname, viablePicsCount, picFilenames.Count));
-                        _view.PersonImage = Properties.Resources.NewPerson;
+                        _view.PersonImage = Resources.NewPerson;
 
                         _view.NameSurname = "";
                         _view.NameSurnameEnabled = true;
@@ -244,14 +244,14 @@ namespace nightOwl.Presenters
                         _view.AdditionalInfo = "";
                     }
                     else
-                        _view.ShowMessage(Properties.Resources.AddPersonsNoValidPersonsError);
+                        _view.ShowMessage(Resources.AddPersonsNoValidPersonsError);
                 }
                 else
-                    _view.ShowMessage(Properties.Resources.AddPersonNotValidInfoError);
+                    _view.ShowMessage(Resources.AddPersonNotValidInfoError);
 
             }
             else
-                _view.ShowMessage(Properties.Resources.AddPersonNoPhotosError);
+                _view.ShowMessage(Resources.AddPersonNoPhotosError);
         }
     }
 }
