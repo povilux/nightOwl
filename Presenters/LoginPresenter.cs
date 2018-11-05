@@ -15,12 +15,10 @@ namespace nightOwl.Presenters
     public class LoginPresenter
     {
         private readonly ILoginView _view;
-        private readonly UserModel _model;
 
-        public LoginPresenter(ILoginView view, UserModel model)
+        public LoginPresenter(ILoginView view)
         {
             _view = view;
-            _model = model;
 
             _view.LoginUserClicked += new EventHandler(OnUserLogin);
         }
@@ -28,13 +26,13 @@ namespace nightOwl.Presenters
         public void OnUserLogin(object sender, EventArgs e)
         {
             object obj;
-            if((obj = DataManagement.GetInstance().FindUserByName(_view.UserName)) != null)
+            if((obj = DataManagement.Instance.FindUserByName(_view.UserName)) != null)
             {
                 User CurrentUser = (User)obj;
 
                 if (String.Equals(_view.Password, CurrentUser.Password))
                 {
-                    DataManagement.GetInstance().UserID = CurrentUser.ID;
+                    DataManagement.Instance.UserID = CurrentUser.ID;
 
                     FirstPageView firstPage = new FirstPageView();
                     firstPage.StartPosition = FormStartPosition.Manual;

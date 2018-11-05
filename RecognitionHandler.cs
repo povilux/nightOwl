@@ -39,7 +39,9 @@ namespace nightOwl
             CascadeClassifier _cascadeClassifier;
             _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
      Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
-            using (var imageFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
+            var frameCapture = capture.QueryFrame().ToImage<Bgr, Byte>();//.Resize(300, 300, Emgu.CV.CvEnum.Inter.Cubic);
+
+            using (var imageFrame = frameCapture.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic)) 
             {
                 if (imageFrame != null)
                 {
@@ -60,14 +62,14 @@ namespace nightOwl
 
                             string name = names.ElementAt(result - 1);
 
-                            CvInvoke.PutText(imageFrame, name, new Point(face.Location.X + 10,
+                            CvInvoke.PutText(frameCapture, name, new Point(face.Location.X + 10,
                                 face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
                         }
-                        imageFrame.Draw(face, new Bgr(Color.BurlyWood), 3); //the detected face(s) is highlighted here using a box that is drawn around it/them
+                        frameCapture.Draw(face, new Bgr(Color.BurlyWood), 3); //the detected face(s) is highlighted here using a box that is drawn around it/them
 
                     }
                 }
-                picBox.Image = imageFrame;
+                picBox.Image = frameCapture;
             }
         }
 
