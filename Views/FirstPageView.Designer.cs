@@ -114,6 +114,7 @@ namespace nightOwl.Views
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FirstPageView";
             this.Text = "SmartVision";
+            this.Load += new System.EventHandler(this.FirstPageView_Load);
             this.ResumeLayout(false);
 
         }

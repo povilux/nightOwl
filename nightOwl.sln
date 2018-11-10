@@ -5,9 +5,7 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nightOwl", "nightOwl.csproj", "{951A0A79-5DBB-412D-9EB7-D6D3286D82C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSerivce", "..\WebSerivce\WebSerivce.csproj", "{5F15FCD5-1BFD-4B96-92C7-E830A74F506A}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DataBase", "DataBase\DataBase.sqlproj", "{040D8690-21CF-477E-B9F4-678EFCFFC527}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSerivce", "..\WebSerivce\WebSerivce.csproj", "{5F15FCD5-1BFD-4B96-92C7-E830A74F506A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +21,6 @@ Global
 		{5F15FCD5-1BFD-4B96-92C7-E830A74F506A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F15FCD5-1BFD-4B96-92C7-E830A74F506A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F15FCD5-1BFD-4B96-92C7-E830A74F506A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{040D8690-21CF-477E-B9F4-678EFCFFC527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{040D8690-21CF-477E-B9F4-678EFCFFC527}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{040D8690-21CF-477E-B9F4-678EFCFFC527}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{040D8690-21CF-477E-B9F4-678EFCFFC527}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{040D8690-21CF-477E-B9F4-678EFCFFC527}.Release|Any CPU.Build.0 = Release|Any CPU
-		{040D8690-21CF-477E-B9F4-678EFCFFC527}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

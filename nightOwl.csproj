@@ -94,6 +94,7 @@
     <Compile Include="Components\User.cs" />
     <Compile Include="Data\DataManagement.cs" />
     <Compile Include="Data\IDataManagement.cs" />
+    <Compile Include="Exceptions\BadHttpRequestException.cs" />
     <Compile Include="ImageHandler.cs" />
     <Compile Include="Models\IPersonModel.cs" />
     <Compile Include="Models\IUserModel.cs" />
@@ -111,6 +112,8 @@
     <Compile Include="Presenters\RegisterPresenter.cs" />
     <Compile Include="Presenters\VideoRecognitionPresenter.cs" />
     <Compile Include="RecognitionHandler.cs" />
+    <Compile Include="Services\HttpClientService.cs" />
+    <Compile Include="Services\IHttpClientService.cs" />
     <Compile Include="Views\ILiveView.cs" />
     <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMapView.cs" />
