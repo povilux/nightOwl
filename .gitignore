@@ -7,6 +7,8 @@
 Data/Pictures
 *.json
 *.yaml
+bin/Debug/
+Data/Pictures
 
 # User-specific files
 *.rsuser
@@ -344,3 +346,4 @@ ASALocalRun/
 /Components/Catalog.cs
 /Components/PhotoList.cs
 /Data/Pictures/Aurimas_Skorupskas
+/Data/Povilas_Zaremba

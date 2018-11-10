@@ -24,13 +24,13 @@ namespace nightOwl.Presenters
         {
             if (!String.IsNullOrWhiteSpace(_view.Username) && !String.IsNullOrWhiteSpace(_view.Password) && !String.IsNullOrWhiteSpace(_view.Email))
             {
-                if (DataManagement.GetInstance().FindUserByName(_view.Username) != null)
+                if (DataManagement.Instance.FindUserByName(_view.Username) != null)
                 {
-                    if (DataManagement.GetInstance().FindUserByEmail(_view.Email) != null)
+                    if (DataManagement.Instance.FindUserByEmail(_view.Email) != null)
                     {
                         // register user
                         User NewUser = new User(_view.Username, _view.Password, _view.Email);
-                        DataManagement.GetInstance().AddUser(NewUser);
+                        DataManagement.Instance.AddUser(NewUser);
 
                         LoginFormView.self.Show();
                         _view.Hide();

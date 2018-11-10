@@ -129,7 +129,7 @@ namespace nightOwl
 
             string name = "";
 
-            foreach (Person person in DataManagement.GetInstance().GetPersonsCatalog())
+            foreach (Person person in DataManagement.Instance.GetPersonsCatalog())
             {
                 name = person.Name;
                 name = name.Replace(" ", "_");
@@ -174,7 +174,7 @@ namespace nightOwl
             }*/
             string name = "";
 
-            foreach (Person person in DataManagement.GetInstance().GetPersonsCatalog())
+            foreach (Person person in DataManagement.Instance.GetPersonsCatalog())
             {
                 name = person.Name;
                 name = name.Replace(" ", "_");
@@ -198,7 +198,7 @@ namespace nightOwl
 
             string name = "";
 
-            foreach (Person person in DataManagement.GetInstance().GetPersonsCatalog())
+            foreach (Person person in DataManagement.Instance.GetPersonsCatalog())
             {
                 name = person.Name;
                 name = name.Replace(" ", "_");

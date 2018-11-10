@@ -55,7 +55,7 @@ namespace nightOwl
                         {
                             List<String> names = new List<String>();
 
-                            foreach (Person person in DataManagement.GetInstance().GetPersonsCatalog())
+                            foreach (Person person in DataManagement.Instance.GetPersonsCatalog())
                                 names.Add(person.Name);
 
                             string name = names.ElementAt(result - 1);
@@ -96,7 +96,7 @@ namespace nightOwl
                         {
                             List<String> names = new List<String>();
 
-                            foreach (Person person in DataManagement.GetInstance().GetPersonsCatalog())
+                            foreach (Person person in DataManagement.Instance.GetPersonsCatalog())
                                 names.Add(person.Name);
 
                             string name = names.ElementAt(result - 1);

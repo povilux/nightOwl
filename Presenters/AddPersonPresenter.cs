@@ -33,7 +33,7 @@ namespace nightOwl.Presenters
         {
             _view = view;
             _model = model;
-            _data = DataManagement.GetInstance();
+            _data = DataManagement.Instance;
             Initialize();
         }
 
