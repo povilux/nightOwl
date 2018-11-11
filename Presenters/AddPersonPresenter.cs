@@ -13,6 +13,7 @@ using nightOwl.Views;
 using System.Configuration;
 using Emgu.CV.Face;
 using nightOwl.Components;
+using nightOwl.BusinessLogic;
 
 namespace nightOwl.Presenters
 {
@@ -33,7 +34,7 @@ namespace nightOwl.Presenters
         {
             _view = view;
             _model = model;
-            _data = DataManagement.GetInstance();
+            _data = DataManagement.Instance;
             Initialize();
         }
 
@@ -65,14 +66,14 @@ namespace nightOwl.Presenters
         {
             _view.Close();
 
-            if (!Recognizer.TrainRecognizer())
+            if (!PersonRecognizer.Instance.LoadTrainedFaces())
                 Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
 
             FirstPageView.self.Show();
         }
         public void OnCloseButtonClicked(object sender, EventArgs e)
         {
-            if (!Recognizer.TrainRecognizer())
+            if (!PersonRecognizer.Instance.LoadTrainedFaces())
                 Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
 
             Application.Exit();
@@ -93,7 +94,7 @@ namespace nightOwl.Presenters
                 // to do: something...
                 string chosenName = _model.CurrentPerson.Name;
                 chosenName = chosenName.Replace(" ", "_");
-                _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
+              //  _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
             }
         }
 
@@ -179,7 +180,7 @@ namespace nightOwl.Presenters
                         {
                             tempImage = new Image<Bgr, byte>(filename);
 
-                            if (ImageHandler.GetFaceFromImage(tempImage) != null)
+                            if (PersonRecognizer.Instance.GetFaceFromImage(tempImage) != null)
                             {
                                 var face = ImageHandler.GetFaceFromImage(tempImage);
                                 var grayFace = face.Convert<Gray, Byte>();

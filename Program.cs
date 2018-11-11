@@ -18,7 +18,7 @@ namespace nightOwl
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DataManagement DataManagementInstance = DataManagement.GetInstance();
+            DataManagement DataManagementInstance = DataManagement.Instance;
             DataManagementInstance.LoadData();
 
             Application.Run(new LoginFormView());
@@ -26,7 +26,7 @@ namespace nightOwl
 
         static void OnProgramExit(object sender, EventArgs e)
         {
-            DataManagement DataManagementInstance = DataManagement.GetInstance();
+            DataManagement DataManagementInstance = DataManagement.Instance;
             DataManagementInstance.SaveData();
         }
     }

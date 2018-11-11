@@ -117,8 +117,7 @@ namespace nightOwl.BusinessLogic
         {
             rec.Write(RecognizerDataPath);
         }
-        Stopwatch watch;
-        System.Windows.Forms.Timer t;
+
         public void StartCapture(Action<Bitmap> onFrameUpdate, bool fromVideo, string CurrentVideoFile = "")
         {
             CloseCapture();
@@ -139,16 +138,7 @@ namespace nightOwl.BusinessLogic
                 onFrameUpdate.Invoke(frame);
             });
 
-            //   Grabber.ImageGrabbed += GrabberEvent;
-            watch = new Stopwatch();
-            watch.Start();
-
-           t = new System.Windows.Forms.Timer();
-            t.Interval = 30; // specify interval time as you want
-            t.Tick += GrabberEvent;
-            t.Start();
-
-            //   Application.Idle += GrabberEvent;
+             Application.Idle += GrabberEvent;
         }
 
 
@@ -159,10 +149,7 @@ namespace nightOwl.BusinessLogic
                 try
                 {
                     Grabber.Dispose();
-                    //  Grabber.ImageGrabbed -= GrabberEvent;
-                    watch.Stop();
-                    t.Stop();
-                 //   Application.Idle -= GrabberEvent;
+                    Application.Idle -= GrabberEvent;
                 }
                 catch (NullReferenceException ex)
                 {
@@ -174,39 +161,24 @@ namespace nightOwl.BusinessLogic
             return true;
         }
 
-
-
         public Bitmap GetFaceFromImage(Image<Bgr, byte> image)
         {
-            /*var grayFrame = image.Convert<Gray, byte>();
+            var grayFrame = image.Convert<Gray, byte>();
+            var detectedFace = GetFacesFromCurrentFrame(grayFrame);
 
-            // Detect faces in that frame
-            var facesDetected = FaceHaarCascade.Detect(grayFrame,
-                scaleFactor: double.Parse(ConfigurationManager.AppSettings["HaarCascadeScaleFactor"]),
-                minNeighbors: int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinNeighbors"]),
-                flag: HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                minSize: new Size(
-                            int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinSize"]),
-                            int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinSize"])
-                            )
-            );
-
-            Image<Gray, byte> DetectedFace = null;
-
-            foreach (var face in facesDetected)
-            {
-                DetectedFace = grayFrame.Copy(face.rect);
-                break;
-            }
-
-            if (facesDetected.Length != 1)
+            if (detectedFace.Length != 1)
                 return null;
             else
             {
-                return DetectedFace.Resize(int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
-                                        int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]), INTER.CV_INTER_CUBIC).ToBitmap();
-            }*/
-            return null;
+                var face = grayFrame.Copy(detectedFace[0]);
+                return face.Resize(
+                             int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
+                             int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
+                            Emgu.CV.CvEnum.Inter.Cubic
+                            ).
+                        ToBitmap();
+                        
+            }
         }
 
         /// Return an array of all faces in current frame
@@ -231,7 +203,7 @@ namespace nightOwl.BusinessLogic
                                     Emgu.CV.CvEnum.Inter.Cubic
                               );
 
-                    var result = Recognizer.RecognizeFace(proccessedFrame);
+                    var result = RecognizeFace(proccessedFrame);
 
                     if (result > 0)
                     {
@@ -244,7 +216,7 @@ namespace nightOwl.BusinessLogic
                     }
                 }
             }
-            return frame;//.ToBitmap();
+            return frame;
         }
         public Bitmap FrameGrabber(object sender, EventArgs e)
         {
@@ -269,8 +241,14 @@ namespace nightOwl.BusinessLogic
                 return null;
             }
         }
-       
 
+        public int RecognizeFace(Image<Gray, byte> image)
+        {
+            EigenFaceRecognizer eigen = OldEigen();
+            FaceRecognizer.PredictionResult result = eigen.Predict(image);
+
+            return result.Label;
+        }
     }
 }
  
