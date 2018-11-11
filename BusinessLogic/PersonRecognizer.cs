@@ -177,8 +177,7 @@ namespace nightOwl.BusinessLogic
                 return null;
             else
             {
-                Image<Bgr, byte> faceImage = image.Copy(detectedFace[0]);
-                faceImage = faceImage.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic); // to do: put constant to app settings
+                Image<Bgr, byte> faceImage = image.Copy(detectedFace[0]).Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
                 return faceImage;
                 
             }

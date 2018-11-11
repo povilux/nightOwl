@@ -236,7 +236,7 @@ namespace nightOwl.Presenters
 
                         if (face != null)
                         {
-                            Image<Gray, byte> grayFace = PersonRecognizer.Instance.ConvertFaceToGray(tempImage);
+                            Image<Gray, byte> grayFace = PersonRecognizer.Instance.ConvertFaceToGray(face);
 
                             string faceFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
                                              Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + directory + "/";
