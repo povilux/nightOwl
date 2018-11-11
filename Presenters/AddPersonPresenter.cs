@@ -198,7 +198,7 @@ namespace nightOwl.Presenters
 
                                 grayFace.Save(faceFile + picNumber + ".bmp");
 
-           
+
                                 viablePicsCount++;
                             }
 
@@ -226,7 +226,7 @@ namespace nightOwl.Presenters
                     string directory = _view.NameSurname;
                     directory = directory.Replace(" ", "_");
 
-                   /* if (!File.Exists(Application.StartupPath + "/data/" + directory + "/rep.bmp"))
+                    /*if (!File.Exists(Application.StartupPath + "/data/" + directory + "/rep.bmp"))
                         ImageHandler.SaveRepresentativePic(tempImage.ToBitmap(), directory);*/
 
                     int viablePicsCount = 0;

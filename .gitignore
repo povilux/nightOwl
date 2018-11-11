@@ -4,18 +4,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-*.exe
-*.sln
-*.csproj
-bin/
-Debug/
-
 Data/Pictures
 *.json
 *.yaml
-bin/
-obj/
-Debug/
+bin/Debug/
+Data/Pictures
 
 # User-specific files
 *.rsuser
@@ -353,5 +346,4 @@ ASALocalRun/
 /Components/Catalog.cs
 /Components/PhotoList.cs
 /Data/Pictures/Aurimas_Skorupskas
-/bin/Debug
 /Data/Povilas_Zaremba

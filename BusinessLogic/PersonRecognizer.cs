@@ -1,17 +1,18 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Drawing;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Emgu.CV.CvEnum;
-using System.Drawing;
-using System.IO;
+using System.Windows.Forms;
+using System.Linq;
+using nightOwl.Components;
+using System.Collections.Generic;
+using nightOwl.Properties;
+using nightOwl.Data;
+using System.Configuration;
 using Emgu.CV.Face;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Threading;
 using System.Diagnostics;
-
 
 namespace nightOwl.BusinessLogic
 {
@@ -21,7 +22,6 @@ namespace nightOwl.BusinessLogic
 
         private VideoCapture Grabber;
         private EventHandler GrabberEvent;
-
         private List<Face> Faces = new List<Face>();
 
         private static readonly string ImageDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
@@ -86,14 +86,14 @@ namespace nightOwl.BusinessLogic
                 picturePath = ImageDataPath + directory + "/";
                 personLabelId++;
 
-                while (File.Exists(picturePath + picNumber + ".bmp"))
+                while (File.Exists(picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"]))
                 {
                     Faces.Add(new Face
                     {
                         PersonLabelId = personLabelId,
                         Name = directory,
-                        FileName = picturePath + picNumber + ".bmp",
-                        Image = new Image<Gray, byte>(picturePath + picNumber + ".bmp")
+                        FileName = picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"],
+                        Image = new Image<Gray, byte>(picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"])
                     });
                     picNumber++;
                 }
@@ -138,11 +138,9 @@ namespace nightOwl.BusinessLogic
                 onFrameUpdate.Invoke(frame);
             });
 
-             Application.Idle += GrabberEvent;
+            Application.Idle += GrabberEvent;
         }
 
-
-         
 
         public bool CloseCapture()
         {
@@ -164,6 +162,7 @@ namespace nightOwl.BusinessLogic
         }
 
 
+
         public Image<Gray, byte> ConvertFaceToGray(Image<Bgr, byte> image)
         {
             Image<Gray, byte> grayImage = image.Convert<Gray, byte>();
@@ -181,14 +180,14 @@ namespace nightOwl.BusinessLogic
             {
                 Image<Bgr, byte> faceImage = image.Copy(detectedFace[0]).Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
                 return faceImage;
- 
+
             }
         }
 
         /// Return an array of all faces in current frame
         private Rectangle[] GetFacesFromCurrentFrame(Image<Gray, byte> frame)
         {
-            var faces = _cascadeClassifier.DetectMultiScale(frame, 1.2, 10, Size.Empty); //the actual face detection happens here
+            var faces = _cascadeClassifier.DetectMultiScale(frame, 1.2, 10, new Size(20, 20)); //the actual face detection happens here
             return faces;
         }
 
@@ -202,9 +201,9 @@ namespace nightOwl.BusinessLogic
                 {
                     Image<Gray, byte> proccessedFrame = gray.Copy(face)
                              .Resize(
-                                   100,
-                                   100,
-                                   Emgu.CV.CvEnum.Inter.Cubic
+                                    int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
+                                    int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
+                                    Emgu.CV.CvEnum.Inter.Cubic
                               );
 
                     var result = RecognizeFace(proccessedFrame);
@@ -222,7 +221,6 @@ namespace nightOwl.BusinessLogic
             }
             return frame;
         }
-      
         public Bitmap FrameGrabber(object sender, EventArgs e)
         {
             try
@@ -230,7 +228,8 @@ namespace nightOwl.BusinessLogic
 
                     Image<Bgr, byte> frame = Grabber.QuerySmallFrame().ToImage<Bgr, byte>();
                     frame = frame.Resize(
-                               320,240,
+                                int.Parse(ConfigurationManager.AppSettings["FrameWidth"]),
+                                int.Parse(ConfigurationManager.AppSettings["FrameHeight"]),
                                 Emgu.CV.CvEnum.Inter.Cubic
                              );
 
@@ -256,4 +255,3 @@ namespace nightOwl.BusinessLogic
     }
 }
  
-

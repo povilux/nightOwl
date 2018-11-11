@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using nightOwl.Models;
 
@@ -62,5 +63,11 @@ namespace nightOwl.Views
             AddPersonForm.Show();
             Hide();
         }
+
+        private void FirstPageView_Load(object sender, EventArgs e)
+        {
+           
+        }
+
     }
 }

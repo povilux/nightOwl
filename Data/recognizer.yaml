@@ -2121,6 +2121,6 @@ opencv_eigenfaces:
       rows: 1
       cols: 2
       dt: i
-      data: [ 1, 1 ]
+      data: [ 6, 6 ]
    labelsInfo:
       []

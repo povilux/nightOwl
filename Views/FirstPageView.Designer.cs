@@ -60,7 +60,7 @@ namespace nightOwl.Views
             this.WatchCameraButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.WatchCameraButton.ForeColor = System.Drawing.Color.White;
             this.WatchCameraButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.WatchCameraButton.Location = new System.Drawing.Point(511, 357);
+            this.WatchCameraButton.Location = new System.Drawing.Point(511, 356);
             this.WatchCameraButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.WatchCameraButton.Name = "WatchCameraButton";
             this.WatchCameraButton.Size = new System.Drawing.Size(667, 86);
@@ -114,7 +114,7 @@ namespace nightOwl.Views
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FirstPageView";
             this.Text = "SmartVision";
-           // this.Load += new System.EventHandler(this.FirstPageView_Load);
+            this.Load += new System.EventHandler(this.FirstPageView_Load);
             this.ResumeLayout(false);
 
         }
