@@ -21,12 +21,12 @@ namespace nightOwl.Views
 
         private void SelectVideoButton_Click(object sender, EventArgs e)
         {
-            VideoRecognitionView videoForm = new VideoRecognitionView
+            VideoRecognitionView videoRecognition = new VideoRecognitionView
             {
                 StartPosition = FormStartPosition.Manual,
                 Location = Location
             };
-            videoForm.Show();
+            videoRecognition.Show();
             Hide();
         }
 

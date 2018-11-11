@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Linq;
-using nightOwl.Components;
-using System.Collections.Generic;
-using nightOwl.Properties;
-using nightOwl.Data;
-using System.Configuration;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
+using System.Drawing;
+using System.IO;
 using Emgu.CV.Face;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Threading;
 using System.Diagnostics;
+
 
 namespace nightOwl.BusinessLogic
 {
@@ -22,6 +21,7 @@ namespace nightOwl.BusinessLogic
 
         private VideoCapture Grabber;
         private EventHandler GrabberEvent;
+
         private List<Face> Faces = new List<Face>();
 
         private static readonly string ImageDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
@@ -142,6 +142,8 @@ namespace nightOwl.BusinessLogic
         }
 
 
+         
+
         public bool CloseCapture()
         {
             if (IsCaptureOpened)
@@ -179,7 +181,7 @@ namespace nightOwl.BusinessLogic
             {
                 Image<Bgr, byte> faceImage = image.Copy(detectedFace[0]).Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
                 return faceImage;
-                
+ 
             }
         }
 
@@ -220,6 +222,7 @@ namespace nightOwl.BusinessLogic
             }
             return frame;
         }
+      
         public Bitmap FrameGrabber(object sender, EventArgs e)
         {
             try
@@ -253,4 +256,4 @@ namespace nightOwl.BusinessLogic
     }
 }
  
- 
+

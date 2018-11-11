@@ -11,7 +11,6 @@ using nightOwl.Data;
 using nightOwl.Models;
 using nightOwl.Views;
 using System.Configuration;
-using Emgu.CV.Face;
 using nightOwl.Components;
 using nightOwl.BusinessLogic;
 using nightOwl.Properties;
@@ -66,6 +65,7 @@ namespace nightOwl.Presenters
         public void OnBackButtonClicked(object sender, EventArgs e)
         {
             _view.Close();
+
 
             if (!PersonRecognizer.Instance.LoadTrainedFaces())
                 Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
@@ -197,6 +197,8 @@ namespace nightOwl.Presenters
                                     picNumber++;
 
                                 grayFace.Save(faceFile + picNumber + ".bmp");
+
+           
                                 viablePicsCount++;
                             }
 
@@ -233,11 +235,12 @@ namespace nightOwl.Presenters
                     {
                         tempImage = new Image<Bgr, byte>(filename);
                         var face = PersonRecognizer.Instance.GetFaceFromImage(tempImage);
-
                         if (face != null)
                         {
                             Image<Gray, byte> grayFace = PersonRecognizer.Instance.ConvertFaceToGray(face);
 
+                        
+       
                             string faceFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
                                              Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + directory + "/";
 
@@ -249,6 +252,7 @@ namespace nightOwl.Presenters
                                 picNumber++;
 
                             grayFace.Save(faceFile + picNumber + ".bmp");
+
                             viablePicsCount++;
                         }
                     }
@@ -258,7 +262,7 @@ namespace nightOwl.Presenters
                         _view.AddPersonToList(_model.CurrentPerson);
 
                         _view.ShowMessage(String.Format(Properties.Resources.AddPersonPhotosAddedMsg, _view.NameSurname, viablePicsCount, picFilenames.Count));
-                        _view.PersonImage = Properties.Resources.NewPerson;
+                        _view.PersonImage = Resources.NewPerson;
 
                         _view.NameSurname = "";
                         _view.NameSurnameEnabled = true;

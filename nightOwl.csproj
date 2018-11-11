@@ -73,6 +73,8 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SQLite.Linq.1.0.109.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -91,6 +93,7 @@
     <Compile Include="Components\Face.cs" />
     <Compile Include="Components\Person.cs" />
     <Compile Include="Components\PersonComparer.cs" />
+  </ItemGroup>
     <Compile Include="Components\User.cs" />
     <Compile Include="Data\DataManagement.cs" />
     <Compile Include="Data\IDataManagement.cs" />
@@ -143,6 +146,8 @@
     </Compile>
     <Compile Include="Views\VideoRecognitionView.Designer.cs">
       <DependentUpon>VideoRecognitionView.cs</DependentUpon>
+
+
     </Compile>
     <Compile Include="Views\FirstPageView.cs">
       <SubType>Form</SubType>
@@ -155,6 +160,7 @@
     <EmbeddedResource Include="Views\LiveView.resx">
       <DependentUpon>LiveView.cs</DependentUpon>
     </EmbeddedResource>
+ 
     <EmbeddedResource Include="Views\LoginFormView.resx">
       <DependentUpon>LoginFormView.cs</DependentUpon>
     </EmbeddedResource>
@@ -167,8 +173,10 @@
     <EmbeddedResource Include="Views\RegisterView.resx">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
+
     <EmbeddedResource Include="Views\VideoRecognitionView.resx">
       <DependentUpon>VideoRecognitionView.cs</DependentUpon>
+
     </EmbeddedResource>
     <EmbeddedResource Include="Views\FirstPageView.resx">
       <DependentUpon>FirstPageView.cs</DependentUpon>
@@ -183,6 +191,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+
+   
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -213,6 +223,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="License-LGPL.txt" />
+
     <Content Include="Resources\NewPerson.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

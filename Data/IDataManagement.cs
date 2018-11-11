@@ -8,7 +8,7 @@ namespace nightOwl.Data
         Person FindPerson(int ID);
         List<Person> GetPersonsCatalog();
         int GetPersonsCount();
-        void LoadData();
-        void SaveData();
+        bool LoadData();
+        bool SaveData();
     }
 }
