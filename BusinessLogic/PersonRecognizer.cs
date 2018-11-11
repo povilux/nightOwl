@@ -1,27 +1,27 @@
-﻿using System;
+using System;
+using System.IO;
+using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
-using System.Linq;
-using nightOwl.Components;
-using System.Collections.Generic;
-using nightOwl.Properties;
-using nightOwl.Data;
-using System.Configuration;
+using Emgu.CV.Face;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using System.Threading;
+using System.Diagnostics;
+
 
 namespace nightOwl.BusinessLogic
 {
     public sealed class PersonRecognizer
     {
-        private Image<Bgr, Byte> CurrentFrame;
-        private Capture Grabber;
+        private readonly CascadeClassifier _cascadeClassifier;
+
+        private VideoCapture Grabber;
         private EventHandler GrabberEvent;
-        private HaarCascade FaceHaarCascade;
-        private MCvFont Font;
-        private Image<Gray, byte> Result;
+
         private List<Face> Faces = new List<Face>();
 
         private static readonly string ImageDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
@@ -33,44 +33,90 @@ namespace nightOwl.BusinessLogic
         public static PersonRecognizer Instance { get { return recognizer.Value; } }
         private bool IsCaptureOpened = false;
 
+        private static readonly string RecognizerDataPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+           Settings.Default.DataFolderPath + Settings.Default.RecognizerFilePath;
+
         private PersonRecognizer()
         {
+            LoadTrainedFaces();
+
             IsCaptureOpened = false;
 
-            FaceHaarCascade = new HaarCascade(ImageDataPath + Settings.Default.FaceInformationFilePath);
-            Font = new MCvFont(
-                FONT.CV_FONT_HERSHEY_DUPLEX,
-               double.Parse(ConfigurationManager.AppSettings["HaarCascadeHScale"]),
-               double.Parse(ConfigurationManager.AppSettings["HaarCascadeVScale"])
-           );
+            _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
+
         }
 
-        public void LoadTrainedFaces()
+
+        public static EigenFaceRecognizer NewEigen()
         {
-            string name = "", picturePath = "";
-            int picNumber = 1;
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 8000);
+            eigenRec.Write(RecognizerDataPath);
+            return eigenRec;
+        }
+
+        public static EigenFaceRecognizer OldEigen()
+        {
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 8000);
+
+            try
+            {
+                eigenRec.Read(RecognizerDataPath);
+            }
+            catch
+            {
+                eigenRec = NewEigen();
+            }
+            return eigenRec;
+        }
+
+        public bool LoadTrainedFaces()
+        {
+            EigenFaceRecognizer eigen = NewEigen();
+
+            string directory = "", picturePath = "";
+            int picNumber = 1, personLabelId = 0;
 
             foreach (Person person in DataManagement.Instance.GetPersonsCatalog())
             {
-                name = person.Name;
-                name = name.Replace(" ", "_");
+                directory = person.Name;
+                directory = directory.Replace(" ", "_");
 
                 picNumber = 1;
-                picturePath = ImageDataPath + name + "/";
+                picturePath = ImageDataPath + directory + "/";
+                personLabelId++;
 
-                while (File.Exists(picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"]))
+                while (File.Exists(picturePath + picNumber + ".bmp"))
                 {
                     Faces.Add(new Face
                     {
-                        Name = name,
-                        FileName = picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"],
-                        Image = new Image<Gray, byte>(picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"])
+                        PersonLabelId = personLabelId,
+                        Name = directory,
+                        FileName = picturePath + picNumber + ".bmp",
+                        Image = new Image<Gray, byte>(picturePath + picNumber + ".bmp")
                     });
                     picNumber++;
                 }
             }
+            Image<Gray, byte>[] faceArray = Faces.Select(f => f.Image).ToArray();
+            int[] labelArray = Faces.Select(f => f.PersonLabelId).ToArray();
+
+            if (faceArray.Length != labelArray.Length || faceArray.Length < 1 || labelArray.Length < 1)
+            {
+                return false;
+            }
+            else
+            {
+                eigen.Train(faceArray, labelArray);
+                SaveRecognizer(eigen);
+                return true;
+            }
         }
 
+        public void SaveRecognizer(EigenFaceRecognizer rec)
+        {
+            rec.Write(RecognizerDataPath);
+        }
 
         public void StartCapture(Action<Bitmap> onFrameUpdate, bool fromVideo, string CurrentVideoFile = "")
         {
@@ -78,11 +124,11 @@ namespace nightOwl.BusinessLogic
 
             if (fromVideo)
             {
-               Grabber = new Capture(CurrentVideoFile);
+                Grabber = new VideoCapture(CurrentVideoFile);
             }
             else
             {
-                Grabber = new Capture();
+                Grabber = new VideoCapture();
             }
             IsCaptureOpened = true;
 
@@ -91,10 +137,12 @@ namespace nightOwl.BusinessLogic
                 var frame = FrameGrabber(sender, e);
                 onFrameUpdate.Invoke(frame);
             });
-         
 
-           Application.Idle += GrabberEvent;
+             Application.Idle += GrabberEvent;
         }
+
+
+         
 
         public bool CloseCapture()
         {
@@ -116,122 +164,79 @@ namespace nightOwl.BusinessLogic
         }
 
 
-     
-        public Bitmap GetFaceFromImage(Image<Bgr, byte> image)
+        public Image<Gray, byte> ConvertFaceToGray(Image<Bgr, byte> image)
         {
-            var grayFrame = image.Convert<Gray, byte>();
+            Image<Gray, byte> grayImage = image.Convert<Gray, byte>();
+            return grayImage;
+        }
 
-            // Detect faces in that frame
-            var facesDetected = FaceHaarCascade.Detect(grayFrame,
-                scaleFactor: double.Parse(ConfigurationManager.AppSettings["HaarCascadeScaleFactor"]),
-                minNeighbors: int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinNeighbors"]),
-                flag: HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                minSize: new Size(
-                            int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinSize"]),
-                            int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinSize"])
-                            )
-            );
+        public Image<Bgr, byte> GetFaceFromImage(Image<Bgr, byte> image)
+        {
+            var grayImage = image.Convert<Gray, byte>();
+            var detectedFace = GetFacesFromCurrentFrame(grayImage);
 
-            Image<Gray, byte> DetectedFace = null;
-
-            foreach (var face in facesDetected)
-            {
-                DetectedFace = grayFrame.Copy(face.rect);
-                break;
-            }
-
-            if (facesDetected.Length != 1)
+            if (detectedFace.Length == 0)
                 return null;
             else
             {
-                return DetectedFace.Resize(int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]), 
-                                        int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]), INTER.CV_INTER_CUBIC).ToBitmap();
+                Image<Bgr, byte> faceImage = image.Copy(detectedFace[0]).Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+                return faceImage;
+ 
             }
         }
 
         /// Return an array of all faces in current frame
-        private MCvAvgComp[] GetFacesFromCurrentFrame(Image<Gray, Byte> frame)
+        private Rectangle[] GetFacesFromCurrentFrame(Image<Gray, byte> frame)
         {
-            var facesDetected = FaceHaarCascade.Detect(frame,
-                scaleFactor: double.Parse(ConfigurationManager.AppSettings["HaarCascadeScaleFactor"]),
-                minNeighbors: int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinNeighbors"]),
-                flag: HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                minSize: new Size(
-                            int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinSize"]),
-                            int.Parse(ConfigurationManager.AppSettings["HaarCascadeMinSize"])
-                            )
-            );
-
-            return facesDetected;
+            var faces = _cascadeClassifier.DetectMultiScale(frame, 1.2, 10, Size.Empty); //the actual face detection happens here
+            return faces;
         }
 
-        private Bitmap RecognizePersons(Image<Gray, Byte> gray, Image<Bgr, Byte> CurrentFrame)
+        private Image<Bgr, byte> RecognizePersons(Image<Bgr, byte> frame)
         {
-            int frameThickness = 2;
-
-            foreach (var face in GetFacesFromCurrentFrame(gray))
+            if (Faces.Any())
             {
-                Result = CurrentFrame
-                                   .Copy(face.rect)
-                                   .Convert<Gray, byte>()
-                                   .Resize(
-                                            int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
-                                            int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
-                                            INTER.CV_INTER_CUBIC
-                                          );
+                Image<Gray, byte> gray = frame.Convert<Gray, byte>();
 
-                if (Faces.Any())
+                foreach (var face in GetFacesFromCurrentFrame(gray))
                 {
-                    var termCriteria = new MCvTermCriteria(
-                        Faces.Count,
-                        double.Parse(ConfigurationManager.AppSettings["RecognizerInfinitive"]));
+                    Image<Gray, byte> proccessedFrame = gray.Copy(face)
+                             .Resize(
+                                   100,
+                                   100,
+                                   Emgu.CV.CvEnum.Inter.Cubic
+                              );
 
-                    var recognizer = new EigenObjectRecognizer(
-                       Faces.Select(f => f.Image).ToArray(),
-                       Faces.Select(f => f.Name).ToArray(),
-                       int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]),
-                       ref termCriteria);
+                    var result = RecognizeFace(proccessedFrame);
 
-                    // actual recognition
-                    string name = recognizer.Recognize(Result);
-
-                    if (name != string.Empty)
+                    if (result > 0)
                     {
-                            CurrentFrame.Draw(face.rect, new Bgr(Color.Green), frameThickness);
+                        Face currentFace = Faces.Where(f => f.PersonLabelId == result).FirstOrDefault();
 
-                             //Draw the label for each recognized face
-                             var textSize = Font.GetTextSize(name, 0);
-                             var x = face.rect.Left + (face.rect.Width - textSize.Width) / 2;
-                             var y = face.rect.Bottom + textSize.Height;
-                             CurrentFrame.Draw(name, ref Font, new Point(x, y + 5), new Bgr(Color.White));
+                        CvInvoke.PutText(frame, currentFace.Name, new Point(face.Location.X + 10,
+                            face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 0.5, new Bgr(0, 255, 0).MCvScalar);
+
+                        frame.Draw(face, new Bgr(Color.BurlyWood), 2); //the detected face(s) is highlighted here using a box that is drawn around it/them*
                     }
-                    else
-                    {
-                        CurrentFrame.Draw(face.rect, new Bgr(Color.Red), frameThickness);
-                    }
-                }
-                else
-                {
-                   CurrentFrame.Draw(face.rect, new Bgr(Color.Red), frameThickness);
                 }
             }
-            return CurrentFrame.ToBitmap();
+            return frame;
         }
-
+      
         public Bitmap FrameGrabber(object sender, EventArgs e)
         {
             try
             {
-                //Get the current frame form capture device
-                CurrentFrame = Grabber.QueryFrame().Resize(
-                       int.Parse(ConfigurationManager.AppSettings["FrameWidth"]),
-                       int.Parse(ConfigurationManager.AppSettings["FrameHeight"]),
-                       INTER.CV_INTER_CUBIC);
 
-                //Convert it to Grayscale
-                var gray = CurrentFrame.Convert<Gray, Byte>();
+                    Image<Bgr, byte> frame = Grabber.QuerySmallFrame().ToImage<Bgr, byte>();
+                    frame = frame.Resize(
+                               320,240,
+                                Emgu.CV.CvEnum.Inter.Cubic
+                             );
 
-                return RecognizePersons(gray, CurrentFrame);
+               
+              
+                    return RecognizePersons(frame).ToBitmap();
             }
             catch (NullReferenceException ex)
             {
@@ -240,5 +245,15 @@ namespace nightOwl.BusinessLogic
                 return null;
             }
         }
+
+        public int RecognizeFace(Image<Gray, byte> image)
+        {
+            EigenFaceRecognizer eigen = OldEigen();
+            FaceRecognizer.PredictionResult result = eigen.Predict(image);
+
+            return result.Label;
+        }
     }
 }
+ 
+

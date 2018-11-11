@@ -19,9 +19,7 @@ namespace nightOwl
             Application.SetCompatibleTextRenderingDefault(false);
 
             DataManagement DataManagementInstance = DataManagement.Instance;
-            Console.WriteLine("krauna");
             DataManagementInstance.LoadData();
-            Console.WriteLine("uzkrauna");
 
             Application.Run(new LoginFormView());
         }

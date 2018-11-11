@@ -65,10 +65,18 @@ namespace nightOwl.Presenters
         public void OnBackButtonClicked(object sender, EventArgs e)
         {
             _view.Close();
+
+
+            if (!PersonRecognizer.Instance.LoadTrainedFaces())
+                Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
+
             FirstPageView.self.Show();
         }
         public void OnCloseButtonClicked(object sender, EventArgs e)
         {
+            if (!PersonRecognizer.Instance.LoadTrainedFaces())
+                Console.WriteLine(Properties.Resources.ErrorWhileTrainingRecognizer);
+
             Application.Exit();
         }
 
@@ -87,7 +95,7 @@ namespace nightOwl.Presenters
                 // to do: something...
                 string chosenName = _model.CurrentPerson.Name;
                 chosenName = chosenName.Replace(" ", "_");
-                //_view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
+              //  _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
             }
         }
 
@@ -172,12 +180,28 @@ namespace nightOwl.Presenters
                         foreach (string filename in picFilenames)
                         {
                             tempImage = new Image<Bgr, byte>(filename);
+
                             var faceImage = PersonRecognizer.Instance.GetFaceFromImage(tempImage);
                             if (faceImage != null)
-                            {           
-                                // ImageHandler.SaveGrayFacetoFile(personName, grayFace);
+                            {
+                                Image<Gray, byte> grayFace = PersonRecognizer.Instance.ConvertFaceToGray(faceImage);
+
+                                string faceFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+                                                     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + personName + "/";
+
+                                if (!Directory.Exists(faceFile))
+                                    Directory.CreateDirectory(faceFile);
+
+                                int picNumber = 1;
+                                while (File.Exists(faceFile + picNumber + ".bmp"))
+                                    picNumber++;
+
+                                grayFace.Save(faceFile + picNumber + ".bmp");
+
+           
                                 viablePicsCount++;
                             }
+
                         }
                         updateMessage = String.Format(Properties.Resources.AddPersonPicturesUpdated, viablePicsCount, picFilenames.Count, Properties.Resources.AddPersonInfoUpdatedMsg);
                     }
@@ -202,7 +226,8 @@ namespace nightOwl.Presenters
                     string directory = _view.NameSurname;
                     directory = directory.Replace(" ", "_");
 
-                    Image representitiveImage = tempImage.ToBitmap();
+                   /* if (!File.Exists(Application.StartupPath + "/data/" + directory + "/rep.bmp"))
+                        ImageHandler.SaveRepresentativePic(tempImage.ToBitmap(), directory);*/
 
                     int viablePicsCount = 0;
 
@@ -210,9 +235,12 @@ namespace nightOwl.Presenters
                     {
                         tempImage = new Image<Bgr, byte>(filename);
                         var face = PersonRecognizer.Instance.GetFaceFromImage(tempImage);
-                        
                         if (face != null)
                         {
+                            Image<Gray, byte> grayFace = PersonRecognizer.Instance.ConvertFaceToGray(face);
+
+                        
+       
                             string faceFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
                                              Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + directory + "/";
 
@@ -220,10 +248,10 @@ namespace nightOwl.Presenters
                                 Directory.CreateDirectory(faceFile);
 
                             int picNumber = 1;
-                            while (File.Exists(faceFile + picNumber + ConfigurationManager.AppSettings["PictureFormat"]))
+                            while (File.Exists(faceFile + picNumber + ".bmp"))
                                 picNumber++;
 
-                            face.Save(faceFile + picNumber + ConfigurationManager.AppSettings["PictureFormat"]);
+                            grayFace.Save(faceFile + picNumber + ".bmp");
 
                             viablePicsCount++;
                         }
