@@ -94,26 +94,13 @@
     <Compile Include="Components\User.cs" />
     <Compile Include="Data\DataManagement.cs" />
     <Compile Include="Data\IDataManagement.cs" />
-    <Compile Include="Exceptions\BadHttpRequestException.cs" />
-    <Compile Include="ImageHandler.cs" />
     <Compile Include="Models\IPersonModel.cs" />
-    <Compile Include="Models\IUserModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="PictureForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PictureForm.Designer.cs">
-      <DependentUpon>PictureForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MapPresenter.cs" />
     <Compile Include="Presenters\RecognitionPresenter.cs" />
     <Compile Include="Presenters\RegisterPresenter.cs" />
     <Compile Include="Presenters\VideoRecognitionPresenter.cs" />
-    <Compile Include="RecognitionHandler.cs" />
-    <Compile Include="Services\HttpClientService.cs" />
-    <Compile Include="Services\IHttpClientService.cs" />
     <Compile Include="Views\ILiveView.cs" />
     <Compile Include="Views\ILoginView.cs" />
     <Compile Include="Views\IMapView.cs" />
@@ -138,13 +125,6 @@
       <DependentUpon>MapView.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\AddPersonPresenter.cs" />
-    <Compile Include="Recognizer.cs" />
-    <Compile Include="VideoPlayerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="VideoPlayerForm.Designer.cs">
-      <DependentUpon>VideoPlayerForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\AddPersonView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,12 +142,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\VideoRecognitionView.Designer.cs" />
-    <Compile Include="WebcamForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WebcamForm.Designer.cs">
-      <DependentUpon>WebcamForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\FirstPageView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,9 +150,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="PictureForm.resx">
-      <DependentUpon>PictureForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\LiveView.resx">
       <DependentUpon>LiveView.cs</DependentUpon>
     </EmbeddedResource>
@@ -188,9 +159,6 @@
     <EmbeddedResource Include="Views\MapView.resx">
       <DependentUpon>MapView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VideoPlayerForm.resx">
-      <DependentUpon>VideoPlayerForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\AddPersonView.resx">
       <DependentUpon>AddPersonView.cs</DependentUpon>
     </EmbeddedResource>
@@ -198,9 +166,6 @@
       <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\VideoRecognitionView.resx" />
-    <EmbeddedResource Include="WebcamForm.resx">
-      <DependentUpon>WebcamForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\FirstPageView.resx">
       <DependentUpon>FirstPageView.cs</DependentUpon>
     </EmbeddedResource>
@@ -255,15 +220,6 @@
     <None Include="Resources\background3.png" />
     <None Include="Resources\Exiit.png" />
     <None Include="Resources\Back.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WebSerivce\WebSerivce.csproj">
-      <Project>{5f15fcd5-1bfd-4b96-92c7-e830a74f506a}</Project>
-      <Name>WebSerivce</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets" Condition="Exists('packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" />

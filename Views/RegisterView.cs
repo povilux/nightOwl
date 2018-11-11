@@ -16,10 +16,10 @@ namespace nightOwl.Views
     {
         private readonly RegisterPresenter _presenter;
 
-        public RegisterView(UserModel model)
+        public RegisterView()
         {
             InitializeComponent();
-            _presenter = new RegisterPresenter(this, model);
+            _presenter = new RegisterPresenter(this);
         }
 
         private void RegisterButton_Click(object sender, EventArgs e)

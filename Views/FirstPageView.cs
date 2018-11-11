@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using nightOwl.Exceptions;
 using nightOwl.Models;
-using nightOwl.Services;
 
 namespace nightOwl.Views
 {
@@ -66,42 +64,10 @@ namespace nightOwl.Views
             Hide();
         }
 
-        private async void FirstPageView_Load(object sender, EventArgs e)
+        private void FirstPageView_Load(object sender, EventArgs e)
         {
-            try
-            {
-                var created = await TestAsync("Petras");
-
-                if (created != null)
-                {
-                    Console.WriteLine("Vardas " + created.Name + " id: " + created.ID);
-                }
-            }
-            catch(BadHttpRequestException ex)
-            {
-                Console.WriteLine("Error: " + ex);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "An error has occured. " + ex);
-                return;
-            }
+           
         }
 
-        public async Task<Person> TestAsync(string name)
-        {
-            try {
-                var response = await HttpClientService.Instance.GetAsync<Person>("https://localhost:5001/api/Person/Get/" +  name);
-                return response;
-            }
-            catch(BadHttpRequestException)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
     }
 }

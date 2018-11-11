@@ -20,11 +20,13 @@ namespace nightOwl
     public partial class MapView : Form, IMapView
     {
         private readonly MapPresenter _presenter;
+        private readonly IPersonModel _model;
 
         public MapView(IPersonModel model)
         {
             InitializeComponent();
-            _presenter = new MapPresenter(this, model);
+            _model = model;
+            _presenter = new MapPresenter(this, _model);
         }
 
         private void gmap_Load(object sender, EventArgs e){ MapLoaded(sender, e); }

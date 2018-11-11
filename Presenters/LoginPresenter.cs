@@ -15,12 +15,10 @@ namespace nightOwl.Presenters
     public class LoginPresenter
     {
         private readonly ILoginView _view;
-        private readonly UserModel _model;
 
-        public LoginPresenter(ILoginView view, UserModel model)
+        public LoginPresenter(ILoginView view)
         {
             _view = view;
-            _model = model;
 
             _view.LoginUserClicked += new EventHandler(OnUserLogin);
         }

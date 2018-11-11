@@ -10,12 +10,10 @@ namespace nightOwl.Presenters
     public class RegisterPresenter
     {
         private readonly IRegisterView _view;
-        private readonly UserModel _model;
 
-        public RegisterPresenter(IRegisterView view, UserModel model)
+        public RegisterPresenter(IRegisterView view)
         {
             _view = view;
-            _model = model;
 
             _view.UserRegistered += new EventHandler(OnUserRegisterClicked);
         }
