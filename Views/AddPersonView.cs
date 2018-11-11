@@ -22,7 +22,10 @@ namespace nightOwl.Views
             _presenter = new AddPersonPresenter(this, model);
         }
 
-        public void ShowMessage(string message) { MessageBox.Show(message, @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+        public void ShowMessage(string message)
+            {
+                MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
         private void BackButton_Click(object sender, EventArgs e) { BackButtonClicked(sender, e); }
         private void CloseButton_Click(object sender, EventArgs e) { CloseButtonClicked(sender, e); }

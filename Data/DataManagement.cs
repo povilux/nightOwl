@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using nightOwl.Properties;
 using nightOwl.Components;
+using System.Windows.Forms;
 
 namespace nightOwl.Data
 {
@@ -20,14 +21,21 @@ namespace nightOwl.Data
         private string UsersPath = Settings.Default.UsersFileName;
 
         private static readonly Lazy<DataManagement> dataManagement =
-    new Lazy<DataManagement>(() => new DataManagement());
+           new Lazy<DataManagement>(() => new DataManagement());
 
         public static DataManagement Instance { get { return dataManagement.Value; } }
 
         private DataManagement()
         {
             if (!Directory.Exists(DirectoryPath))
-                Directory.CreateDirectory(DirectoryPath);
+                try
+                {
+                    Directory.CreateDirectory(DirectoryPath);
+                } catch
+                {
+                    DialogResult result = MessageBox.Show("Fatal error. Application closing.", "Error", MessageBoxButtons.OK);
+                }
+                
 
             if (!File.Exists(DirectoryPath + PersonsPath))
             {
@@ -55,26 +63,36 @@ namespace nightOwl.Data
             return UsersCatalog;
         }
 
-        public void SaveData()
+        public bool SaveData()
         {
-            // Save persons
-            File.WriteAllText(DirectoryPath + PersonsPath, JsonConvert.SerializeObject(PersonsCatalog));
+            try
+            {
+                // Save persons
+                File.WriteAllText(DirectoryPath + PersonsPath, JsonConvert.SerializeObject(PersonsCatalog));
 
-            // Save users
-            File.WriteAllText(DirectoryPath + UsersPath, JsonConvert.SerializeObject(UsersCatalog));
+                // Save users
+                File.WriteAllText(DirectoryPath + UsersPath, JsonConvert.SerializeObject(UsersCatalog));
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
-        public void LoadData()
+        public bool LoadData()
         {
             try
             {
                 PersonsCatalog = JsonConvert.DeserializeObject<List<Person>>(File.ReadAllText(DirectoryPath + PersonsPath));
                 UsersCatalog = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(DirectoryPath + UsersPath));
             }
-            catch (Exception e)
+            catch (NullReferenceException e)
             {
                 Console.Write(e.Message);
+                return false;
             }
+            return true;
         }
 
          public void AddPerson(Person person)
