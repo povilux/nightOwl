@@ -4,6 +4,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+*.exe
+*.sln
+*.csproj
+bin/
+Debug/
+
 Data/Pictures
 *.json
 *.yaml
