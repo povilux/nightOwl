@@ -87,10 +87,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\PersonComparer.cs" />
     <Compile Include="BusinessLogic\PersonRecognizer.cs" />
     <Compile Include="Components\Face.cs" />
     <Compile Include="Components\Person.cs" />
-    <Compile Include="Components\PersonComparer.cs" />
     <Compile Include="Components\User.cs" />
     <Compile Include="Data\DataManagement.cs" />
     <Compile Include="Data\IDataManagement.cs" />
