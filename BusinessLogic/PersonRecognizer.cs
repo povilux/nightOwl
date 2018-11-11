@@ -43,7 +43,7 @@ namespace nightOwl.BusinessLogic
             IsCaptureOpened = false;
 
             _cascadeClassifier = new CascadeClassifier(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
-     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + Settings.Default.FaceInformationFilePath);
+     Settings.Default.DataFolderPath + Settings.Default.FaceInformationFilePath);
 
         }
 

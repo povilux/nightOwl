@@ -34,11 +34,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.CV.UI, Version=3.4.1.2976, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\EMGU.CV.3.4.1.2976\lib\net35\Emgu.CV.UI.dll</HintPath>
+    <Reference Include="Emgu.CV.UI">
+      <HintPath>packages\EMGU.CV.3.4.3.3016\lib\net35\Emgu.CV.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.CV.World, Version=3.4.1.2976, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\EMGU.CV.3.4.1.2976\lib\net35\Emgu.CV.World.dll</HintPath>
+    <Reference Include="Emgu.CV.World">
+      <HintPath>packages\EMGU.CV.3.4.3.3016\lib\net35\Emgu.CV.World.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -84,6 +84,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
       <HintPath>packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +230,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets'))" />
     <Error Condition="!Exists('packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets'))" />
   </Target>
   <Import Project="packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets')" />
+  <Import Project="packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets" Condition="Exists('packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets')" />
 </Project>
