@@ -34,7 +34,6 @@ namespace nightOwl.Services
 
             if(!response.IsSuccessStatusCode)
             {
-                 MessageBox.Show("HttpClientService");
                 throw new BadHttpRequestException(contents);
             }
             else

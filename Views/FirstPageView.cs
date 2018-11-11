@@ -87,6 +87,7 @@ namespace nightOwl.Views
                 return;
             }
         }
+
         public async Task<Person> TestAsync(string name)
         {
             try {
@@ -95,7 +96,6 @@ namespace nightOwl.Views
             }
             catch(BadHttpRequestException)
             {
-                MessageBox.Show("TestAsync");
                 throw;
             }
             catch (Exception)
