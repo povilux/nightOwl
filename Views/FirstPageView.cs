@@ -21,38 +21,46 @@ namespace nightOwl.Views
 
         private void SelectVideoButton_Click(object sender, EventArgs e)
         {
-            VideoPlayerForm videoForm = new VideoPlayerForm();
-            videoForm.StartPosition = FormStartPosition.Manual;
-            videoForm.Location = Location;
+            VideoRecognitionView videoForm = new VideoRecognitionView
+            {
+                StartPosition = FormStartPosition.Manual,
+                Location = Location
+            };
             videoForm.Show();
-            this.Hide();
+            Hide();
         }
 
         private void WatchCameraButton_Click(object sender, EventArgs e)
         {
-            WebcamForm webCamForm = new WebcamForm();
-            webCamForm.StartPosition = FormStartPosition.Manual;
-            webCamForm.Location = Location;
+            LiveView webCamForm = new LiveView
+            {
+                StartPosition = FormStartPosition.Manual,
+                Location = Location
+            };
             webCamForm.Show();
-            this.Hide();
+            Hide();
         }
 
         private void ShowMapButton_Click(object sender, EventArgs e)
         {
-            MapView lsmForm = new MapView(new PersonModel());
-            lsmForm.StartPosition = FormStartPosition.Manual;
-            lsmForm.Location = Location;
+            MapView lsmForm = new MapView(new PersonModel())
+            {
+                StartPosition = FormStartPosition.Manual,
+                Location = Location
+            };
             lsmForm.Show();
-            this.Hide();
+            Hide();
         }
 
         private void AddPersonButton_Click(object sender, EventArgs e)
         {
-            AddPersonView AddPersonForm = new AddPersonView(new PersonModel());
-            AddPersonForm.StartPosition = FormStartPosition.Manual;
-            AddPersonForm.Location = Location;
+            AddPersonView AddPersonForm = new AddPersonView(new PersonModel())
+            {
+                StartPosition = FormStartPosition.Manual,
+                Location = Location
+            };
             AddPersonForm.Show();
-            this.Hide();
+            Hide();
         }
     }
 }

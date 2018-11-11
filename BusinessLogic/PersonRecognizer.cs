@@ -86,14 +86,14 @@ namespace nightOwl.BusinessLogic
                 picturePath = ImageDataPath + directory + "/";
                 personLabelId++;
 
-                while (File.Exists(picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"]))
+                while (File.Exists(picturePath + picNumber + ".bmp"))
                 {
                     Faces.Add(new Face
                     {
                         PersonLabelId = personLabelId,
                         Name = directory,
-                        FileName = picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"],
-                        Image = new Image<Gray, byte>(picturePath + picNumber + ConfigurationManager.AppSettings["PictureFormat"])
+                        FileName = picturePath + picNumber + ".bmp",
+                        Image = new Image<Gray, byte>(picturePath + picNumber + ".bmp")
                     });
                     picNumber++;
                 }
@@ -161,30 +161,33 @@ namespace nightOwl.BusinessLogic
             return true;
         }
 
-        public Bitmap GetFaceFromImage(Image<Bgr, byte> image)
-        {
-            var grayFrame = image.Convert<Gray, byte>();
-            var detectedFace = GetFacesFromCurrentFrame(grayFrame);
 
-            if (detectedFace.Length != 1)
+        public Image<Gray, byte> ConvertFaceToGray(Image<Bgr, byte> image)
+        {
+            Image<Gray, byte> grayImage = image.Convert<Gray, byte>();
+            return grayImage;
+        }
+
+        public Image<Bgr, byte> GetFaceFromImage(Image<Bgr, byte> image)
+        {
+            var grayImage = image.Convert<Gray, byte>();
+            var detectedFace = GetFacesFromCurrentFrame(grayImage);
+
+            if (detectedFace.Length == 0)
                 return null;
             else
             {
-                var face = grayFrame.Copy(detectedFace[0]);
-                return face.Resize(
-                             int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
-                             int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
-                            Emgu.CV.CvEnum.Inter.Cubic
-                            ).
-                        ToBitmap();
-                        
+                Image<Bgr, byte> faceImage = image.Copy(detectedFace[0]);
+                faceImage = faceImage.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic); // to do: put constant to app settings
+                return faceImage;
+                
             }
         }
 
         /// Return an array of all faces in current frame
         private Rectangle[] GetFacesFromCurrentFrame(Image<Gray, byte> frame)
         {
-            var faces = _cascadeClassifier.DetectMultiScale(frame, 1.2, 10, new Size(20, 20)); //the actual face detection happens here
+            var faces = _cascadeClassifier.DetectMultiScale(frame, 1.2, 10, Size.Empty); //the actual face detection happens here
             return faces;
         }
 
@@ -198,9 +201,9 @@ namespace nightOwl.BusinessLogic
                 {
                     Image<Gray, byte> proccessedFrame = gray.Copy(face)
                              .Resize(
-                                    int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
-                                    int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
-                                    Emgu.CV.CvEnum.Inter.Cubic
+                                   100,
+                                   100,
+                                   Emgu.CV.CvEnum.Inter.Cubic
                               );
 
                     var result = RecognizeFace(proccessedFrame);
@@ -225,8 +228,7 @@ namespace nightOwl.BusinessLogic
 
                     Image<Bgr, byte> frame = Grabber.QuerySmallFrame().ToImage<Bgr, byte>();
                     frame = frame.Resize(
-                                int.Parse(ConfigurationManager.AppSettings["FrameWidth"]),
-                                int.Parse(ConfigurationManager.AppSettings["FrameHeight"]),
+                               320,240,
                                 Emgu.CV.CvEnum.Inter.Cubic
                              );
 
@@ -251,4 +253,5 @@ namespace nightOwl.BusinessLogic
         }
     }
 }
+ 
  

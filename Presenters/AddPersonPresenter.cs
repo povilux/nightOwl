@@ -14,6 +14,7 @@ using System.Configuration;
 using Emgu.CV.Face;
 using nightOwl.Components;
 using nightOwl.BusinessLogic;
+using nightOwl.Properties;
 
 namespace nightOwl.Presenters
 {
@@ -180,14 +181,25 @@ namespace nightOwl.Presenters
                         {
                             tempImage = new Image<Bgr, byte>(filename);
 
-                            if (PersonRecognizer.Instance.GetFaceFromImage(tempImage) != null)
+                            var faceImage = PersonRecognizer.Instance.GetFaceFromImage(tempImage);
+                            if (faceImage != null)
                             {
-                                var face = ImageHandler.GetFaceFromImage(tempImage);
-                                var grayFace = face.Convert<Gray, Byte>();
-                                ImageHandler.SaveGrayFacetoFile(personName, grayFace);
+                                Image<Gray, byte> grayFace = PersonRecognizer.Instance.ConvertFaceToGray(faceImage);
 
+                                string faceFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+                                                     Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + personName + "/";
+
+                                if (!Directory.Exists(faceFile))
+                                    Directory.CreateDirectory(faceFile);
+
+                                int picNumber = 1;
+                                while (File.Exists(faceFile + picNumber + ".bmp"))
+                                    picNumber++;
+
+                                grayFace.Save(faceFile + picNumber + ".bmp");
                                 viablePicsCount++;
                             }
+
                         }
                         updateMessage = String.Format(Properties.Resources.AddPersonPicturesUpdated, viablePicsCount, picFilenames.Count, Properties.Resources.AddPersonInfoUpdatedMsg);
                     }
@@ -212,20 +224,31 @@ namespace nightOwl.Presenters
                     string directory = _view.NameSurname;
                     directory = directory.Replace(" ", "_");
 
-                    if (!File.Exists(Application.StartupPath + "/data/" + directory + "/rep.bmp"))
-                        ImageHandler.SaveRepresentativePic(tempImage.ToBitmap(), directory);
+                   /* if (!File.Exists(Application.StartupPath + "/data/" + directory + "/rep.bmp"))
+                        ImageHandler.SaveRepresentativePic(tempImage.ToBitmap(), directory);*/
 
                     int viablePicsCount = 0;
 
                     foreach (string filename in picFilenames)
                     {
                         tempImage = new Image<Bgr, byte>(filename);
+                        var face = PersonRecognizer.Instance.GetFaceFromImage(tempImage);
 
-                        if (ImageHandler.GetFaceFromImage(tempImage) != null)
+                        if (face != null)
                         {
-                            var newFace = ImageHandler.GetFaceFromImage(tempImage);
-                            var newGrayFace = newFace.Convert<Gray, Byte>();
-                            ImageHandler.SaveGrayFacetoFile(directory, newGrayFace);
+                            Image<Gray, byte> grayFace = PersonRecognizer.Instance.ConvertFaceToGray(tempImage);
+
+                            string faceFile = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+                                             Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + directory + "/";
+
+                            if (!Directory.Exists(faceFile))
+                                Directory.CreateDirectory(faceFile);
+
+                            int picNumber = 1;
+                            while (File.Exists(faceFile + picNumber + ".bmp"))
+                                picNumber++;
+
+                            grayFace.Save(faceFile + picNumber + ".bmp");
                             viablePicsCount++;
                         }
                     }
@@ -245,14 +268,14 @@ namespace nightOwl.Presenters
                         _view.AdditionalInfo = "";
                     }
                     else
-                        _view.ShowMessage(Properties.Resources.AddPersonsNoValidPersonsError);
+                        _view.ShowMessage(Resources.AddPersonsNoValidPersonsError);
                 }
                 else
-                    _view.ShowMessage(Properties.Resources.AddPersonNotValidInfoError);
+                    _view.ShowMessage(Resources.AddPersonNotValidInfoError);
 
             }
             else
-                _view.ShowMessage(Properties.Resources.AddPersonNoPhotosError);
+                _view.ShowMessage(Resources.AddPersonNoPhotosError);
         }
     }
 }

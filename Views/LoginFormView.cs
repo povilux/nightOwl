@@ -22,13 +22,13 @@ namespace nightOwl.Views
             InitializeComponent();
             self = this;
 
-            _presenter = new LoginPresenter(this, new UserModel());
+            _presenter = new LoginPresenter(this);
         }
 
 
         private void RegisterButton_Click(object sender, EventArgs e)
         {
-            RegisterView registerForm = new RegisterView(new UserModel());
+            RegisterView registerForm = new RegisterView();
             registerForm.StartPosition = FormStartPosition.Manual;
             registerForm.Location = Location;
             registerForm.Show();
