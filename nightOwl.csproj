@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\PersonRecognizer.cs" />
+    <Compile Include="Components\Face.cs" />
     <Compile Include="Components\Person.cs" />
     <Compile Include="Components\PersonComparer.cs" />
     <Compile Include="Components\User.cs" />

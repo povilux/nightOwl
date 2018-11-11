@@ -19,8 +19,10 @@ namespace nightOwl.Data
         private string PersonsPath = Settings.Default.PersonsFileName;
         private string UsersPath = Settings.Default.UsersFileName;
 
+        private static readonly Lazy<DataManagement> dataManagement =
+           new Lazy<DataManagement>(() => new DataManagement());
 
-        protected static DataManagement _obj;
+        public static DataManagement Instance { get { return dataManagement.Value; } }
 
         private DataManagement()
         {
@@ -41,14 +43,6 @@ namespace nightOwl.Data
 
                 File.WriteAllText(DirectoryPath + UsersPath, "[]");
             }
-        }
-
-        public static DataManagement GetInstance()
-        {
-            if (_obj == null)
-                _obj = new DataManagement();
-
-            return _obj;
         }
 
         public List<Person> GetPersonsCatalog()
