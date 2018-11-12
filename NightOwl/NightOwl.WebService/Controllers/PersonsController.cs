@@ -65,33 +65,6 @@ namespace NightOwl.WebService.Controllers
             return Ok(updated.Entity);
         }
 
-        /* public IActionResult Post([FromBody][Bind(new string[] { "Name", "Images", "Creator", "Date"})]Event sentEvent)
-        {
-            if (sentEvent != null)
-            {
-                if (ModelState.IsValid)
-                {
-                    if (sentEvent.Id == null || sentEvent.Id.Equals(Guid.Empty))
-                        sentEvent.Id = Guid.NewGuid();
-
-                    var found = context.Users.Find(sentEvent.Creator.Id);
-                    if (found != null)
-                        sentEvent.Creator = found;
-
-                    var created = context.Events.Add(sentEvent);
-                    if (created.Entity != null)
-                    {
-                        if (context.SaveChanges() > 0)
-                            return Ok(created.Entity);
-                        return BadRequest("Failed to save changes.");
-                    }
-                    return BadRequest("Failed to add user.");
-                }
-                return BadRequest(string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
-            }
-            return NotFound();
-        }
-*/
       
         // POST: api/Persons/Post/
         [HttpPost]
