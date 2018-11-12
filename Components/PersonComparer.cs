@@ -2,7 +2,7 @@
 
 namespace nightOwl.Components
 {
-        class PersonNameComparer : IComparer<Person>
+        public class PersonNameComparer : IComparer<Person>
         {
             public int Compare(Person x, Person y)
             {
@@ -10,7 +10,7 @@ namespace nightOwl.Components
             }
         }
 
-        class PersonMissingDateComparer : IComparer<Person>
+        public class PersonMissingDateComparer : IComparer<Person>
         {
             public int Compare(Person x, Person y)
             {
@@ -18,7 +18,7 @@ namespace nightOwl.Components
             }
         }
 
-        class PersonBirthDateComparer : IComparer<Person>
+        public class PersonBirthDateComparer : IComparer<Person>
         {
             public int Compare(Person x, Person y)
             {
@@ -26,7 +26,7 @@ namespace nightOwl.Components
             }
         }
 
-        class PersonComparer : IComparer<Person>
+        public class PersonComparer : IComparer<Person>
         {
             // The field to compare.
             public enum CompareField

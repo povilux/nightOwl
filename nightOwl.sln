@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nightOwl", "nightOwl.csproj", "{951A0A79-5DBB-412D-9EB7-D6D3286D82C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nigthOwlTests", "nigthOwlTests\nigthOwlTests.csproj", "{A354F004-4BC8-4FAC-9DAA-BFF7B6FAA53A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{951A0A79-5DBB-412D-9EB7-D6D3286D82C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{951A0A79-5DBB-412D-9EB7-D6D3286D82C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{951A0A79-5DBB-412D-9EB7-D6D3286D82C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A354F004-4BC8-4FAC-9DAA-BFF7B6FAA53A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A354F004-4BC8-4FAC-9DAA-BFF7B6FAA53A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A354F004-4BC8-4FAC-9DAA-BFF7B6FAA53A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A354F004-4BC8-4FAC-9DAA-BFF7B6FAA53A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
