@@ -50,15 +50,18 @@ namespace NightOwl.WindowsForms.BusinessLogic
 
         public static EigenFaceRecognizer NewEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 8000);
-            eigenRec.Write(RecognizerDataPath);
-            return eigenRec;
+            EigenFaceRecognizer eigen = new EigenFaceRecognizer(
+                        int.Parse(ConfigurationManager.AppSettings["RecognizerComponentsNum"]),
+                        int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));
+
+            return eigen;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(80, 8000);
-
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(
+                        int.Parse(ConfigurationManager.AppSettings["RecognizerComponentsNum"]),
+                        int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));
             try
             {
                 eigenRec.Read(RecognizerDataPath);
@@ -70,12 +73,14 @@ namespace NightOwl.WindowsForms.BusinessLogic
             return eigenRec;
         }
 
+
         public bool LoadTrainedFaces()
         {
             EigenFaceRecognizer eigen = NewEigen();
 
             string directory = "", picturePath = "";
             int picNumber = 1, personLabelId = 0;
+            Faces.Clear();
 
             foreach (Person person in DataManagement.Instance.GetPersonsCatalog())
             {
@@ -134,7 +139,7 @@ namespace NightOwl.WindowsForms.BusinessLogic
 
             GrabberEvent = new EventHandler((sender, e) =>
             {
-                var frame = FrameGrabber(sender, e);
+                Bitmap frame = FrameGrabber(sender, e);
                 onFrameUpdate.Invoke(frame);
             });
 
@@ -171,14 +176,14 @@ namespace NightOwl.WindowsForms.BusinessLogic
 
         public Image<Bgr, byte> GetFaceFromImage(Image<Bgr, byte> image)
         {
-            var grayImage = image.Convert<Gray, byte>();
-            var detectedFace = GetFacesFromCurrentFrame(grayImage);
+            Image<Gray, byte> grayImage = image.Convert<Gray, byte>();
+            Rectangle[] detectedFaces = GetFacesFromCurrentFrame(grayImage);
 
-            if (detectedFace.Length == 0)
+            if (detectedFaces.Length == 0)
                 return null;
             else
             {
-                Image<Bgr, byte> faceImage = image.Copy(detectedFace[0]).Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+                Image<Bgr, byte> faceImage = image.Copy(detectedFaces[0]).Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
                 return faceImage;
 
             }
@@ -187,7 +192,7 @@ namespace NightOwl.WindowsForms.BusinessLogic
         /// Return an array of all faces in current frame
         private Rectangle[] GetFacesFromCurrentFrame(Image<Gray, byte> frame)
         {
-            var faces = _cascadeClassifier.DetectMultiScale(frame, 1.2, 10, new Size(20, 20)); //the actual face detection happens here
+            Rectangle[] faces = _cascadeClassifier.DetectMultiScale(frame, 1.2, 10, new Size(20, 20)); //the actual face detection happens here
             return faces;
         }
 
@@ -197,7 +202,7 @@ namespace NightOwl.WindowsForms.BusinessLogic
             {
                 Image<Gray, byte> gray = frame.Convert<Gray, byte>();
 
-                foreach (var face in GetFacesFromCurrentFrame(gray))
+                foreach (Rectangle face in GetFacesFromCurrentFrame(gray))
                 {
                     Image<Gray, byte> proccessedFrame = gray.Copy(face)
                              .Resize(
@@ -206,8 +211,9 @@ namespace NightOwl.WindowsForms.BusinessLogic
                                     Emgu.CV.CvEnum.Inter.Cubic
                               );
 
-                    var result = RecognizeFace(proccessedFrame);
-
+      
+                   int result = RecognizeFace(proccessedFrame);
+   
                     if (result > 0)
                     {
                         Face currentFace = Faces.Where(f => f.PersonLabelId == result).FirstOrDefault();
@@ -225,19 +231,16 @@ namespace NightOwl.WindowsForms.BusinessLogic
         {
             try
             {
-
                     Image<Bgr, byte> frame = Grabber.QuerySmallFrame().ToImage<Bgr, byte>();
                     frame = frame.Resize(
                                 int.Parse(ConfigurationManager.AppSettings["FrameWidth"]),
                                 int.Parse(ConfigurationManager.AppSettings["FrameHeight"]),
                                 Emgu.CV.CvEnum.Inter.Cubic
                              );
-
-               
               
                     return RecognizePersons(frame).ToBitmap();
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 CloseCapture();

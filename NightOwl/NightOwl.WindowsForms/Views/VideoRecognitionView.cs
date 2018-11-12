@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
+using NightOwl.WindowsForms.BusinessLogic;
 using NightOwl.WindowsForms.Presenters;
 using NightOwl.WindowsForms.Views;
 

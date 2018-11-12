@@ -32,8 +32,23 @@ namespace NightOwl.WindowsForms.Presenters
 
         public void OnUserSelectedFile(object sender, SelectedFileEventArgs e)
         {
-            PersonRecognizer.Instance.LoadTrainedFaces();
-            PersonRecognizer.Instance.StartCapture((frame) => _view.CurrentVideoFrame = frame, fromVideo: true, CurrentVideoFile: e.SelectedFileName);
+            try
+            {
+                PersonRecognizer.Instance.LoadTrainedFaces();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Recognition is not working! " + ex);
+            }
+
+            try
+            {
+                PersonRecognizer.Instance.StartCapture((frame) => _view.CurrentVideoFrame = frame, fromVideo: true, CurrentVideoFile: e.SelectedFileName);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Failed to start video! " + ex);
+            }
         }
     }
 }

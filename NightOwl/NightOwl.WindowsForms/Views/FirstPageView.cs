@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NightOwl.WindowsForms.BusinessLogic;
 using NightOwl.WindowsForms.Models;
 
 namespace NightOwl.WindowsForms.Views
