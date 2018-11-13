@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using NightOwl.WebService.DAL;
+using NightOwl.WebService.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NightOwl.WebService.DAL;
-using NightOwl.WebService.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace NightOwl.WebService.Controllers
 {
@@ -13,13 +13,15 @@ namespace NightOwl.WebService.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public PersonsController(DatabaseContext context)
+        public PersonsController(UserManager<User> userManager, DatabaseContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: api/Persons
+        // GET: api/Persons/Get
         [HttpGet]
         public IActionResult Get()
         {
@@ -27,7 +29,7 @@ namespace NightOwl.WebService.Controllers
         }
 
 
-        // GET: api/Persons/5
+        // GET: api/Persons/Get/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {            
@@ -39,7 +41,41 @@ namespace NightOwl.WebService.Controllers
             return Ok(person);
         }
 
-        // PUT: api/Persons/5
+        // GET: api/Persons/GetByCreatorId/5
+        [HttpGet("{creatorId}")]
+        public IActionResult GetByCreatorId([FromRoute] int creatorId)
+        {
+            var persons = _context.Persons.Where(p => p.CreatorId == creatorId).ToList();
+
+            if (persons == null)
+                return NotFound();
+
+            return Ok(persons);
+        }
+
+        // GET: api/Persons/GetPersonsByCreator/
+        [HttpGet]
+        public IActionResult GetPersonsByCreator()
+        {
+            var persons = _userManager.Users.
+                GroupJoin(_context.Persons.ToList(),
+                u => u.Id,
+                p => p.CreatorId,
+                (u, personsGroup) => new
+                {
+                    UserName = u.Username,
+                    Persons = personsGroup
+                });
+
+            if (persons == null)
+                return NotFound();
+
+            return Ok(persons.ToList());
+
+        }
+
+
+        // PUT: api/Persons/Put/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromBody] Person person)
         {
@@ -86,14 +122,11 @@ namespace NightOwl.WebService.Controllers
             return Ok(created.Entity);
         }
 
-        // DELETE: api/Persons/5
+        // DELETE: api/Persons/Delete/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {
-            Console.WriteLine("ID: " + id);
             var person = await _context.Persons.FindAsync(id);
-
-            Console.WriteLine("Person: " + person.Name);
 
             if (person == null)
                 return NotFound();

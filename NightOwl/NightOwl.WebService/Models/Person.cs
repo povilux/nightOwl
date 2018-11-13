@@ -23,7 +23,7 @@ namespace NightOwl.WebService.Models
         public string AdditionalInfo { get; set; }
 
         [Required]
-        public int CreatorID { get; private set; }
+        public int CreatorId { get; private set; }
     }
 }
 
