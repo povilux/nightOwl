@@ -10,9 +10,16 @@ namespace NightOwl.WebService.Models
     {
         [Key]
         public int Id { get; set;  }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string BirthDate { get; set; }
+
+        [Required]
         public string MissingDate { get; set; }
+
         public string AdditionalInfo { get; set; }
 
         [Required]

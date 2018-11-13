@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,18 +21,16 @@ namespace NightOwl.WebService.Controllers
 
         // GET: api/Persons
         [HttpGet]
-        public IActionResult GetPersons()
+        public IActionResult Get()
         {
             return Ok(_context.Persons.ToList());
         }
 
+
         // GET: api/Persons/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPerson([FromRoute] int id)
+        public async Task<IActionResult> Get([FromRoute] int id)
         {            
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-           
             var person = await _context.Persons.FindAsync(id);
 
             if(person == null)
@@ -44,7 +41,7 @@ namespace NightOwl.WebService.Controllers
 
         // PUT: api/Persons/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson([FromBody] Person person)
+        public async Task<IActionResult> Put([FromBody] Person person)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -68,7 +65,7 @@ namespace NightOwl.WebService.Controllers
       
         // POST: api/Persons/Post/
         [HttpPost]
-        public IActionResult PostPerson([FromBody][Bind(new string[] { "Name", "BirthDate", "MissingDate", "AdditionalInfo", "CreatorID" })]Person person)
+        public IActionResult Post([FromBody][Bind(new string[] { "Name", "BirthDate", "MissingDate", "AdditionalInfo", "CreatorID" })]Person person)
         {
             if(!ModelState.IsValid)
                return BadRequest(ModelState);
@@ -91,12 +88,12 @@ namespace NightOwl.WebService.Controllers
 
         // DELETE: api/Persons/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
+            Console.WriteLine("ID: " + id);
             var person = await _context.Persons.FindAsync(id);
+
+            Console.WriteLine("Person: " + person.Name);
 
             if (person == null)
                 return NotFound();

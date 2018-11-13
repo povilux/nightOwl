@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NightOwl.WindowsForms", "NightOwl.WindowsForms\NightOwl.WindowsForms.csproj", "{EDBF9CF1-0467-447C-99CA-C5E78F27D7F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NightOwl.WebService", "NightOwl.WebService\NightOwl.WebService.csproj", "{8D3A8E1F-7BA1-444C-8CB0-A9931A7D404B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NightOwl.WebService", "NightOwl.WebService\NightOwl.WebService.csproj", "{8D3A8E1F-7BA1-444C-8CB0-A9931A7D404B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NightOwl.PersonRecognitionService", "NightOwl.PersonRecognitionService\NightOwl.PersonRecognitionService.csproj", "{80C7327F-3A9D-42B3-995D-B4683A084806}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8D3A8E1F-7BA1-444C-8CB0-A9931A7D404B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D3A8E1F-7BA1-444C-8CB0-A9931A7D404B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D3A8E1F-7BA1-444C-8CB0-A9931A7D404B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80C7327F-3A9D-42B3-995D-B4683A084806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C7327F-3A9D-42B3-995D-B4683A084806}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C7327F-3A9D-42B3-995D-B4683A084806}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C7327F-3A9D-42B3-995D-B4683A084806}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
