@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace NightOwl.WebService.Controllers
 {
@@ -43,9 +44,9 @@ namespace NightOwl.WebService.Controllers
 
         // GET: api/Persons/GetByCreatorId/5
         [HttpGet("{creatorId}")]
-        public IActionResult GetByCreatorId([FromRoute] int creatorId)
+        public IActionResult GetByCreatorId([FromRoute]Guid creatorId)
         {
-            var persons = _context.Persons.Where(p => p.CreatorId == creatorId).ToList();
+            var persons = _context.Persons.Where(p => p.Creator.Id.Equals(creatorId.ToString())).ToList();
 
             if (persons == null)
                 return NotFound();
@@ -60,10 +61,10 @@ namespace NightOwl.WebService.Controllers
             var persons = _userManager.Users.
                 GroupJoin(_context.Persons.ToList(),
                 u => u.Id,
-                p => p.CreatorId,
+                p => p.Creator.Id,
                 (u, personsGroup) => new
                 {
-                    UserName = u.Username,
+                    u.UserName,
                     Persons = personsGroup
                 });
 
@@ -77,10 +78,15 @@ namespace NightOwl.WebService.Controllers
 
         // PUT: api/Persons/Put/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromBody] Person person)
+        public async Task<IActionResult> Put([FromBody] Person person, [FromRoute]int id)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            var personExists = await _context.Persons.FindAsync(id);
+
+            if (personExists == null)
+                return NotFound();
 
             var updated = _context.Persons.Update(person);
 
