@@ -176,6 +176,7 @@ namespace NightOwl.WindowsForms.BusinessLogic
 
         public Image<Bgr, byte> GetFaceFromImage(Image<Bgr, byte> image)
         {
+
             Image<Gray, byte> grayImage = image.Convert<Gray, byte>();
             Rectangle[] detectedFaces = GetFacesFromCurrentFrame(grayImage);
 
