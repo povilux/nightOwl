@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
-namespace NightOwl.Xamarin
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace NightOwl.Xamarin.Views
 {
-    public partial class MainPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class AddPerson : ContentPage
     {
-        public MainPage()
+        public AddPerson()
         {
             InitializeComponent();
         }

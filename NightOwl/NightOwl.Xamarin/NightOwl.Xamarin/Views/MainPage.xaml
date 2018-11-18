@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:NightOwl.Xamarin"
+             x:Class="NightOwl.Xamarin.MainPage">
+
+    <StackLayout>
+        <Button Text="Select Video" HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                BackgroundColor="RoyalBlue"
+                Margin="20"
+                Font="Microsoft Sans Serif"
+                FontSize="Large"
+                FontAttributes="Bold"
+                TextColor="White"
+                Clicked="OnSelectVideoButtonClicked"/>
+        <Button Text="Select Picture" HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                BackgroundColor="RoyalBlue"
+                Margin="20"
+                Font="Microsoft Sans Serif"
+                FontSize="Large"
+                FontAttributes="Bold"
+                TextColor="White"
+                Clicked="OnSelectPictureButtonClicked"/>
+        <Button Text="Watch Camera" HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                BackgroundColor="RoyalBlue"
+                Margin="20"
+                Font="Microsoft Sans Serif"
+                FontSize="Large"
+                FontAttributes="Bold"
+                TextColor="White"
+                Clicked="OnWatchCameraButtonClicked"/>
+        <Button Text="Add New Person" HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                BackgroundColor="RoyalBlue"
+                Margin="20"
+                Font="Microsoft Sans Serif"
+                FontSize="Large"
+                FontAttributes="Bold"
+                TextColor="White"
+                Clicked="OnAddNewPersonButtonClicked"/>
+        <Button Text="Map" HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                BackgroundColor="RoyalBlue"
+                Margin="20"
+                Font="Microsoft Sans Serif"
+                FontSize="Large"
+                FontAttributes="Bold"
+                TextColor="White"
+                Clicked="OnMapButtonClicked"/>
+    </StackLayout>
+
+</ContentPage>

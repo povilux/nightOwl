@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.AddPerson">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Manage missing person data:"/>
+            <Button Text="Select person from the list"/>
+            <Image Source="{Binding image}"/>
+            <Button Text="Add photo"/>
+            <Button Text="Add persons data"/>
+            <Label Text="Name, Surname"/>
+            <Entry/>
+            <Label Text="Birth date"/>
+            <DatePicker/>
+            <Label Text="Additional inforamtion"/>
+            <Entry/>
+            <Label Text="Missing date"/>
+            <DatePicker/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
