@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using NightOwl.WebService.DAL;
+using NightOwl.WebService.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NightOwl.WebService.DAL;
-using NightOwl.WebService.Models;
+using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace NightOwl.WebService.Controllers
 {
@@ -14,26 +14,26 @@ namespace NightOwl.WebService.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public PersonsController(DatabaseContext context)
+        public PersonsController(UserManager<User> userManager, DatabaseContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: api/Persons
+        // GET: api/Persons/Get
         [HttpGet]
-        public IActionResult GetPersons()
+        public IActionResult Get()
         {
             return Ok(_context.Persons.ToList());
         }
 
-        // GET: api/Persons/5
+
+        // GET: api/Persons/Get/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPerson([FromRoute] int id)
+        public async Task<IActionResult> Get([FromRoute] int id)
         {            
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-           
             var person = await _context.Persons.FindAsync(id);
 
             if(person == null)
@@ -42,12 +42,51 @@ namespace NightOwl.WebService.Controllers
             return Ok(person);
         }
 
-        // PUT: api/Persons/5
+        // GET: api/Persons/GetByCreatorId/5
+        [HttpGet("{creatorId}")]
+        public IActionResult GetByCreatorId([FromRoute]Guid creatorId)
+        {
+            var persons = _context.Persons.Where(p => p.Creator.Id.Equals(creatorId.ToString())).ToList();
+
+            if (persons == null)
+                return NotFound();
+
+            return Ok(persons);
+        }
+
+        // GET: api/Persons/GetPersonsByCreator/
+        [HttpGet]
+        public IActionResult GetPersonsByCreator()
+        {
+            var persons = _userManager.Users.
+                GroupJoin(_context.Persons.ToList(),
+                u => u.Id,
+                p => p.Creator.Id,
+                (u, personsGroup) => new
+                {
+                    u.UserName,
+                    Persons = personsGroup
+                });
+
+            if (persons == null)
+                return NotFound();
+
+            return Ok(persons.ToList());
+
+        }
+
+
+        // PUT: api/Persons/Put/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson([FromBody] Person person)
+        public async Task<IActionResult> Put([FromBody] Person person, [FromRoute]int id)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            var personExists = await _context.Persons.FindAsync(id);
+
+            if (personExists == null)
+                return NotFound();
 
             var updated = _context.Persons.Update(person);
 
@@ -68,7 +107,7 @@ namespace NightOwl.WebService.Controllers
       
         // POST: api/Persons/Post/
         [HttpPost]
-        public IActionResult PostPerson([FromBody][Bind(new string[] { "Name", "BirthDate", "MissingDate", "AdditionalInfo", "CreatorID" })]Person person)
+        public IActionResult Post([FromBody][Bind(new string[] { "Name", "BirthDate", "MissingDate", "AdditionalInfo", "CreatorID" })]Person person)
         {
             if(!ModelState.IsValid)
                return BadRequest(ModelState);
@@ -89,13 +128,10 @@ namespace NightOwl.WebService.Controllers
             return Ok(created.Entity);
         }
 
-        // DELETE: api/Persons/5
+        // DELETE: api/Persons/Delete/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var person = await _context.Persons.FindAsync(id);
 
             if (person == null)

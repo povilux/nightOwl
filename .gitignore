@@ -249,3 +249,4 @@ GitHubVS.sln.DotSettings
 appsettings.*.json
 web.config
 /NightOwl/NightOwl.WindowsForms/Data/Pictures
+/NightOwl/NightOwl.WebAPIService
