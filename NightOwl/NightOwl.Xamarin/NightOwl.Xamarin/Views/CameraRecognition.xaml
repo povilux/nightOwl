@@ -4,8 +4,12 @@
 
              x:Class="NightOwl.Xamarin.Views.CameraRecognition">
     <ContentPage.Content>
-        <StackLayout>
-
-        </StackLayout>
+        <RelativeLayout>
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
+            </Grid>
+        </RelativeLayout>
     </ContentPage.Content>
 </ContentPage>

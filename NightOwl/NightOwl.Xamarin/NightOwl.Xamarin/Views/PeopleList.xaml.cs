@@ -10,11 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace NightOwl.Xamarin.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PersonsList : ContentPage
+	public partial class PeopleList : ContentPage
 	{
-		public PersonsList ()
+		public PeopleList()
 		{
-			InitializeComponent ();
+            InitializeComponent();
 		}
 	}
 }
