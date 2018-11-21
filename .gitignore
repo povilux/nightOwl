@@ -250,3 +250,7 @@ appsettings.*.json
 web.config
 /NightOwl/NightOwl.WindowsForms/Data/Pictures
 /NightOwl/NightOwl.WebAPIService
+/NightOwl/PersonRecognitionWebService/recognizer.yaml
+/NightOwl/PersonRecognitionWebService/FacesNames.txt
+/NightOwl/NightOwl.PersonRecognitionService/recognizer.yaml
+/NightOwl/NightOwl.PersonRecognitionService/FacesNames.txt

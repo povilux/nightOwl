@@ -28,7 +28,6 @@ namespace NightOwl.WindowsForms.Presenters
         private readonly IDataManagement _data;
 
 
-        // ATEICIAI: datos kol kas saugomos kaip string (nors is view gaunamos kaip datetime). Galbut galima saugoti kaip datetime
 
         public AddPersonPresenter(IAddPersonView view, IPersonModel model)
         {

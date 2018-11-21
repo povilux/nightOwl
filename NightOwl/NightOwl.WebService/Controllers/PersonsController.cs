@@ -107,7 +107,7 @@ namespace NightOwl.WebService.Controllers
       
         // POST: api/Persons/Post/
         [HttpPost]
-        public IActionResult Post([FromBody][Bind(new string[] { "Name", "BirthDate", "MissingDate", "AdditionalInfo", "CreatorID" })]Person person)
+        public IActionResult Post([FromBody]Person person)
         {
             if(!ModelState.IsValid)
                return BadRequest(ModelState);
