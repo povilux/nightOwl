@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.CreateAnAccount">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Register new user"/>
+            <Label Text="Username"/>
+            <Entry VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Password"/>
+            <Entry VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Email"/>
+            <Entry VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Register"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
