@@ -92,9 +92,9 @@ namespace NightOwl.WebService.Controllers
             if (valid_username == null)
                 return NotFound();
 
-            var user = _userManager.CheckPasswordAsync(valid_username, loginInfo.Value);
+            Task<bool> user = _userManager.CheckPasswordAsync(valid_username, loginInfo.Value);
 
-            if (user == null)
+            if (user.Result == false)
                 return NotFound();        
 
             return Ok(user.Result);
@@ -105,10 +105,10 @@ namespace NightOwl.WebService.Controllers
         public async Task<IActionResult> Register([FromBody]User user)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
 
             var createdPerson = await _userManager.CreateAsync(user, user.PasswordHash);
-       
+
             if (!createdPerson.Succeeded)
                 return BadRequest(createdPerson.Errors);
 

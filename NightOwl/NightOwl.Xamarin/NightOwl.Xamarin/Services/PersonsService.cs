@@ -12,16 +12,12 @@ namespace NightOwl.Xamarin.Services
     {
         private IHttpClientService httpClient = HttpClientService.Instance;
 
-        public async Task<Person> GetPersonsList()
+        public async Task<APIMessage<Person>> GetPersonsList()
         {    
             try
             {
                 var response = await httpClient.GetAsync<Person>(APIEndPoints.GetPersonEndPoint);
                 return response;
-            }
-            catch (BadHttpRequestException ex)
-            {
-                Console.WriteLine("BadHttpRequestException: " + ex);
             }
             catch (Exception ex)
             {
@@ -29,7 +25,7 @@ namespace NightOwl.Xamarin.Services
             }
             return null;
         }
-        public async Task<Person> AddNewPersonAsync(Person newPerson)
+        public async Task<APIMessage<Person>> AddNewPersonAsync(Person newPerson)
         {
             if (newPerson != null)
             {
@@ -38,18 +34,12 @@ namespace NightOwl.Xamarin.Services
                     var response = await httpClient.PostAsync<Person, Person>(APIEndPoints.AddNewPersonEndPoint, newPerson);
                     return response;
                 }
-                catch (BadHttpRequestException ex)
-                {
-                    Console.WriteLine("BadHttpRequestException: " + ex);
-                }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Exception: " + ex);
                 }
             }
-            throw new Exception("Person cannot be null.");
+            return null;
         }
-
-
     }
 }

@@ -6,5 +6,6 @@ namespace NightOwl.Xamarin.Services
 {
     public class ErrorLogger
     {
+
     }
 }

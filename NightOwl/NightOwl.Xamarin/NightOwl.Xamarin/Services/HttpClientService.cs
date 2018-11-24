@@ -4,6 +4,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
 using NightOwl.Xamarin.Exceptions;
+using NightOwl.Xamarin.Components;
 
 namespace NightOwl.Xamarin.Services
 {
@@ -28,24 +29,30 @@ namespace NightOwl.Xamarin.Services
             }
         }
 
-        public async Task<T> GetAsync<T>(string url)
+        public async Task<APIMessage<T>> GetAsync<T>(string url)
         {
             var response = await HttpClient.GetAsync(url);
             var contents = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new BadHttpRequestException(contents);
+                return new APIMessage<T>()
+                {
+                    Success = false,
+                    Error = contents
+                };
             }
             else
             {
-
-
-                return JsonConvert.DeserializeObject<T>(contents);
+                return new APIMessage<T>()
+                {
+                    Success = true,
+                    Message = JsonConvert.DeserializeObject<T>(contents)
+                };
             }
         }
 
-        public async Task<V> PostAsync<V, T>(string url, T postData)
+        public async Task<APIMessage<V>> PostAsync<V, T>(string url, T postData)
         {
             var postContent = new StringContent(JsonConvert.SerializeObject(postData), Encoding.UTF8, "application/json");
             var response = await HttpClient.PostAsync(url, postContent);
@@ -53,16 +60,26 @@ namespace NightOwl.Xamarin.Services
             if (!response.IsSuccessStatusCode)
             {
                 var contents = await response.Content.ReadAsStringAsync();
-                throw new BadHttpRequestException(contents.Length > 0 ? contents.Substring(1, contents.Length - 2) : response.ReasonPhrase);
+                
+                return new APIMessage<V>()
+                {
+                    Success = false,
+                    Error = contents
+                };
             }
             else
             {
                 var contents = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<V>(contents);
+
+                return new APIMessage<V>()
+                {
+                    Success = true,
+                    Message = JsonConvert.DeserializeObject<V>(contents)
+                };
             }
         }
 
-        public async Task<T> PutAsync<T>(string url, T putData)
+        public async Task<APIMessage<T>> PutAsync<T>(string url, T putData)
         {
             var putContent = new StringContent(JsonConvert.SerializeObject(putData), Encoding.UTF8, "application/json");
 
@@ -71,26 +88,42 @@ namespace NightOwl.Xamarin.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new BadHttpRequestException(contents);
+                return new APIMessage<T>()
+                {
+                    Success = false,
+                    Error = contents
+                };
             }
             else
             {
-                return JsonConvert.DeserializeObject<T>(contents);
+                return new APIMessage<T>()
+                {
+                    Success = true,
+                    Message = JsonConvert.DeserializeObject<T>(contents)
+                };
             }
         }
 
-        public async Task<T> DeleteAsync<T>(string url)
+        public async Task<APIMessage<T>> DeleteAsync<T>(string url)
         {
             var response = await HttpClient.DeleteAsync(url);
             var contents = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new BadHttpRequestException(contents);
+                return new APIMessage<T>()
+                {
+                    Success = false,
+                    Error = contents
+                };
             }
             else
             {
-                return JsonConvert.DeserializeObject<T>(contents);
+                return new APIMessage<T>()
+                {
+                    Success = true,
+                    Message = JsonConvert.DeserializeObject<T>(contents)
+                };
             }
         }
     }

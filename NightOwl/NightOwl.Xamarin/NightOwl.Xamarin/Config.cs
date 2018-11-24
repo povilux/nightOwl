@@ -9,6 +9,16 @@ namespace NightOwl.Xamarin
 
     }
 
+    public struct Messages
+    {
+        public const string MessageBoxClosingBtnText = "Close";
+
+        public const string SystemErrorMessage = "System error. Please contact administrator.";
+        public const string SystemErrorTitle = "Error";
+
+        public const string InvalidDataTitle = "Invalid input";
+        public const string NotValidLoginInfoError = "Username or password is invalid.";
+    }
     public struct APIEndPoints
     {
         public const string DataServiceAPIUrl = "https://nightowlwebservice.azurewebsites.net/api/";
