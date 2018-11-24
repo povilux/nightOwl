@@ -12,7 +12,7 @@ namespace NightOwl.Xamarin
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new Login());
+            MainPage = new NavigationPage(new PictureRecognition());
         }
 
         protected override void OnStart()
