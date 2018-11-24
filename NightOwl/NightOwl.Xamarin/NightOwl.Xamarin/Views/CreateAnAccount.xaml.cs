@@ -2,6 +2,7 @@
 using NightOwl.Xamarin.Exceptions;
 using NightOwl.Xamarin.Services;
 using NightOwl.Xamarin.ViewModel;
+using PCLAppConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,17 +56,17 @@ namespace NightOwl.Xamarin.Views
                         await Navigation.PushAsync(new MainPage());
                     }
                     else
-                        await DisplayAlert(Messages.SystemErrorTitle, Messages.SystemErrorMessage, Messages.MessageBoxClosingBtnText);
+                        await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 }
                 else
                 {
-                    await DisplayAlert(Messages.SystemErrorTitle, result.Error, Messages.MessageBoxClosingBtnText);
+                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], result.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Bad registration: " + ex);
-                await DisplayAlert(Messages.SystemErrorTitle, Messages.SystemErrorMessage, Messages.MessageBoxClosingBtnText);
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
             }
         }
     }

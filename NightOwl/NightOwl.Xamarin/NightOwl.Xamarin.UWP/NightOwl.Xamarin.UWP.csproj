@@ -160,6 +160,12 @@
   <ItemGroup>
     <Folder Include="NightOwl\Xamarin\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\NightOwl.Xamarin\app.config">
+      <Link>app.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

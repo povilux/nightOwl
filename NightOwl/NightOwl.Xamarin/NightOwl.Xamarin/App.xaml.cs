@@ -1,6 +1,7 @@
 ﻿using NightOwl.Xamarin.Components;
 using NightOwl.Xamarin.Services;
 using NightOwl.Xamarin.Views;
+using System.Configuration;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,7 +16,7 @@ namespace NightOwl.Xamarin
         {
             InitializeComponent();
 
-            if(CurrentUser == null)
+            if (CurrentUser == null)
                 MainPage = new NavigationPage(new Login(new UserService()));
             else
                 MainPage = new NavigationPage(new MainPage());

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCLAppConfig;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,36 +10,82 @@ namespace NightOwl.Xamarin
 
     }
 
-    public struct Messages
-    {
-        public const string MessageBoxClosingBtnText = "Close";
-
-        public const string SystemErrorMessage = "System error. Please contact administrator.";
-        public const string SystemErrorTitle = "Error";
-
-        public const string InvalidDataTitle = "Invalid input";
-        public const string NotValidLoginInfoError = "Username or password is invalid.";
-    }
     public struct APIEndPoints
     {
-        public const string DataServiceAPIUrl = "https://nightowlwebservice.azurewebsites.net/api/";
-        public const string RecognizerServiceAPIUrl = "https://nightowlpersonrecognitionservice.azurewebsites.net/api/";
+        //---------------------------------------------------------------
+        // Users controller end points
+        public static string RegisterUserEndPoint {
+            get {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["UsersAPIUrl"] + ConfigurationManager.AppSettings["RegisterUserAPI"];
+                }
+        }
 
-        public const string UsersAPIUrl = "Users/";
-        public const string PersonsAPIUrl = "Persons/";
-        public const string FacesAPIUrl = "Faces/";
+        public static string LoginUserEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["UsersAPIUrl"] + ConfigurationManager.AppSettings["LoginUserAPI"];
+            }
+        }
 
-        public const string RegisterUserEndPoint = DataServiceAPIUrl + UsersAPIUrl + "Register/";
-        public const string LoginUserEndPoint = DataServiceAPIUrl + UsersAPIUrl + "Login/";
-        public const string GetUserByUsernameEndPoint = DataServiceAPIUrl + UsersAPIUrl + "GetUserByName/";
+        public static string GetUserByUsernameEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["UsersAPIUrl"] + ConfigurationManager.AppSettings["GetUserByUsernameAPI"];
+            }
+        }
 
-        public const string AddNewPersonEndPoint = DataServiceAPIUrl + PersonsAPIUrl + "Post/";
-        public const string GetPersonEndPoint = DataServiceAPIUrl + PersonsAPIUrl + "Get/";
-        public const string GetPersonByCreatorEndPoint = DataServiceAPIUrl + PersonsAPIUrl + "GetByCreatorId/";
+        //---------------------------------------------------------------
+        // Persons controller end points
+        public static string AddNewPersonEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonsAPIUrl"] + ConfigurationManager.AppSettings["AddNewPersonAPI"];
+            }
+        }
 
-        public const string RecognizeFaceEndPoint = RecognizerServiceAPIUrl + FacesAPIUrl + "Recognize/";
-        public const string TrainFaceEndPoint = RecognizerServiceAPIUrl + FacesAPIUrl + "Train/";
-        public const string DetectFacesEndPoint = RecognizerServiceAPIUrl + FacesAPIUrl + "Detect/";
+        public static string GetPersonEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonsAPIUrl"] + ConfigurationManager.AppSettings["GetPersonAPI"];
+            }
+        }
 
+        public static string GetPersonByCreatorEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonsAPIUrl"] + ConfigurationManager.AppSettings["GetPersonByCreatorAPI"];
+            }
+        }
+
+        //---------------------------------------------------------------
+        // Faces controller end points
+        public static string RecognizeFaceEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RecognizerServiceAPIUrl"] + ConfigurationManager.AppSettings["FacesAPIUrl"] + ConfigurationManager.AppSettings["RecognizeFaceAPI"];
+            }
+        }
+
+        public static string TrainFaceEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RecognizerServiceAPIUrl"] + ConfigurationManager.AppSettings["FacesAPIUrl"] + ConfigurationManager.AppSettings["TrainFaceAPI"];
+            }
+        }
+
+        public static string DetectFacesEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RecognizerServiceAPIUrl"] + ConfigurationManager.AppSettings["FacesAPIUrl"] + ConfigurationManager.AppSettings["DetectFaceAPI"];
+            }
+        }
     }
 }

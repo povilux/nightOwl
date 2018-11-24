@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCLAppConfig;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -53,6 +54,7 @@ namespace NightOwl.Xamarin.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 global::Xamarin.Forms.Forms.Init(e);
+                ConfigurationManager.Initialise(PCLAppConfig.FileSystemStream.PortableStream.Current);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {

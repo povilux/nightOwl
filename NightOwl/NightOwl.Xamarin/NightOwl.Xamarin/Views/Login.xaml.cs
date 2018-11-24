@@ -1,5 +1,6 @@
 ﻿using NightOwl.Xamarin.Services;
 using NightOwl.Xamarin.ViewModel;
+using PCLAppConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,11 +41,11 @@ namespace NightOwl.Xamarin.Views
                     await Navigation.PushAsync(new MainPage());
                 }
                 else
-                    await DisplayAlert(Messages.SystemErrorTitle, Messages.SystemErrorMessage, Messages.MessageBoxClosingBtnText);
+                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
             }
             else
             {
-                await DisplayAlert(Messages.InvalidDataTitle, Messages.NotValidLoginInfoError, Messages.MessageBoxClosingBtnText);
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
             }
 
         }
