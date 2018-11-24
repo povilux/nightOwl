@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

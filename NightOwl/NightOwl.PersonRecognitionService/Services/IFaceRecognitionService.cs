@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using PersonRecognitionService.Models;
+using NightOwl.PersonRecognitionService.Models;
 
-namespace PersonRecognitionService.Services
+namespace NightOwl.PersonRecognitionService.Services
 {
     public interface IFaceRecognitionService
     {

@@ -121,11 +121,14 @@
     </Compile>
     <Compile Include="Models\Face.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FaceDetectionService.cs" />
     <Compile Include="Services\FaceRecognitionService.cs" />
+    <Compile Include="Services\IFaceDetectionService.cs" />
     <Compile Include="Services\IFaceRecognitionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\NightOwlPersonRecognitionService - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

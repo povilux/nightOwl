@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Web.Http;
-using PersonRecognitionService.Components;
-using PersonRecognitionService.Services;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using NightOwl.PersonRecognitionService.Components;
+using NightOwl.PersonRecognitionService.Services;
+using NightOwl.PersonRecognitionWebService.Extensions;
 
-namespace PersonRecognitionService.Controllers
+namespace NightOwl.PersonRecognitionService.Controllers
 {
     public class FacesController : ApiController
     {        
@@ -32,7 +36,7 @@ namespace PersonRecognitionService.Controllers
 
         // POST: api/Faces/RecognizeFace
         [HttpPost]
-        public  IHttpActionResult RecognizeFace([FromBody]byte[] face)
+        public  IHttpActionResult Recognize([FromBody]byte[] face)
         {
             try { 
                 IFaceRecognitionService faceRecognitionService = new FaceRecognitionService();
@@ -45,5 +49,23 @@ namespace PersonRecognitionService.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+
+        [HttpPost]
+        public IHttpActionResult Detect([FromBody]byte[] photo)
+        {
+            try
+            {
+                IFaceDetectionService faceDetectionService = new FaceDetectionService();
+
+                Rectangle[] rectangles = faceDetectionService.DetectFaces(photo.ByteArrayToImage());
+                return Ok(rectangles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+
     }
 }

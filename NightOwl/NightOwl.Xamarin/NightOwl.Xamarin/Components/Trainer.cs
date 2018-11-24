@@ -1,7 +1,6 @@
-﻿using NightOwl.PersonRecognitionService.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace NightOwl.PersonRecognitionService.Components
+namespace NightOwl.Xamarin.Components
 {
     public class Trainer
     {

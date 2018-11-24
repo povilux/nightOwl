@@ -1,8 +1,8 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Face;
 using Emgu.CV.Structure;
-using PersonRecognitionService.Models;
-using PersonRecognitionWebService.Extensions;
+using NightOwl.PersonRecognitionService.Models;
+using NightOwl.PersonRecognitionWebService.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace PersonRecognitionService.Services
+namespace NightOwl.PersonRecognitionService.Services
 {
     public class FaceRecognitionService : IFaceRecognitionService
     {
@@ -53,7 +53,7 @@ namespace PersonRecognitionService.Services
 
                 int nameId = 0, j = 0;
 
-                Data.ToList().ForEach(f => FacesPhotos.Add(f.Photo.ByteArrayToImage()));
+                Data.ToList().ForEach(f => FacesPhotos.Add(f.Photo.ByteArrayToImage().ConvertToRecognition()));
                 Data.ToList().ForEach(f =>
                 {
                     if (!_FacesNamesArray.Contains(f.PersonName))
@@ -92,7 +92,7 @@ namespace PersonRecognitionService.Services
                 throw ex;
             }
         }
-    
+      
         public string RecognizeFace(byte[] face)
         {
             try
@@ -100,7 +100,8 @@ namespace PersonRecognitionService.Services
                 if (_eigen == null)
                     throw new Exception("Recognizer must be initialized");
 
-                FaceRecognizer.PredictionResult result = _eigen.Predict(face.ByteArrayToImage());
+                Image<Gray, byte> convertedImage = face.ByteArrayToImage().ConvertToRecognition();
+                FaceRecognizer.PredictionResult result = _eigen.Predict(convertedImage);
 
                 if (result.Label > 0)
                     return _FacesNamesArray[result.Label - 1];

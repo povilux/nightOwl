@@ -1,13 +1,11 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Web;
 
-namespace PersonRecognitionWebService.Extensions
+namespace NightOwl.PersonRecognitionWebService.Extensions
 {
     public static class ImageExtension
     {
@@ -18,9 +16,19 @@ namespace PersonRecognitionWebService.Extensions
             return ms.ToArray();
         }
 
-        public static Image<Gray, byte> ByteArrayToImage(this byte[] byteArrayIn)
+        public static Image<Gray, byte> ConvertToRecognition(this Image<Bgr, byte> image)
         {
-
+            return image
+                        .Convert<Gray, byte>()
+                        .Resize(
+                               int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
+                               int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
+                               Emgu.CV.CvEnum.Inter.Cubic
+                        )
+                        .Clone();
+        }
+        public static Image<Bgr, byte> ByteArrayToImage(this byte[] byteArrayIn)
+        {
             try
             {
                 Bitmap bitmap;
@@ -28,7 +36,7 @@ namespace PersonRecognitionWebService.Extensions
                 using (MemoryStream ms = new MemoryStream(byteArrayIn))
                     bitmap = new Bitmap(Image.FromStream(ms));
 
-                return new Image<Gray, byte>(bitmap);
+                return new Image<Bgr, byte>(bitmap);
             }
             catch (Exception)
             {

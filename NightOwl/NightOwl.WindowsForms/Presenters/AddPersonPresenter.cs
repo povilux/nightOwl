@@ -94,7 +94,24 @@ namespace NightOwl.WindowsForms.Presenters
                 // to do: something...
                 string chosenName = _model.CurrentPerson.Name;
                 chosenName = chosenName.Replace(" ", "_");
-              //  _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
+                //  _view.PersonImage = ImageHandler.LoadRepresentativePic(chosenName);
+
+                Bitmap originalBmp = (Bitmap)Image.FromFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+                                                       Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + "Aurimas_Skorupskas/1.bmp");//load the image file
+                PointF firstLocation = new PointF(10f, 10f);
+                Bitmap tempBitmap = new Bitmap(originalBmp);
+                using (Graphics graphics = Graphics.FromImage(tempBitmap))
+                {
+                    using (Font arialFont = new Font("Arial", 10))
+                    {
+                        graphics.DrawString("Testas", arialFont, Brushes.Blue, firstLocation);
+                    }
+                }
+
+               // tempBitmap.Save(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName +
+                                                 //      Settings.Default.DataFolderPath + Settings.Default.ImagesFolderPath + "Aurimas_Skorupskas/1.bmp");//save the image file
+
+                _view.PersonImage = tempBitmap;
             }
         }
 
