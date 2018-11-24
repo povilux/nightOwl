@@ -1,5 +1,5 @@
-﻿using System;
-using System.Configuration;
+﻿using NightOwl.Xamarin.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,7 +12,7 @@ namespace NightOwl.Xamarin
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new Login());
         }
 
         protected override void OnStart()
