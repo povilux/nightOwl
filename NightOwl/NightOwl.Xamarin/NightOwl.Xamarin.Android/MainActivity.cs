@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Plugin.CurrentActivity;
+using Plugin.MediaManager.Forms.Android;
 
 namespace NightOwl.Xamarin.Droid
 {
@@ -18,6 +19,7 @@ namespace NightOwl.Xamarin.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(savedInstanceState);
+            VideoViewRenderer.Init();
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
