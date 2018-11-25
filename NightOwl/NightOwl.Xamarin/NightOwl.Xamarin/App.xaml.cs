@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NightOwl.Xamarin.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +12,7 @@ namespace NightOwl.Xamarin
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new PictureRecognition());
         }
 
         protected override void OnStart()

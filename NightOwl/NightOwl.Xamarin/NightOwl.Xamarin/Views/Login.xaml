@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.Login">
+    <ContentPage.Content>
+        <RelativeLayout>
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
+            </Grid>
+            <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                <Label Text="Login to the system"
+                   Margin="0, 0, 0, 20"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="Large"/>
+                <Label Text="Username"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="Medium"/>
+                <Entry x:Name="Username"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand"
+                    WidthRequest="200"/>
+                <Label Text="Password"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="Medium"/>
+                <Entry x:Name="Password"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand"
+                    WidthRequest="200"
+                    IsPassword="True"/>
+                <Button Text="Login"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="Center"
+                    BackgroundColor="RoyalBlue"
+                    BorderWidth="2"
+                    BorderColor="White"                    
+                    TextColor="White"
+                    Font="Microsoft Sans Serif"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    Clicked="OnLoginButtonClicked"/>
+                <Button Text="Register"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="Center"
+                    BackgroundColor="RoyalBlue"
+                    BorderWidth="2"
+                    BorderColor="White"                    
+                    TextColor="White"
+                    Font="Microsoft Sans Serif"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    Clicked="OnRegisterButtonClicked"/>
+            </StackLayout>
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>

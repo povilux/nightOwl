@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.PictureRecognition">
+    <ContentPage.Content>
+        <ScrollView>
+            <RelativeLayout>
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                        RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                        RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                    <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
+                </Grid>
+                <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                        RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                        RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                <Image x:Name="image"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand"/>
+                    <!--<Button x:Name="takePhoto"
+                    Text="Take photo"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="RoyalBlue"
+                    BorderWidth="2"
+                    BorderColor="White"                    
+                    TextColor="White"
+                    Font="Microsoft Sans Serif"
+                    FontSize="Large"
+                    FontAttributes="Bold"/>-->
+                <Button x:Name="pickPhoto"
+                    Text="Pick photo"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="RoyalBlue"
+                    BorderWidth="2"
+                    BorderColor="White"                    
+                    TextColor="White"
+                    Font="Microsoft Sans Serif"
+                    FontSize="Large"
+                    FontAttributes="Bold"/>
+            </StackLayout>
+               </RelativeLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
