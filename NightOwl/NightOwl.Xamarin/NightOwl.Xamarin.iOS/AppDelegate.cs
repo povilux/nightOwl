@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
-using Plugin.MediaManager.Forms.iOS;
+using PCLAppConfig;
 using UIKit;
 
 namespace NightOwl.Xamarin.iOS
@@ -23,8 +23,8 @@ namespace NightOwl.Xamarin.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            VideoViewRenderer.Init();
             global::Xamarin.Forms.Forms.Init();
+            ConfigurationManager.Initialise(PCLAppConfig.FileSystemStream.PortableStream.Current);
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

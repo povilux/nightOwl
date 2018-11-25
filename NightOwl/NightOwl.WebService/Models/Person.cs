@@ -25,7 +25,6 @@ namespace NightOwl.WebService.Models
 
         public string AdditionalInfo { get; set; }
 
-        [Required]
         public User Creator { get; private set; }
     }
 }

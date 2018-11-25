@@ -140,8 +140,7 @@ namespace NightOwl.WebService.Migrations
                     b.Property<string>("BirthDate")
                         .IsRequired();
 
-                    b.Property<string>("CreatorId")
-                        .IsRequired();
+                    b.Property<string>("CreatorId");
 
                     b.Property<string>("MissingDate")
                         .IsRequired();
@@ -256,8 +255,7 @@ namespace NightOwl.WebService.Migrations
                 {
                     b.HasOne("NightOwl.WebService.Models.User", "Creator")
                         .WithMany("AddedPersons")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CreatorId");
                 });
 #pragma warning restore 612, 618
         }

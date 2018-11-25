@@ -47,21 +47,30 @@ namespace NightOwl.WindowsForms.BusinessLogic
 
         }
 
+        private static double tre = double.PositiveInfinity;
+        private static double treshold = 3900.0;
 
         public static EigenFaceRecognizer NewEigen()
         {
-            EigenFaceRecognizer eigen = new EigenFaceRecognizer(
+
+            EigenFaceRecognizer eigen = new EigenFaceRecognizer(7, tre);
+                /*
                         int.Parse(ConfigurationManager.AppSettings["RecognizerComponentsNum"]),
                         int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));
-
+                        */
             return eigen;
         }
 
         public static EigenFaceRecognizer OldEigen()
         {
-            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(
-                        int.Parse(ConfigurationManager.AppSettings["RecognizerComponentsNum"]),
-                        int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));
+            /*     Console.WriteLine("Bsd" + int.Parse(ConfigurationManager.AppSettings["RecognizerComponentsNum"])+
+                           int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));
+                 EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(
+                             int.Parse(ConfigurationManager.AppSettings["RecognizerComponentsNum"]),
+                             int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));*/
+
+            EigenFaceRecognizer eigenRec = new EigenFaceRecognizer(7, tre);
+
             try
             {
                 eigenRec.Read(RecognizerDataPath);
@@ -218,7 +227,8 @@ namespace NightOwl.WindowsForms.BusinessLogic
                     if (result > 0)
                     {
                         Face currentFace = Faces.Where(f => f.PersonLabelId == result).FirstOrDefault();
-
+                        Console.WriteLine("Face name: " + currentFace.Name);
+                        Console.WriteLine(" ");
                         CvInvoke.PutText(frame, currentFace.Name, new Point(face.Location.X + 10,
                             face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 0.5, new Bgr(0, 255, 0).MCvScalar);
 
@@ -254,7 +264,12 @@ namespace NightOwl.WindowsForms.BusinessLogic
             EigenFaceRecognizer eigen = OldEigen();
             FaceRecognizer.PredictionResult result = eigen.Predict(image);
 
-            return result.Label;
+            Console.WriteLine("ID: " + result.Label + ", " + "Threshold:  " + result.Distance);
+            if (result.Label != -1 && result.Distance < treshold)//int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]))
+            { 
+                return result.Label;
+            }
+            return 0;
         }
     }
 }
