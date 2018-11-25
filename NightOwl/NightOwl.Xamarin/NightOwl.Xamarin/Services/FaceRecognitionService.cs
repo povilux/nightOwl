@@ -1,5 +1,7 @@
 ﻿using NightOwl.Xamarin.Components;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace NightOwl.Xamarin.Services
@@ -19,7 +21,7 @@ namespace NightOwl.Xamarin.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception: " + ex);
+                    ErrorLogger.Instance.LogException(ex);
                 }
             }
             return null;

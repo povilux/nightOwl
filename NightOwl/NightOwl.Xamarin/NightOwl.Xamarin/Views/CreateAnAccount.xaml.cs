@@ -4,8 +4,10 @@ using NightOwl.Xamarin.ViewModel;
 using PCLAppConfig;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -32,6 +34,24 @@ namespace NightOwl.Xamarin.Views
             RegisterVM.Password = Password.Text;
             RegisterVM.Email = Email.Text;
 
+            if (string.IsNullOrEmpty(RegisterVM.Username))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidUserName"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
+            if(string.IsNullOrEmpty(RegisterVM.Password))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidPassword"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(RegisterVM.Email) || (!string.IsNullOrEmpty(RegisterVM.Email) && !Regex.IsMatch(RegisterVM.Email, "([0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$")))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidEmail"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
             User newUser = new User
             {
                 UserName = RegisterVM.Username,
@@ -45,7 +65,7 @@ namespace NightOwl.Xamarin.Views
             {
                 var result = await _userService.RegisterAsync(newUser);
 
-                if(result.Success)
+                if (result.Success)
                 {
                     var user = await _userService.GetUserByUsernameAsync(RegisterVM.Username);
 
@@ -55,16 +75,20 @@ namespace NightOwl.Xamarin.Views
                         await Navigation.PushAsync(new MainPage());
                     }
                     else
+                    {
+                        ErrorLogger.Instance.LogError(user.Error);
                         await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                    }
                 }
                 else
                 {
+                    ErrorLogger.Instance.LogError(result.Error);
                     await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], result.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Bad registration: " + ex);
+                ErrorLogger.Instance.LogException(ex);
                 await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
             }
         }

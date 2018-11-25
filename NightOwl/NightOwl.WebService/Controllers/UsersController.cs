@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -104,10 +105,15 @@ namespace NightOwl.WebService.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody]User user)
         {
+            System.IO.File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "register.txt"), user.UserName + " " + user.PasswordHash + " " + user.Email);
             if (!ModelState.IsValid)
                 return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
 
+            System.IO.File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "register1.txt"), user.UserName + " " + user.PasswordHash + " " + user.Email);
+
             var createdPerson = await _userManager.CreateAsync(user, user.PasswordHash);
+            System.IO.File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "register2.txt"), createdPerson.ToString() + " " + createdPerson.Errors);
+            System.IO.File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "register3.txt"), user.ToString());
 
             if (!createdPerson.Succeeded)
                 return BadRequest(createdPerson.Errors);

@@ -4,11 +4,11 @@ using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,7 +18,6 @@ namespace NightOwl.Xamarin.Views
 	public partial class PictureRecognition : ContentPage
 	{
         private IFaceRecognitionService _faceRecognitionService;
-        private IFaceDetectionService _faceDetectionService;
 
         private Func<Stream> imageStream;
 
@@ -26,8 +25,7 @@ namespace NightOwl.Xamarin.Views
 		{
 			InitializeComponent ();
             _faceRecognitionService = faceRecognitionService;
-            // _faceDetectionService = DependencyService.Get<IFaceDetectionService>();
-            _faceDetectionService = new FaceDetectionService();
+
             pickPhoto.Clicked += OnSelectedPhotoAsync;
 
             /*takePhoto.Clicked += async (sender, args) =>
@@ -81,34 +79,26 @@ namespace NightOwl.Xamarin.Views
                 return;
 
             image.Source = GetImageFromFile(file);
-            byte[] face = GetByteArrayFromStream(imageStream);
-           
-            var detection = await _faceDetectionService.DetectFacesAsync(GetByteArrayFromStream(imageStream));
-
-            if (detection == null)
-            {
-                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                return;
-            }
 
             try
             {
-                IEnumerable<string> recognizedPersons = await RecognizePersonsFromPhtAsync(detection);
+                byte[] photoByteArray = GetByteArrayFromStream(imageStream);
+                string recognizedPersons = await RecognizePersonsFromPhtAsync(photoByteArray);
 
-                if (recognizedPersons == null)
+                if(recognizedPersons == null)
                 {
                     await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                     return;
                 }
 
-                if (recognizedPersons.Count() > 0)
+                if (!string.IsNullOrEmpty(recognizedPersons))
                     await DisplayAlert(ConfigurationManager.AppSettings["RecognizedPersonTitle"], string.Join(Environment.NewLine, recognizedPersons), ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 else
                     await DisplayAlert(ConfigurationManager.AppSettings["NotRecognizedPersonTitle"], ConfigurationManager.AppSettings["NotRecognizedPersonText"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);           
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // to do: log ex
+                ErrorLogger.Instance.LogException(ex);
                 await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
             }
         }
@@ -139,26 +129,19 @@ namespace NightOwl.Xamarin.Views
             return face;
         }
 
-        public async Task<IEnumerable<string>> RecognizePersonsFromPhtAsync(byte[][] faces)
+        public async Task<string> RecognizePersonsFromPhtAsync(byte[] photo)
         {
-            ICollection<string> recognizedPersons = new List<string>();
+            var recognition = await _faceRecognitionService.RecognizeFacesAsync(photo);
 
-            foreach (byte[] faceByteArray in faces)
-            {
-                var recognition = await _faceRecognitionService.RecognizeFacesAsync(faceByteArray);
-
-                if (recognition.Success)
-                {
-                    if (!String.IsNullOrEmpty(recognition.Message))
-                        recognizedPersons.Add(recognition.Message);
-                }
-                else
-                {
-                    // to do: log recognition.Error
-                    return null;
-                }
+           if (recognition.Success)
+           {
+                return recognition.Message;
+           }
+           else
+           {
+                ErrorLogger.Instance.LogError(recognition.Error);
+                return null;
             }
-            return recognizedPersons;
         }
     }
 }

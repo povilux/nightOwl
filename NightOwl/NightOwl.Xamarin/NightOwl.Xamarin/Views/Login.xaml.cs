@@ -28,24 +28,48 @@ namespace NightOwl.Xamarin.Views
         {
             LoginVM.Username = Username.Text;
             LoginVM.Password = Password.Text;
- 
-            var result = await _userService.LoginAsync(LoginVM.Username, LoginVM.Password);
 
-            if (result.Success)
-            {
-                var user = await _userService.GetUserByUsernameAsync(LoginVM.Username);
-
-                if (user.Success)
-                {
-                    App.CurrentUser = user.Message;
-                    await Navigation.PushAsync(new MainPage());
-                }
-                else
-                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-            }
-            else
+            if (string.IsNullOrEmpty(LoginVM.Username))
             {
                 await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(LoginVM.Password))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
+            try
+            {
+                var result = await _userService.LoginAsync(LoginVM.Username, LoginVM.Password);
+
+                if (result.Success)
+                {
+                    var user = await _userService.GetUserByUsernameAsync(LoginVM.Username);
+
+                    if (user.Success)
+                    {
+                        App.CurrentUser = user.Message;
+                        await Navigation.PushAsync(new MainPage());
+                    }
+                    else
+                    {
+                        ErrorLogger.Instance.LogError(user.Error);
+                        await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                    }
+                }
+                else
+                {
+                    ErrorLogger.Instance.LogError(result.Error);
+                    await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                }
+            }
+            catch(Exception ex)
+            {
+                ErrorLogger.Instance.LogException(ex);
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
             }
 
         }

@@ -21,7 +21,7 @@ namespace NightOwl.Xamarin.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception: " + ex);
+                ErrorLogger.Instance.LogException(ex);
             }
             return null;
         }
@@ -37,7 +37,7 @@ namespace NightOwl.Xamarin.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception: " + ex);
+                    ErrorLogger.Instance.LogException(ex);
                 }
             }
             return null;

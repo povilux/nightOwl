@@ -59,7 +59,8 @@ namespace NightOwl.Xamarin.Services
             if (!response.IsSuccessStatusCode)
             {
                 var contents = await response.Content.ReadAsStringAsync();
-                
+                ErrorLogger.Instance.LogError("Klaida" + contents);
+
                 return new APIMessage<V>()
                 {
                     Success = false,
@@ -69,6 +70,7 @@ namespace NightOwl.Xamarin.Services
             else
             {
                 var contents = await response.Content.ReadAsStringAsync();
+                ErrorLogger.Instance.LogError("Neklaida" + JsonConvert.DeserializeObject<T>(contents));
 
                 return new APIMessage<V>()
                 {
