@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Plugin.MediaManager.Forms.iOS;
 using UIKit;
 
 namespace NightOwl.Xamarin.iOS
@@ -22,6 +23,7 @@ namespace NightOwl.Xamarin.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            VideoViewRenderer.Init();
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
