@@ -30,7 +30,7 @@ namespace NightOwl.PersonRecognitionService.Services
         }
 
         /// Return an array of all faces in current frame
-        public Rectangle[] DetectFaces(Image<Bgr, byte> input)
+        public byte[][] DetectFaces(Image<Bgr, byte> input)
         {
             Rectangle[] faces = _cascadeClassifier.DetectMultiScale(input,
                 double.Parse(ConfigurationManager.AppSettings["FaceDetectionScaleFactor"]),
@@ -40,7 +40,21 @@ namespace NightOwl.PersonRecognitionService.Services
                     int.Parse(ConfigurationManager.AppSettings["FaceDetectionSize"])
                 )
             );
-            return faces;
+
+            byte[][] facesArray = new byte[faces.Length][];
+            int i = 0;
+
+            foreach (Rectangle face in faces)
+            {
+                facesArray[i] = input.Copy(face)
+                             .Resize(
+                                    int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
+                                    int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
+                                    Emgu.CV.CvEnum.Inter.Cubic
+                              ).ToBitmap().ImageToByteArray();
+                i++;
+            }
+            return facesArray;
         }
     }
 }

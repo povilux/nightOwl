@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace NightOwl.Xamarin.Services
 {
@@ -25,6 +26,7 @@ namespace NightOwl.Xamarin.Services
             }
             return null;
         }
+
         public async Task<APIMessage<Person>> AddNewPersonAsync(Person newPerson)
         {
             if (newPerson != null)

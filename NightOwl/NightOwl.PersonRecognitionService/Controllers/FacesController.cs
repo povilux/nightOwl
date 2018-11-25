@@ -56,9 +56,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             try
             {
                 IFaceDetectionService faceDetectionService = new FaceDetectionService();
-
-                Rectangle[] rectangles = faceDetectionService.DetectFaces(photo.ByteArrayToImage());
-                return Ok(rectangles);
+                return Ok(faceDetectionService.DetectFaces(photo.ByteArrayToImage()));
             }
             catch (Exception ex)
             {
