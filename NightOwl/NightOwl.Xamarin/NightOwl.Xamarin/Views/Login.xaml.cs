@@ -26,20 +26,20 @@ namespace NightOwl.Xamarin.Views
 
         public async void OnLoginButtonClicked(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(Username.Text))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(Password.Text))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
             LoginVM.Username = Username.Text;
             LoginVM.Password = Password.Text;
-
-            if (string.IsNullOrEmpty(LoginVM.Username))
-            {
-                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(LoginVM.Password))
-            {
-                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["NotValidLoginInfoError"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                return;
-            }
 
             try
             {

@@ -18,6 +18,7 @@ namespace NightOwl.Xamarin.Views
 	public partial class PictureRecognition : ContentPage
 	{
         private IFaceRecognitionService _faceRecognitionService;
+        private IImageResizerService _imageResizerService;
 
         private Func<Stream> imageStream;
 
@@ -25,6 +26,7 @@ namespace NightOwl.Xamarin.Views
 		{
 			InitializeComponent ();
             _faceRecognitionService = faceRecognitionService;
+            _imageResizerService = DependencyService.Get<IImageResizerService>();
 
             pickPhoto.Clicked += OnSelectedPhotoAsync;
 
@@ -78,12 +80,20 @@ namespace NightOwl.Xamarin.Views
             if (file == null)
                 return;
 
-            image.Source = GetImageFromFile(file);
+            imageStream = (() =>
+            {
+                var stream = file.GetStream();
+                return stream;
+            });
+
+            byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400);
+            
+
+            image.Source = ImageSource.FromStream(() => new MemoryStream(photo));
 
             try
             {
-                byte[] photoByteArray = GetByteArrayFromStream(imageStream);
-                string recognizedPersons = await RecognizePersonsFromPhtAsync(photoByteArray);
+                string recognizedPersons = await RecognizePersonsFromPhtAsync(photo);
 
                 if(recognizedPersons == null)
                 {

@@ -30,27 +30,28 @@ namespace NightOwl.Xamarin.Views
 
         public async void OnRegisterButtonClicked(object sender, EventArgs e)
         {
-            RegisterVM.Username = Username.Text;
-            RegisterVM.Password = Password.Text;
-            RegisterVM.Email = Email.Text;
 
-            if (string.IsNullOrEmpty(RegisterVM.Username))
+            if (string.IsNullOrEmpty(Username.Text))
             {
                 await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidUserName"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 return;
             }
 
-            if(string.IsNullOrEmpty(RegisterVM.Password))
+            if(string.IsNullOrEmpty(Password.Text))
             {
                 await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidPassword"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 return;
             }
 
-            if (string.IsNullOrEmpty(RegisterVM.Email) || (!string.IsNullOrEmpty(RegisterVM.Email) && !Regex.IsMatch(RegisterVM.Email, "([0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$")))
+            if (string.IsNullOrEmpty(Email.Text) || (!string.IsNullOrEmpty(Email.Text) && !Regex.IsMatch(Email.Text, "([0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$")))
             {
                 await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidEmail"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 return;
             }
+
+            RegisterVM.Username = Username.Text;
+            RegisterVM.Password = Password.Text;
+            RegisterVM.Email = Email.Text;
 
             User newUser = new User
             {
@@ -59,7 +60,7 @@ namespace NightOwl.Xamarin.Views
                 Email = RegisterVM.Email,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = false,
-                PhoneNumber = ""
+                PhoneNumber = "",
             };
             try
             {
