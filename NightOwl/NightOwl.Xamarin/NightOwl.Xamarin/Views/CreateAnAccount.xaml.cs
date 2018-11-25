@@ -1,5 +1,4 @@
 ﻿using NightOwl.Xamarin.Components;
-using NightOwl.Xamarin.Exceptions;
 using NightOwl.Xamarin.Services;
 using NightOwl.Xamarin.ViewModel;
 using PCLAppConfig;

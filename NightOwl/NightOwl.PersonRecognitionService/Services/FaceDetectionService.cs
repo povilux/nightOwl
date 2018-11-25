@@ -11,6 +11,8 @@ namespace NightOwl.PersonRecognitionService.Services
     public class FaceDetectionService : IFaceDetectionService
     {
         private readonly CascadeClassifier _cascadeClassifier;
+
+
         private readonly string _faceDetectionFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["FaceDetectionFileName"]);
 
         public FaceDetectionService()
@@ -21,11 +23,11 @@ namespace NightOwl.PersonRecognitionService.Services
         /// Return an image with rectangles on faces
         public Image<Bgr, byte> DrawFaces(Image<Bgr, byte> input)
         {
-            Rectangle[] faces = DetectFaces(input);
+          /*  Rectangle[] faces = DetectFaces(input);
 
             foreach(Rectangle face in faces)
                 input.Draw(face, new Bgr(Color.BurlyWood), 2); //the detected face(s) is highlighted here using a box that is drawn around it/them*
- 
+ */
             return input;
         }
 

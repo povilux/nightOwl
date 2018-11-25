@@ -5,6 +5,7 @@ using NightOwl.PersonRecognitionService.Models;
 using NightOwl.PersonRecognitionWebService.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,8 +15,8 @@ namespace NightOwl.PersonRecognitionService.Services
 {
     public class FaceRecognitionService : IFaceRecognitionService
     {
-        private readonly string _recognizerFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recognizer.yaml");
-        private readonly string _recognizerFacesFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FacesNames.txt");
+        private readonly string _recognizerFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["RecognizerTrainFile"]);
+        private readonly string _recognizerFacesFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["RecognizerNamesFile"]);
 
         private readonly int _recognizerNumOfComponents;
         private readonly int _recognizerThreshold;
@@ -24,14 +25,15 @@ namespace NightOwl.PersonRecognitionService.Services
 
         private EigenFaceRecognizer _eigen;
 
+        // to do: should log exceptions 
         public FaceRecognitionService()
         {
             try
             {
                 _eigen = new EigenFaceRecognizer();
+                _FacesNamesArray = File.ReadAllLines(_recognizerFacesFileName);
                 _eigen.Read(_recognizerFileName);
 
-                _FacesNamesArray = File.ReadAllLines(_recognizerFacesFileName);
             }
             catch (Exception ex)
             {

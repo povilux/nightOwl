@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
-using NightOwl.Xamarin.Exceptions;
 using NightOwl.Xamarin.Components;
 
 namespace NightOwl.Xamarin.Services

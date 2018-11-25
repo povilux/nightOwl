@@ -31,12 +31,26 @@ namespace NightOwl.WindowsForms.Views
                 return ms.ToArray();
             }
         }
+        public Bitmap ByteArrayToImage( byte[] byteArrayIn)
+        {
+            try
+            {
+                Bitmap bitmap;
+
+                using (MemoryStream ms = new MemoryStream(byteArrayIn))
+                    bitmap = new Bitmap(Image.FromStream(ms));
+
+                return bitmap;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public AddPersonView(IPersonModel model)
         {
             InitializeComponent();
             _presenter = new AddPersonPresenter(this, model);
-
-          
 
         }
 
