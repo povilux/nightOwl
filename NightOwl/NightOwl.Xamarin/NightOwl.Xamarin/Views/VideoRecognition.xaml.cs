@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plugin.Media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,22 @@ namespace NightOwl.Xamarin.Views
 		public VideoRecognition ()
 		{
 			InitializeComponent ();
-		}
+
+            pickVideo.Clicked += async (sender, args) =>
+            {
+                if (!CrossMedia.Current.IsPickVideoSupported)
+                {
+                    await DisplayAlert("Videos Not Supported", ":( Permission not granted to videos.", "OK");
+                    return;
+                }
+                var file = await CrossMedia.Current.PickVideoAsync();
+
+                if (file == null)
+                    return;
+
+                await DisplayAlert("Video Selected", "Location: " + file.Path, "OK");
+                file.Dispose();
+            };
+        }
 	}
 }
