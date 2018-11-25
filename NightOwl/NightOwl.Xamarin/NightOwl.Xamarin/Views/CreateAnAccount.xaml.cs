@@ -53,17 +53,19 @@ namespace NightOwl.Xamarin.Views
             RegisterVM.Password = Password.Text;
             RegisterVM.Email = Email.Text;
 
-            User newUser = new User
-            {
-                UserName = RegisterVM.Username,
-                PasswordHash = RegisterVM.Password,
-                Email = RegisterVM.Email,
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = false,
-                PhoneNumber = "",
-            };
             try
             {
+                User newUser = new User
+                {
+                    Id = new Guid(),
+                    UserName = RegisterVM.Username,
+                    PasswordHash = RegisterVM.Password,
+                    Email = RegisterVM.Email,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = false,
+                    PhoneNumber = ""
+                };
+
                 var result = await _userService.RegisterAsync(newUser);
 
                 if (result.Success)
