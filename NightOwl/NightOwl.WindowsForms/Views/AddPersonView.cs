@@ -1,12 +1,17 @@
 ﻿using NightOwl.WindowsForms.Components;
+using NightOwl.WindowsForms.Exceptions;
 using NightOwl.WindowsForms.Models;
 using NightOwl.WindowsForms.Presenters;
+using NightOwl.WindowsForms.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,13 +22,77 @@ namespace NightOwl.WindowsForms.Views
     {
         private readonly AddPersonPresenter _presenter;
 
+        private List<Face3> trainingData = new List<Face3>();
+        public byte[] ImageToByteArray(System.Drawing.Image imageIn)
+        {
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, imageIn.RawFormat);
+                return ms.ToArray();
+            }
+        }
+        public Bitmap ByteArrayToImage( byte[] byteArrayIn)
+        {
+            try
+            {
+                Bitmap bitmap;
+
+                using (MemoryStream ms = new MemoryStream(byteArrayIn))
+                    bitmap = new Bitmap(Image.FromStream(ms));
+
+                return bitmap;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public AddPersonView(IPersonModel model)
         {
             InitializeComponent();
             _presenter = new AddPersonPresenter(this, model);
+
         }
 
-        public void ShowMessage(string message)
+        public async Task<string> RecognizeAsync(byte[] face)
+        {
+            try
+            {
+                IHttpClientService httpClient = HttpClientService.Instance;
+                var name = await httpClient.PostAsync<string, byte[]>("http://localhost:54357/api/Faces/RecognizeFace/", face);
+                Console.WriteLine("Name: " + name);
+                return name;
+            }
+            catch (BadHttpRequestException ex)
+            {
+                Console.WriteLine("Erroras: " + ex);
+                throw ex ;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async void SendAsync(Trainer trainer)
+        {
+            try
+            {
+                IHttpClientService httpClient = HttpClientService.Instance;
+                await httpClient.PostAsync<Trainer, Trainer>("http://localhost:54357/api/Faces/Train/", trainer);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                throw ex;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+          
+
+            public void ShowMessage(string message)
             {
                 MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -68,6 +137,84 @@ namespace NightOwl.WindowsForms.Views
             AddPhotoButtonClicked(sender, e);
         }
 
- 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog browser = new OpenFileDialog
+            {
+                Filter = ConfigurationManager.AppSettings["BrowserFilterPhoto"],
+                Title = Properties.Resources.BrowserTitle,
+                Multiselect = true
+            };
+
+            if (browser.ShowDialog() == DialogResult.OK)
+            {
+                /*try
+                {
+                    byte[] array = { 1, 2, 3 };
+                            var name = RecognizeAsync(array);
+
+                            MessageBox.Show("Name: " + name.Result);
+                            Console.WriteLine("Recognized");
+                        
+                    
+                }
+                catch (BadHttpRequestException ex)
+                {
+                    Console.WriteLine("Neteisinga uzklausa:" + ex);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("ERRORRRAS:" + ex);
+                }*/
+
+                foreach (var file in browser.FileNames.ToList())
+                {
+                    Bitmap imageIn = new Bitmap(file);
+                    MemoryStream ms = new MemoryStream();
+                    imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+
+                    /*trainingData.Add(new Face3
+                    {
+                        Photo = ms.ToArray(),
+                        PersonName = textBox1.Text
+                    });*/
+                    try
+                    {
+                        RecognizeAsync(ms.ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Bad error: " + ex);
+                    }
+                }
+
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var trainer = new Trainer()
+            {
+                Data = trainingData,
+                NumOfComponents = trainingData.Count,
+                Threshold = 3900
+            };
+
+            try
+            {
+                   SendAsync(trainer);
+               // Face3 face = new Face3 { PersonName = " ", Photo = ms.ToArray() };
+               // RecognizeAsync(face);
+                //   MessageBox.Show("Result:" + result.Result);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                Console.WriteLine("Neteisinga uzklausa:" + ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRORRRAS:" + ex);
+            }
+        }
     }
 }

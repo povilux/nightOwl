@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NightOwl.WindowsForms.BusinessLogic;
+using NightOwl.WindowsForms.Components;
 using NightOwl.WindowsForms.Models;
+using NightOwl.WindowsForms.Services;
 
 namespace NightOwl.WindowsForms.Views
 {
@@ -14,6 +16,33 @@ namespace NightOwl.WindowsForms.Views
         {
             InitializeComponent();
             self = this;
+            //TestAsync();
+        }
+
+        public async void TestAsync()
+        {
+            PersonsService service = new PersonsService();
+
+            Person2 newPerson = new Person2(new User(), "Jonaitis", "199-11-21", "2018-11-21", "test");
+            Console.WriteLine("person: " + newPerson);
+            try
+            {
+                var response = await service.AddNewPersonAsync(newPerson);
+
+                if (response != null)
+                    Console.WriteLine("Done");
+                else
+                    Console.WriteLine("Error");
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("error: " + ex);
+            }
+            /*     var response2 = await service.GetPersonsList();
+
+                  foreach (Person2 person in response2)
+                      Console.WriteLine(person.Name);*/
         }
 
         public static void CloseMainForm()

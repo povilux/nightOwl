@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plugin.MediaManager.Forms.UWP;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace NightOwl.Xamarin.UWP
         public MainPage()
         {
             this.InitializeComponent();
+            //VideoViewRenderer.Init();
 
             LoadApplication(new NightOwl.Xamarin.App());
         }
