@@ -254,3 +254,6 @@ web.config
 /NightOwl/PersonRecognitionWebService/FacesNames.txt
 /NightOwl/NightOwl.PersonRecognitionService/recognizer.yaml
 /NightOwl/NightOwl.PersonRecognitionService/FacesNames.txt
+
+#Server info
+/NightOwl/NightOwl.WebService/Constants.cs
