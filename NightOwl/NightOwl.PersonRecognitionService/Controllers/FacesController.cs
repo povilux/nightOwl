@@ -32,7 +32,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             {
                 return BadRequest(ex.ToString());
             }
-            return Ok();
+            return Ok("Success");
         }
 
         // POST: api/Faces/RecognizeFace
