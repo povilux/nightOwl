@@ -62,6 +62,7 @@ namespace NightOwl.Xamarin.Views
                 await DisplayAlert("Saved", "Information saved successfully", "Close");
             else
             {
+                trainingData.Clear();
                 await DisplayAlert("Error", "Error: " + trainRecognizer.Error, "Close");
                 ErrorLogger.Instance.LogError(trainRecognizer.Error);
             }
@@ -101,7 +102,7 @@ namespace NightOwl.Xamarin.Views
                     PersonVM.Username = PersonName.Text = "";
                     PersonVM.AdditionalInfo = AdditionalInfo.Text = "";
 
-                    await DisplayAlert("Prideta", "Person successfully created.", "Close");
+                    await DisplayAlert("Person added", "Person successfully created.", "Close");
                    
                 }
                 else
@@ -142,7 +143,7 @@ namespace NightOwl.Xamarin.Views
             PersonVM.Faces.Add(await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400));
 
            
-            await DisplayAlert("Prideta", "Nuotrauka prideta", "Gerai");
+            await DisplayAlert("Success", "Photo was added", "Close");
         }
 
 

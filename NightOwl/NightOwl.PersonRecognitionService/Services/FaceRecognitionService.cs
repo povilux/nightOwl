@@ -48,13 +48,29 @@ namespace NightOwl.PersonRecognitionService.Services
                 _recognizerThreshold = recognizerThreshold;
                 _eigen = new EigenFaceRecognizer(_recognizerNumOfComponents, _recognizerThreshold);
 
-                var FacesPhotos = new List<Image<Gray, byte>>();
+                var FacesPhotos = new List<Image<Bgr, byte>>();
                 var FacesNamesArray = new int[Data.Count()];
                 _FacesNamesArray = new string[Data.Count()];
 
                 int nameId = 0, j = 0;
 
-                Data.ToList().ForEach(f => FacesPhotos.Add(f.Photo.ByteArrayToImage().ConvertToRecognition()));
+                Data.ToList().ForEach(f => FacesPhotos.Add(f.Photo.ByteArrayToImage()));
+
+                IFaceDetectionService faceDetectionService = new FaceDetectionService();
+
+                List<Image<Gray, byte>> FacesOnly = new List<Image<Gray, byte>>();
+
+                foreach (var face in FacesPhotos)
+                {
+                    Rectangle[] faceRectangle = faceDetectionService.DetectFacesAsRect(face);
+
+                    if (faceRectangle.Count() != 1)
+                        throw new Exception("There is more than 1 face in the photo");
+
+                    var faceOnly = face.Copy(faceRectangle[0]).ConvertToRecognition();
+                    FacesOnly.Add(faceOnly);
+                }
+
                 Data.ToList().ForEach(f =>
                 {
                     if (!_FacesNamesArray.Contains(f.PersonName))
@@ -68,7 +84,7 @@ namespace NightOwl.PersonRecognitionService.Services
                     j++;
                 });
 
-                TrainRecognizer(FacesPhotos.ToArray(), FacesNamesArray);
+                TrainRecognizer(FacesOnly.ToArray(), FacesNamesArray);
             }
             catch (Exception ex)
             {
@@ -102,8 +118,6 @@ namespace NightOwl.PersonRecognitionService.Services
                     throw new Exception(ConfigurationManager.AppSettings["RecognizerError"]);
 
                 Image<Bgr, byte> photo = photoByteArray.ByteArrayToImage();
-
-                CascadeClassifier _cascadeClassifier = new CascadeClassifier(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["FaceDetectionFileName"]));
 
                 IFaceDetectionService faceDetectionService = new FaceDetectionService();
                 Rectangle[] faces = faceDetectionService.DetectFacesAsRect(photo);
