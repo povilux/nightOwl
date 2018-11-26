@@ -44,11 +44,10 @@ namespace NightOwl.Xamarin.UWP
         {
 
 
-            Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (rootFrame == null)
+            if (!(Window.Current.Content is Frame rootFrame))
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
@@ -56,6 +55,8 @@ namespace NightOwl.Xamarin.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 global::Xamarin.Forms.Forms.Init(e);
+                global::Xamarin.Forms.DependencyService.Register<FaceDetectionService>();
+                global::Xamarin.Forms.DependencyService.Register<ImageResizerService>(); 
                 ConfigurationManager.Initialise(PCLAppConfig.FileSystemStream.PortableStream.Current);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

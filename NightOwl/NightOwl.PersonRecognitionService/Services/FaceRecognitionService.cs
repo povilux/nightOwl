@@ -33,7 +33,6 @@ namespace NightOwl.PersonRecognitionService.Services
                 _eigen = new EigenFaceRecognizer();
                 _FacesNamesArray = File.ReadAllLines(_recognizerFacesFileName);
                 _eigen.Read(_recognizerFileName);
-
             }
             catch (Exception ex)
             {
@@ -82,8 +81,8 @@ namespace NightOwl.PersonRecognitionService.Services
             try
             {
                 if (_eigen == null)
-                    throw new Exception("Recognizer must be initialized");
-                  
+                    throw new Exception(ConfigurationManager.AppSettings["RecognizerError"]);
+            
                 _eigen.Train(images, names);
                 _eigen.Write(_recognizerFileName);
                 File.WriteAllLines(_recognizerFacesFileName, _FacesNamesArray, Encoding.UTF8);
@@ -95,22 +94,33 @@ namespace NightOwl.PersonRecognitionService.Services
             }
         }
       
-        public string RecognizeFace(byte[] face)
+        public string RecognizeFace(byte[] photoByteArray)
         {
             try
             {
                 if (_eigen == null)
-                    throw new Exception("Recognizer must be initialized");
+                    throw new Exception(ConfigurationManager.AppSettings["RecognizerError"]);
 
-                Image<Gray, byte> convertedImage = face.ByteArrayToImage().ConvertToRecognition();
-                FaceRecognizer.PredictionResult result = _eigen.Predict(convertedImage);
+                Image<Bgr, byte> photo = photoByteArray.ByteArrayToImage();
 
-                if (result.Label > 0)
-                    return _FacesNamesArray[result.Label - 1];
-                else
-                    return "";
+                CascadeClassifier _cascadeClassifier = new CascadeClassifier(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["FaceDetectionFileName"]));
+
+                IFaceDetectionService faceDetectionService = new FaceDetectionService();
+                Rectangle[] faces = faceDetectionService.DetectFacesAsRect(photo);
+
+                ICollection<string> recognizedNames = new List<string>();
+
+                foreach (Rectangle faceRectangle in faces)
+                {
+                    var face = photo.Copy(faceRectangle).ConvertToRecognition();                  
+                    FaceRecognizer.PredictionResult result = _eigen.Predict(face);
+
+                    if (result.Label > 0)
+                        recognizedNames.Add(_FacesNamesArray[result.Label - 1]);
+                }
+                return string.Join(Environment.NewLine, recognizedNames);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }

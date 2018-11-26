@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web.Http;
 using Emgu.CV;
@@ -31,17 +32,17 @@ namespace NightOwl.PersonRecognitionService.Controllers
             {
                 return BadRequest(ex.ToString());
             }
-            return Ok();
+            return Ok("Success");
         }
 
         // POST: api/Faces/RecognizeFace
         [HttpPost]
-        public  IHttpActionResult Recognize([FromBody]byte[] face)
+        public  IHttpActionResult Recognize([FromBody]byte[] photoByteArray)
         {
-            try { 
+            try {
                 IFaceRecognitionService faceRecognitionService = new FaceRecognitionService();
 
-                string name = faceRecognitionService.RecognizeFace(face);
+                string name = faceRecognitionService.RecognizeFace(photoByteArray);
                 return Ok(name);
             }
             catch(Exception ex)

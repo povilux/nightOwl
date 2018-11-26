@@ -62,7 +62,7 @@ namespace NightOwl.Xamarin.Views
             };
         }
 
-        async void OnRecognizedPeopleListClicked()
+        public async void OnRecognizedPeopleListClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new RecognizedPeopleList());
         }

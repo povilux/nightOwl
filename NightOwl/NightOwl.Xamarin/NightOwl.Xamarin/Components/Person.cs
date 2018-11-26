@@ -7,6 +7,6 @@
         public string BirthDate { get; set; }
         public string MissingDate { get; set; }
         public string AdditionalInfo { get; set; }
-        public User Creator { get; private set; }
+        public User Creator { get; set; }
     }
 }

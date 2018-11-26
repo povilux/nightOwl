@@ -59,7 +59,7 @@ namespace NightOwl.Xamarin.Services
             if (!response.IsSuccessStatusCode)
             {
                 var contents = await response.Content.ReadAsStringAsync();
-                
+
                 return new APIMessage<V>()
                 {
                     Success = false,

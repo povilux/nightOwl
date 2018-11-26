@@ -93,7 +93,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ByteArrayExtensions.cs" />
     <Compile Include="FaceDetectionService.cs" />
+    <Compile Include="ImageResizerService.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

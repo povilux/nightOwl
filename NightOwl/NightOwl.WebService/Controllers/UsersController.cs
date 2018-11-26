@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -107,12 +108,22 @@ namespace NightOwl.WebService.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
 
-            var createdPerson = await _userManager.CreateAsync(user, user.PasswordHash);
+            User asd = new User
+            {
+                UserName = user.UserName,
+                PasswordHash = user.PasswordHash,
+                Email =  user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            var createdPerson = await _userManager.CreateAsync(asd, asd.PasswordHash);
 
             if (!createdPerson.Succeeded)
                 return BadRequest(createdPerson.Errors);
 
-            return Ok(user);
+            return Ok(asd);
         }
 
         // DELETE: api/Users/Delete/5

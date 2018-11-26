@@ -8,7 +8,7 @@ namespace NightOwl.PersonRecognitionService.Services
     public interface IFaceRecognitionService
     {
         Image<Gray, byte> ConvertImageToGrayImage(Image image);
-        string RecognizeFace(byte[] face);
+        string RecognizeFace(byte[] photoByteArray);
         bool TrainRecognizer(Image<Gray, byte>[] images, int[] names);
     }
 }

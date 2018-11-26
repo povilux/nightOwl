@@ -16,6 +16,18 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    FontSize="Medium"/>
+                <Button x:Name="trainRecognizer"
+                    Text="Save information"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="RoyalBlue"
+                    BorderWidth="2"
+                    BorderColor="White"                    
+                    TextColor="White"
+                    Font="Microsoft Sans Serif"
+                    FontSize="Large"
+                    FontAttributes="Bold"/>
+                
                 <Button Text="Select person from the list"
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"
@@ -28,7 +40,8 @@
                     FontAttributes="Bold"
                     Clicked="OnSelectPersonButtonClicked"/>
                 <Image Source="{Binding image}"/>
-                <Button Text="Add photo"
+                <Button x:Name="addPersonPhoto"
+                    Text="Add photo"
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"
                     BackgroundColor="RoyalBlue"
@@ -38,7 +51,8 @@
                     Font="Microsoft Sans Serif"
                     FontSize="Medium"
                     FontAttributes="Bold"/>
-                <Button Text="Add persons data" 
+                <Button  x:Name="addPerson"
+                    Text="Add persons data" 
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"
                     BackgroundColor="RoyalBlue"
@@ -52,7 +66,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <Entry
+                <Entry  x:Name="PersonName"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     WidthRequest="400"/>
@@ -60,12 +74,12 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <DatePicker/>
+                <DatePicker  x:Name="BirthDate"/>
                 <Label Text="Additional inforamtion"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <Entry
+                <Entry  x:Name="AdditionalInfo"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     WidthRequest="400"/>
@@ -73,7 +87,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <DatePicker/>
+                <DatePicker  x:Name="MissingDate"/>
             </StackLayout>
         </RelativeLayout>
     </ContentPage.Content>
