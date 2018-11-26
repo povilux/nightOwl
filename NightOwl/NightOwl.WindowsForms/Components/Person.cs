@@ -1,4 +1,7 @@
 ﻿using NightOwl.WindowsForms.Properties;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.IO;
 
@@ -44,4 +47,35 @@ namespace NightOwl.WindowsForms.Components
         public override string ToString() { return Name; }
 
     }
-}
+
+    public class Person2 
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string BirthDate { get; set; }
+
+        [Required]
+        public string MissingDate { get; set; }
+
+        public string AdditionalInfo { get; set; }
+
+        [Required]
+        public User Creator { get; private set; }
+
+        public Person2(User Creator, string Name, string BirthDate, string MissingDate, string AdditionalInfo = "-")
+        {
+            this.Creator = Creator;
+            this.Name = Name;
+            this.BirthDate = BirthDate;
+            this.MissingDate = MissingDate;
+            this.AdditionalInfo = AdditionalInfo;
+        }
+
+
+    }
+    }

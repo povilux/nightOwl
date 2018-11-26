@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NightOwl.WindowsForms.Services;
 
 namespace NightOwl.WindowsForms.Presenters
 {
@@ -21,7 +22,11 @@ namespace NightOwl.WindowsForms.Presenters
             _view = view;
 
             _view.LoginUserClicked += new EventHandler(OnUserLogin);
+
+           
         }
+
+        
 
         public void OnUserLogin(object sender, EventArgs e)
         {

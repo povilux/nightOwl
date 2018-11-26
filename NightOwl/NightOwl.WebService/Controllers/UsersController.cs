@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -40,7 +42,7 @@ namespace NightOwl.WebService.Controllers
 
         // GET: api/Users/GetUserByName/test
         [HttpGet("{name}")]
-        public async Task<IActionResult> GetUserByNameAsync([FromRoute]string name)
+        public async Task<IActionResult> GetUserByName([FromRoute]string name)
         {
             var user = await _userManager.FindByNameAsync(name);
 
@@ -52,7 +54,7 @@ namespace NightOwl.WebService.Controllers
 
         // GET: api/Users/GetUserByEmail/test@test.gmail.com
         [HttpGet("{email}")]
-        public async Task<IActionResult> GetUserByEmailAsync([FromRoute]string email)
+        public async Task<IActionResult> GetUserByEmail([FromRoute]string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -82,20 +84,46 @@ namespace NightOwl.WebService.Controllers
             return Ok(user);
         }
 
-
-        // POST: api/Users/Post/
+        // POST: api/Users/Login
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]User user)
+        public async Task<IActionResult> Login([FromBody]KeyValuePair<string, string> loginInfo)
+        {
+            var valid_username = await _userManager.FindByNameAsync(loginInfo.Key);
+
+            if (valid_username == null)
+                return NotFound();
+
+            Task<bool> user = _userManager.CheckPasswordAsync(valid_username, loginInfo.Value);
+
+            if (user.Result == false)
+                return NotFound();        
+
+            return Ok(user.Result);
+        }
+
+        // POST: api/Users/Register/
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody]User user)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
 
-            var createdPerson = await _userManager.CreateAsync(user, user.PasswordHash);
-       
+            User asd = new User
+            {
+                UserName = user.UserName,
+                PasswordHash = user.PasswordHash,
+                Email =  user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            var createdPerson = await _userManager.CreateAsync(asd, asd.PasswordHash);
+
             if (!createdPerson.Succeeded)
                 return BadRequest(createdPerson.Errors);
 
-            return Ok(user);
+            return Ok(asd);
         }
 
         // DELETE: api/Users/Delete/5
