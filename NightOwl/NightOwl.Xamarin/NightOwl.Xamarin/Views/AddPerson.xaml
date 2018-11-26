@@ -28,7 +28,8 @@
                     FontAttributes="Bold"
                     Clicked="OnSelectPersonButtonClicked"/>
                 <Image Source="{Binding image}"/>
-                <Button Text="Add photo"
+                <Button x:Name="addPhotoButton"
+                    Text="Add photo"
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"
                     BackgroundColor="RoyalBlue"
@@ -47,12 +48,13 @@
                     TextColor="White"
                     Font="Microsoft Sans Serif"
                     FontSize="Medium"
-                    FontAttributes="Bold"/>
+                    FontAttributes="Bold"
+                    Clicked="OnAddPersonsDataButtonClicked"/>
                 <Label Text="Name, Surname"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <Entry
+                <Entry x:Name="nameTextBox"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     WidthRequest="400"/>
@@ -60,12 +62,12 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <DatePicker/>
-                <Label Text="Additional inforamtion"
+                <DatePicker x:Name="birthdatePicker"/>
+                <Label Text="Additional information"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <Entry
+                <Entry x:Name="addInfoTextBox"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     WidthRequest="400"/>
@@ -73,7 +75,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     FontSize="Medium"/>
-                <DatePicker/>
+                <DatePicker x:Name="missingdatePicker"/>
             </StackLayout>
         </RelativeLayout>
     </ContentPage.Content>
