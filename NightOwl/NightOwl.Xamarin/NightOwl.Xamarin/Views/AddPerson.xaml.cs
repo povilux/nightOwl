@@ -1,169 +1,173 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NightOwl.Xamarin.Components;
-using NightOwl.Xamarin.Services;
-using NightOwl.Xamarin.ViewModel;
+using NightOwl.Xamarin.Models;
 using NightOwl.Xamarin.Views;
-using PCLAppConfig;
 using Plugin.Media;
-using Plugin.Media.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
 
 namespace NightOwl.Xamarin.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddPerson : ContentPage
     {
-        private PersonViewModel PersonVM;
-        private IImageResizerService _imageResizerService;
-        private Func<Stream> imageStream;
-        private PersonsService _personsService;
-        private List<Face> trainingData = new List<Face>();
-        private FaceRecognitionService _faceRecognitionService;
+        private Person personToSend = new Person();
+        private static List<Image> images = new List<Image>();
+        private Image image = null;
+        public static List<Person> personsList = null;
+        public static void SetPersonsList(List<Person> persons)
+        {
+            personsList = persons;
+        }
 
         public AddPerson()
         {
             InitializeComponent();
-            PersonVM = new PersonViewModel();
-
-            _personsService = new PersonsService();
-            _faceRecognitionService = new FaceRecognitionService();
-            _imageResizerService = DependencyService.Get<IImageResizerService>();
-
-            addPerson.Clicked += OnAddPersonClicked;
-            addPersonPhoto.Clicked += OnAddPersonPhotoClicked;
-            trainRecognizer.Clicked += OnTrainRecognizerClicked;
-
-            trainingData.Clear();
-        }
-
-        async void OnTrainRecognizerClicked(object sender, EventArgs e)
-        {
-            if(trainingData.Count == 0)
+            addPhotoButton.Clicked += async (sender, args) =>
             {
-                await DisplayAlert("Error", "Nothing to save", "Close");
-                return;
-            }
+                if (!CrossMedia.Current.IsPickPhotoSupported)
+                {
+                    await DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                    return;
+                }
+                var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+                {
+                    PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
 
-            Trainer trainer = new Trainer
-            {
-                Data = trainingData,
-                Threshold = 4000,
-                NumOfComponents = trainingData.Count
+                });
+
+
+                if (file == null)
+                    return;
+
+                image = new Image();
+                image.Source = ImageSource.FromStream(() =>
+                {
+                    var stream = file.GetStream();
+                    file.Dispose();
+                    return stream;
+                });
+                images.Add(image);
             };
-            var trainRecognizer = await _faceRecognitionService.TrainFacesAsync(trainer);
-
-            if (trainRecognizer.Success)
-                await DisplayAlert("Saved", "Information saved successfully", "Close");
-            else
-            {
-                await DisplayAlert("Error", "Error: " + trainRecognizer.Error, "Close");
-                ErrorLogger.Instance.LogError(trainRecognizer.Error);
-            }
-        }
-
-        async void OnAddPersonClicked(object sender, EventArgs e)
-        {
-            PersonVM.Username = PersonName.Text;
-            PersonVM.BirthDate = BirthDate.Date;
-            PersonVM.AdditionalInfo = AdditionalInfo.Text;
-            PersonVM.MissingDate = MissingDate.Date;
-            
-            try
-            {
-                Person person = new Person
-                {
-                    Name = PersonVM.Username,
-                    BirthDate = PersonVM.BirthDate.ToString(),
-                    MissingDate = PersonVM.MissingDate.ToString(),
-                    AdditionalInfo = PersonVM.AdditionalInfo.ToString()
-                 //   Creator = App.CurrentUser
-                };
-
-                var addPerson = await _personsService.AddNewPersonAsync(person);
-               
-                if (addPerson.Success)
-                {
-                    foreach (byte[] face in PersonVM.Faces)
-                    {
-                        trainingData.Add(new Face
-                        {
-                            Photo = face,
-                            PersonName = PersonVM.Username
-                        });
-                    }
-                    PersonVM.Faces.Clear();
-                    PersonVM.Username = PersonName.Text = "";
-                    PersonVM.AdditionalInfo = AdditionalInfo.Text = "";
-
-                    await DisplayAlert("Prideta", "Person successfully created.", "Close");
-                   
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Error: "+  addPerson.Error, "Close");
-                    ErrorLogger.Instance.LogError(addPerson.Error);
-                }
-            }            
-            catch (Exception ex)
-            {
-                ErrorLogger.Instance.LogException(ex);
-                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-            }
-        }
-
-        async void OnAddPersonPhotoClicked(object sender, EventArgs e)
-        {
-            if (!CrossMedia.Current.IsPickPhotoSupported)
-            {
-                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorNoPermissionForPhot"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                return;
-            }
-
-            var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
-            {
-                PhotoSize = PhotoSize.Medium
-            });
-
-            if (file == null)
-                return;
-
-            imageStream = (() =>
-            {
-                var stream = file.GetStream();
-                return stream;
-            });
-            
-            PersonVM.Faces.Add(await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400));
-
-           
-            await DisplayAlert("Prideta", "Nuotrauka prideta", "Gerai");
-        }
-
-
-        public byte[] GetByteArrayFromStream(Func<Stream> stream)
-        {
-            var memoryStream = stream.Invoke();
-
-            if (!(memoryStream is MemoryStream ms))
-            {
-                ms = new MemoryStream();
-                memoryStream.CopyTo(ms);
-            }
-            byte[] face = ms.ToArray();
-            ms.Dispose();
-
-            return face;
         }
 
         async void OnSelectPersonButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PeopleList());
+            // Sukurta nauja Person klase - Models.Person; joje truksta Creator lauko (gal galima kazkaip ir be jo?)
+
+            // testiniai duomenys - reikia tikrus pasiimt per webservisa ( List<Person>)
+            List<Person> testPersons = new List<Person>();
+            Person testPerson1 = new Person();
+            testPerson1.Id = 1;
+            testPerson1.Name = "jonas";
+            testPerson1.BirthDate = "19950315";
+            testPerson1.MissingDate = "20170512";
+            testPerson1.AdditionalInfo = "";
+            Person testPerson2 = new Person();
+            testPerson2.Id = 2;
+            testPerson2.Name = "petras";
+            testPerson2.BirthDate = "19850415";
+            testPerson2.MissingDate = "20160911";
+            testPerson2.AdditionalInfo = "";
+            Person testPerson3 = new Person();
+            testPerson3.Id = 3;
+            testPerson3.Name = "algis";
+            testPerson3.BirthDate = "19250322";
+            testPerson3.MissingDate = "20180521";
+            testPerson3.AdditionalInfo = "Should be considered armed and dangerous";
+
+            testPersons.Add(testPerson1);
+            testPersons.Add(testPerson2);
+            testPersons.Add(testPerson3);
+            // testiniu duomenu pabaiga; nutrinti, kai nebereiks
+
+            SetPersonsList(testPersons);                        // pakeisti testPersons tikru List<Person>
+            if(personsList != null)
+            {
+                MessagingCenter.Subscribe<PeopleList, Person>(this, "PersonPicked", (personSender, personObject) =>
+                {
+                    SetValues(personObject);
+                });
+                await Navigation.PushAsync(new PeopleList());
+            }
+        }
+
+        void OnAddPersonsDataButtonClicked(object sender, EventArgs e)
+        {
+            if(nameTextBox.Text != "")
+            {
+                // set name for object to be sent
+                personToSend.Name = nameTextBox.Text;
+
+                // set birth date for object to be sent
+                string birthDate = birthdatePicker.Date.Year.ToString() + birthdatePicker.Date.Month.ToString();
+                if(birthdatePicker.Date.Day < 10)
+                {
+                    birthDate += "0";
+                }
+                birthDate += birthdatePicker.Date.Day.ToString();
+
+                // set missing date for object to be sent
+                string missingDate = missingdatePicker.Date.Year.ToString() + missingdatePicker.Date.Month.ToString();
+                if (missingdatePicker.Date.Day < 10)
+                {
+                    missingDate += "0";
+                }
+                missingDate += missingdatePicker.Date.Day.ToString();
+
+                // set additional info for object to be sent
+                personToSend.AdditionalInfo = addInfoTextBox.Text;
+
+                SetViewToDefaultValues();
+                ClearPhotoList();
+
+                try
+                {
+                    // SEND PERSON OBJECT TO WEBSERVICE     - To be implemented
+                }
+                catch (Exception)
+                {
+                    DisplayAlert("Action failed", "Adding person's data failed.", "OK");
+                }
+
+
+
+            } else
+            {
+                DisplayAlert("Invalid data", "Please write a name", "OK");
+            }
+        }
+
+        private void SetValues(Person person)
+        {
+            nameTextBox.Text = person.Name;
+            var birthDate = DateTime.ParseExact(person.BirthDate,
+                                  "yyyyMMdd",
+                                   CultureInfo.InvariantCulture);
+            birthdatePicker.Date = birthDate;
+            var missingDate = DateTime.ParseExact(person.MissingDate,
+                                  "yyyyMMdd",
+                                   CultureInfo.InvariantCulture);
+            missingdatePicker.Date = missingDate;
+            addInfoTextBox.Text = person.AdditionalInfo;
+        }
+
+        public static void ClearPhotoList()
+        {
+            images.Clear();
+        }
+
+        public void SetViewToDefaultValues()
+        {
+            nameTextBox.Text = "";
+            addInfoTextBox.Text = "";
+            birthdatePicker.Date = birthdatePicker.MinimumDate;
+            missingdatePicker.Date = missingdatePicker.MaximumDate;
         }
     }
 }
