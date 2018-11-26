@@ -49,8 +49,7 @@
                         TextColor="White"
                         Font="Microsoft Sans Serif"
                         FontSize="Large"
-                        FontAttributes="Bold"
-                        Clicked="OnRecognizedPeopleListClicked"/>
+                        FontAttributes="Bold"/>
                 </StackLayout>
             </RelativeLayout>
         </ScrollView>
