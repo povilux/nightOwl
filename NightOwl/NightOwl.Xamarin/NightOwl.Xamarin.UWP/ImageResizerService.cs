@@ -34,10 +34,6 @@ namespace NightOwl.Xamarin.UWP
 
             SoftwareBitmap sourceBitmap = await decoder.GetSoftwareBitmapAsync(decoder.BitmapPixelFormat, BitmapAlphaMode.Premultiplied, transform, ExifOrientationMode.IgnoreExifOrientation, ColorManagementMode.DoNotColorManage);
             SoftwareBitmap convertedBitmap = sourceBitmap;
-
-            // First: Use an encoder to copy from SoftwareBitmap to an in-mem stream (FlushAsync)
-            // Next:  Use ReadAsync on the in-mem stream to get byte[] array
-
             byte[] imageBytes = null;
 
             using (var ms = new InMemoryRandomAccessStream())
