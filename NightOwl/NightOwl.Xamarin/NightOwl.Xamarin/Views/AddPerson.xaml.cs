@@ -83,7 +83,6 @@ namespace NightOwl.Xamarin.Views
                     BirthDate = PersonVM.BirthDate.ToString(),
                     MissingDate = PersonVM.MissingDate.ToString(),
                     AdditionalInfo = PersonVM.AdditionalInfo.ToString()
-                 //   Creator = App.CurrentUser
                 };
 
                 var addPerson = await _personsService.AddNewPersonAsync(person);
