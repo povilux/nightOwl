@@ -64,8 +64,10 @@ namespace NightOwl.PersonRecognitionService.Services
                 {
                     Rectangle[] faceRectangle = faceDetectionService.DetectFacesAsRect(face);
 
-                    if (faceRectangle.Count() != 1)
+                    if (faceRectangle.Count() > 1)
                         throw new Exception("There is more than 1 face in the photo");
+                    if(faceRectangle.Count() == 0)
+                        throw new Exception("There is no faces in the photo");
 
                     var faceOnly = face.Copy(faceRectangle[0]).ConvertToRecognition();
                     FacesOnly.Add(faceOnly);

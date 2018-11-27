@@ -30,7 +30,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest(ex.Message);
             }
             return Ok("Success");
         }
@@ -47,7 +47,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest(ex.Message);
             }
         }
 
@@ -61,7 +61,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest(ex.Message);
             }
         }
 
