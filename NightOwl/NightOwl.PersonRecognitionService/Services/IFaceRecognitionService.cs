@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using NightOwl.PersonRecognitionService.Models;
@@ -9,6 +10,6 @@ namespace NightOwl.PersonRecognitionService.Services
     {
         Image<Gray, byte> ConvertImageToGrayImage(Image image);
         string RecognizeFace(byte[] photoByteArray);
-        bool TrainRecognizer(Image<Gray, byte>[] images, int[] names);
+        Task<bool> TrainRecognizer(Image<Gray, byte>[] images, int[] names);
     }
 }

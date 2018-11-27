@@ -41,7 +41,8 @@
                     TextColor="White"
                     Font="Microsoft Sans Serif"
                     FontSize="Medium"
-                    FontAttributes="Bold"/>
+                    FontAttributes="Bold"
+                    Clicked="OnAddPersonPhotoClicked"/>
                 <Button x:Name="addPerson" Text="Add persons data" 
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"

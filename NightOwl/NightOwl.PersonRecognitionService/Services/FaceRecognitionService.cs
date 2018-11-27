@@ -1,6 +1,8 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Face;
 using Emgu.CV.Structure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using NightOwl.PersonRecognitionService.Models;
 using NightOwl.PersonRecognitionWebService.Extensions;
 using System;
@@ -10,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NightOwl.PersonRecognitionService.Services
 {
@@ -94,13 +97,43 @@ namespace NightOwl.PersonRecognitionService.Services
             }
         }
 
-        public bool TrainRecognizer(Image<Gray, byte>[] images, int[] names)
+        public async Task<bool> TrainRecognizer(Image<Gray, byte>[] images, int[] names)
         {
             try
             {
                 if (_eigen == null)
                     throw new Exception(ConfigurationManager.AppSettings["RecognizerError"]);
-            
+
+                int i = 0;
+
+                CloudStorageAccount _cloudStorageAccount = CloudStorageAccount.Parse(Connections.CloudBlobStorageConnection);
+                CloudBlobClient _blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+
+                string containerId = Guid.NewGuid().ToString();
+
+                CloudBlobContainer cloudBlobContainer = _blobClient.GetContainerReference(containerId);
+                await cloudBlobContainer.CreateIfNotExistsAsync().ConfigureAwait(false);
+
+                // Set the permissions so the blobs are public. 
+                BlobContainerPermissions permissions = new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                };
+                await cloudBlobContainer.SetPermissionsAsync(permissions);
+
+
+                foreach (Image<Gray, byte> image in images)
+                {
+
+                    // Get the reference to the block blob from the container
+                    CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(i + ".bmp");
+
+                    // Upload the file
+                    byte[] byteArray = image.ToBitmap().ImageToByteArray();
+
+                    await blockBlob.UploadFromByteArrayAsync(byteArray , 0, byteArray.Length);
+                    i++;
+                }
                 _eigen.Train(images, names);
                 _eigen.Write(_recognizerFileName);
                 File.WriteAllLines(_recognizerFacesFileName, _FacesNamesArray, Encoding.UTF8);

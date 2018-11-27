@@ -35,8 +35,6 @@ namespace NightOwl.Xamarin.Views
             _faceRecognitionService = new FaceRecognitionService();
             _imageResizerService = DependencyService.Get<IImageResizerService>();
 
-            addPerson.Clicked += OnAddPersonsDataButtonClicked;
-            addPhotoButton.Clicked += OnAddPersonPhotoClicked;
         }
 
         /*   public void OnPersonSelectedFromList(object sender, PersonSelectedEventArgs e)
@@ -87,6 +85,7 @@ namespace NightOwl.Xamarin.Views
 
         async void OnAddPersonsDataButtonClicked(object sender, EventArgs e)
         {
+
             if (string.IsNullOrEmpty(nameTextBox.Text))
             {
                 await DisplayAlert("Error", "reik irayti varda", "error");
@@ -98,6 +97,8 @@ namespace NightOwl.Xamarin.Views
                 await DisplayAlert("Error", "reik bent vienos nuotraukos", "error");
                 return;
             }
+
+            addPerson.IsEnabled = false;
 
             PersonVM.Username = nameTextBox.Text;
             PersonVM.BirthDate = birthdatePicker.Date;
@@ -153,6 +154,10 @@ namespace NightOwl.Xamarin.Views
             {
                 ErrorLogger.Instance.LogException(ex);
                 await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+            }
+            finally
+            {
+                addPerson.IsEnabled = true;
             }
         }
 

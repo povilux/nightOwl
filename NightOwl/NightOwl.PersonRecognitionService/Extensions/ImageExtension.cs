@@ -18,8 +18,7 @@ namespace NightOwl.PersonRecognitionWebService.Extensions
 
         public static Image<Gray, byte> ConvertToRecognition(this Image<Bgr, byte> image)
         {
-            return image
-                        .Convert<Gray, byte>()
+            return image.Convert<Gray, byte>()
                         .Resize(
                                int.Parse(ConfigurationManager.AppSettings["FacePicWidth"]),
                                int.Parse(ConfigurationManager.AppSettings["FacePicHeight"]),
