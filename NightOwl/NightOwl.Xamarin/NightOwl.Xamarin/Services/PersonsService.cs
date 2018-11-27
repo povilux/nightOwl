@@ -12,11 +12,11 @@ namespace NightOwl.Xamarin.Services
     {
         private IHttpClientService httpClient = HttpClientService.Instance;
 
-        public async Task<APIMessage<Person>> GetPersonsList()
+        public async Task<APIMessage<IEnumerable<Person>>> GetPersonsList()
         {    
             try
             {
-                var response = await httpClient.GetAsync<Person>(APIEndPoints.GetPersonEndPoint);
+                var response = await httpClient.GetAsync<IEnumerable<Person>>(APIEndPoints.GetPersonEndPoint);
                 return response;
             }
             catch (Exception ex)

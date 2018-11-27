@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,6 @@ namespace NightOwl.Xamarin.Views
     {
         private PersonViewModel PersonVM;
         private IImageResizerService _imageResizerService;
-        private Func<Stream> imageStream;
         private PersonsService _personsService;
         private List<Face> trainingData = new List<Face>();
         private FaceRecognitionService _faceRecognitionService;
@@ -29,93 +29,21 @@ namespace NightOwl.Xamarin.Views
         public AddPerson()
         {
             InitializeComponent();
-            PersonVM = new PersonViewModel();
 
+            PersonVM = new PersonViewModel();
             _personsService = new PersonsService();
             _faceRecognitionService = new FaceRecognitionService();
             _imageResizerService = DependencyService.Get<IImageResizerService>();
 
-            addPerson.Clicked += OnAddPersonClicked;
-            addPersonPhoto.Clicked += OnAddPersonPhotoClicked;
-            trainRecognizer.Clicked += OnTrainRecognizerClicked;
-
-            trainingData.Clear();
+            addPerson.Clicked += OnAddPersonsDataButtonClicked;
+            addPhotoButton.Clicked += OnAddPersonPhotoClicked;
         }
 
-        async void OnTrainRecognizerClicked(object sender, EventArgs e)
-        {
-            if(trainingData.Count == 0)
-            {
-                await DisplayAlert("Error", "Nothing to save", "Close");
-                return;
-            }
-
-            Trainer trainer = new Trainer
-            {
-                Data = trainingData,
-                Threshold = 4000,
-                NumOfComponents = trainingData.Count
-            };
-            var trainRecognizer = await _faceRecognitionService.TrainFacesAsync(trainer);
-
-            if (trainRecognizer.Success)
-                await DisplayAlert("Saved", "Information saved successfully", "Close");
-            else
-            {
-                trainingData.Clear();
-                await DisplayAlert("Error", "Error: " + trainRecognizer.Error, "Close");
-                ErrorLogger.Instance.LogError(trainRecognizer.Error);
-            }
-        }
-
-        async void OnAddPersonClicked(object sender, EventArgs e)
-        {
-            PersonVM.Username = PersonName.Text;
-            PersonVM.BirthDate = BirthDate.Date;
-            PersonVM.AdditionalInfo = AdditionalInfo.Text;
-            PersonVM.MissingDate = MissingDate.Date;
-            
-            try
-            {
-                Person person = new Person
-                {
-                    Name = PersonVM.Username,
-                    BirthDate = PersonVM.BirthDate.ToString(),
-                    MissingDate = PersonVM.MissingDate.ToString(),
-                    AdditionalInfo = PersonVM.AdditionalInfo.ToString()
-                };
-
-                var addPerson = await _personsService.AddNewPersonAsync(person);
-               
-                if (addPerson.Success)
-                {
-                    foreach (byte[] face in PersonVM.Faces)
-                    {
-                        trainingData.Add(new Face
-                        {
-                            Photo = face,
-                            PersonName = PersonVM.Username
-                        });
-                    }
-                    PersonVM.Faces.Clear();
-                    PersonVM.Username = PersonName.Text = "";
-                    PersonVM.AdditionalInfo = AdditionalInfo.Text = "";
-
-                    await DisplayAlert("Person added", "Person successfully created.", "Close");
-                   
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Error: "+  addPerson.Error, "Close");
-                    ErrorLogger.Instance.LogError(addPerson.Error);
-                }
-            }            
-            catch (Exception ex)
-            {
-                ErrorLogger.Instance.LogException(ex);
-                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-            }
-        }
+        /*   public void OnPersonSelectedFromList(object sender, PersonSelectedEventArgs e)
+           {
+               ClearPhotoList();
+               SetValues(e.SelectedPerson);
+           }*/
 
         async void OnAddPersonPhotoClicked(object sender, EventArgs e)
         {
@@ -133,18 +61,163 @@ namespace NightOwl.Xamarin.Views
             if (file == null)
                 return;
 
-            imageStream = (() =>
+            Func<Stream> imageStream = (() =>
             {
                 var stream = file.GetStream();
                 return stream;
             });
-            
-            PersonVM.Faces.Add(await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400));
 
-           
-            await DisplayAlert("Success", "Photo was added", "Close");
+            byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400);
+            image.Source = ImageSource.FromStream(() => new MemoryStream(photo));
+
+            PersonVM.Faces.Add(photo);
         }
 
+        async void OnSelectPersonButtonClicked(object sender, EventArgs e)
+        {
+            MessagingCenter.Subscribe<PeopleList, Person>(this, "PersonPicked", (personSender, personObject) =>
+            {
+                ClearData();
+                SetValues(personObject);
+            });
+            //PeopleList peopleList = new PeopleList();
+            //peopleList.PersonSelected += OnPersonSelectedFromList;
+            await Navigation.PushAsync(new PeopleList());
+        }
+
+        async void OnAddPersonsDataButtonClicked(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(nameTextBox.Text))
+            {
+                await DisplayAlert("Error", "reik irayti varda", "error");
+                return;
+            }
+
+            if(PersonVM.Faces.Count < 1)
+            {
+                await DisplayAlert("Error", "reik bent vienos nuotraukos", "error");
+                return;
+            }
+
+            PersonVM.Username = nameTextBox.Text;
+            PersonVM.BirthDate = birthdatePicker.Date;
+            PersonVM.MissingDate = missingdatePicker.Date;
+            PersonVM.AdditionalInfo = addInfoTextBox.Text;
+
+            if (string.IsNullOrEmpty(PersonVM.AdditionalInfo))
+                PersonVM.AdditionalInfo = "";
+
+            try
+            {
+                var addPerson = await _personsService.AddNewPersonAsync(
+                                                                            new Person
+                                                                            {
+                                                                                Name = PersonVM.Username,
+                                                                                BirthDate = PersonVM.BirthDate.ToString(),
+                                                                                MissingDate = PersonVM.MissingDate.ToString(),
+                                                                                AdditionalInfo = PersonVM.AdditionalInfo.ToString()
+                                                                            }
+                                                                        );
+
+                if (addPerson.Success)
+                {
+                    foreach (byte[] face in PersonVM.Faces)
+                    {
+                        trainingData.Add(new Face
+                        {
+                            Photo = face,
+                            PersonName = PersonVM.Username
+                        });
+                    }
+
+                    bool trainSuccess = await TrainRecognizer();
+
+                    if (trainSuccess)
+                    {
+                        ClearData();
+                        await DisplayAlert("Person added", "Person successfully created.", "Close");
+                    }
+                    else
+                    {
+                        PersonVM.Faces.Clear();
+                        await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                    }
+                }
+                else
+                {
+                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], addPerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                    ErrorLogger.Instance.LogError(addPerson.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.Instance.LogException(ex);
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+            }
+        }
+
+        private void SetValues(Person person)
+        {
+            if(!string.IsNullOrEmpty(person.Name))
+                nameTextBox.Text = person.Name;
+
+          /*  if (!string.IsNullOrEmpty(person.BirthDate))
+            {
+                var birthDate = DateTime.ParseExact(person.BirthDate,
+                                      "yyyyMMdd",
+                                       CultureInfo.InvariantCulture);
+                birthdatePicker.Date = birthDate;
+            }
+
+            if (!string.IsNullOrEmpty(person.MissingDate))
+            {
+                var missingDate = DateTime.ParseExact(person.MissingDate,
+                                  "yyyyMMdd",
+                                   CultureInfo.InvariantCulture);
+                missingdatePicker.Date = missingDate;
+            */
+
+            if(!string.IsNullOrEmpty(person.AdditionalInfo))
+                addInfoTextBox.Text = person.AdditionalInfo;
+        }
+
+        private async Task<bool> TrainRecognizer()
+        {
+            if (trainingData.Count == 0)
+            {
+                ErrorLogger.Instance.LogError("No training data while adding person..");
+                return false;
+            }
+            Trainer trainer = new Trainer
+            {
+                Data = trainingData,
+                Threshold = 4000,
+                NumOfComponents = trainingData.Count
+            };
+
+            var trainRecognizer = await _faceRecognitionService.TrainFacesAsync(trainer);
+
+            if (trainRecognizer.Success)
+                return true;
+  
+            trainingData.Clear();
+            ErrorLogger.Instance.LogError(trainRecognizer.Error);
+            return false;
+        }
+
+        public void ClearData()
+        {
+            PersonVM.Faces.Clear();
+            PersonVM.Username = "";
+            PersonVM.MissingDate = DateTime.Now;
+            PersonVM.BirthDate = DateTime.Now;
+            PersonVM.AdditionalInfo = "";
+
+            nameTextBox.Text = "";
+            addInfoTextBox.Text = "";
+            birthdatePicker.Date = birthdatePicker.MinimumDate;
+            missingdatePicker.Date = missingdatePicker.MaximumDate;
+        }
 
         public byte[] GetByteArrayFromStream(Func<Stream> stream)
         {
@@ -159,11 +232,6 @@ namespace NightOwl.Xamarin.Views
             ms.Dispose();
 
             return face;
-        }
-
-        async void OnSelectPersonButtonClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new PeopleList());
         }
     }
 }
