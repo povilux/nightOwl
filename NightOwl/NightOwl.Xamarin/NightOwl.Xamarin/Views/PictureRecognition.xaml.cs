@@ -22,10 +22,10 @@ namespace NightOwl.Xamarin.Views
 
         private Func<Stream> imageStream;
 
-        public PictureRecognition (IFaceRecognitionService faceRecognitionService)
+        public PictureRecognition ()
 		{
 			InitializeComponent ();
-            _faceRecognitionService = faceRecognitionService;
+            _faceRecognitionService = new FaceRecognitionService();
             _imageResizerService = DependencyService.Get<IImageResizerService>();
 
             pickPhoto.Clicked += OnSelectedPhotoAsync;
