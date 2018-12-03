@@ -54,6 +54,17 @@
                     FontSize="Medium"
                     FontAttributes="Bold"
                     Clicked="OnAddPersonsDataButtonClicked"/>
+                <Button x:Name="deletePerson" Text="DeletePerson" 
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="Center"
+                    BackgroundColor="RoyalBlue"
+                    BorderWidth="2"
+                    BorderColor="White"                    
+                    TextColor="White"
+                    Font="Microsoft Sans Serif"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    Clicked="OnDeletePersonClicked"/>
                 <Label Text="Name, Surname"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"

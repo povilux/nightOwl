@@ -102,6 +102,30 @@ namespace NightOwl.Xamarin.Views
             await Navigation.PushAsync(new PeopleList());
         }
 
+        async void OnDeletePersonClicked(object sender, EventArgs e)
+        {
+            if(_PersonSelected == -1)
+            {
+                await DisplayAlert("Error", "You need to chose person!", "Close");
+                return;
+            }
+
+            addPerson.IsEnabled = false;
+
+            var deletePerson = await _personsService.DeletePersonAsync(_PersonSelected);
+                  
+
+            if (deletePerson.Success)
+            {
+                await DisplayAlert("Success", "Person deleted", "Close");
+            }
+            else
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], deletePerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                ErrorLogger.Instance.LogError(deletePerson.Error);
+            }
+        }
+
         async void OnAddPersonsDataButtonClicked(object sender, EventArgs e)
         {
 

@@ -108,7 +108,7 @@ namespace NightOwl.WebService.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
 
-            User asd = new User
+            User newPerson = new User
             {
                 UserName = user.UserName,
                 PasswordHash = user.PasswordHash,
@@ -118,12 +118,12 @@ namespace NightOwl.WebService.Controllers
                 PhoneNumber = user.PhoneNumber
             };
 
-            var createdPerson = await _userManager.CreateAsync(asd, asd.PasswordHash);
+            var createdPerson = await _userManager.CreateAsync(newPerson, newPerson.PasswordHash);
 
             if (!createdPerson.Succeeded)
                 return BadRequest(string.Join(Environment.NewLine, createdPerson.Errors.Select(e => e.Description)));
 
-            return Ok(asd);
+            return Ok(newPerson);
         }
 
         // DELETE: api/Users/Delete/5
