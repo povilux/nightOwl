@@ -23,7 +23,7 @@ namespace NightOwl.Xamarin
 
         async void OnSelectPictureButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PictureRecognition(new FaceRecognitionService()));
+            await Navigation.PushAsync(new PictureRecognition());
         }
 
         async void OnWatchCameraButtonClicked(object sender, EventArgs e)
