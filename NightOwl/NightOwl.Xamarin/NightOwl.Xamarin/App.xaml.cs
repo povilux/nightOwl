@@ -19,8 +19,17 @@ namespace NightOwl.Xamarin
 
             if (CurrentUser == Guid.Empty)
                 MainPage = new NavigationPage(new Login(new UserService()));
+            
+
+            /*
+            if (CurrentUser == null)
+                MainPage = new NavigationPage(new Login(new UserService()));
             else
                 MainPage = new NavigationPage(new MainPage());
+            */
+            
+            // Application.Current.MainPage = new NavigationPage(new MasterDetail());
+            
         }
 
         protected override void OnStart()

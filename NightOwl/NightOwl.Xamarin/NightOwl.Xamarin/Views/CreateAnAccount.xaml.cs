@@ -75,7 +75,7 @@ namespace NightOwl.Xamarin.Views
                     if (user.Success)
                     {
                         App.CurrentUser = user.Message.Id;
-                        await Navigation.PushAsync(new MainPage());
+                        Application.Current.MainPage = new NavigationPage(new MasterDetail());
                     }
                     else
                     {

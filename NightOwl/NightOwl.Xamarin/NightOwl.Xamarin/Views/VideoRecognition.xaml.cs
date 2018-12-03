@@ -17,8 +17,8 @@ namespace NightOwl.Xamarin.Views
 	{
 
         public VideoRecognition ()
-		{
-			InitializeComponent ();
+        {
+            InitializeComponent();
 
             string FilePath = "";
             pickVideo.Clicked += async (sender, args) =>
@@ -40,10 +40,14 @@ namespace NightOwl.Xamarin.Views
                 //await DisplayAlert("Video Selected", "Location: " + file.Path, "OK");
                 file.Dispose();
             };
+            Task.Run(() => PlayStopButtonClicked(FilePath));
+        }
 
+        private void PlayStopButtonClicked(string FilePath)
+        {
             playStopButton.Clicked += async (sender, args) =>
             {
-                if(FilePath == "")
+                if (FilePath == "")
                 {
                     playStopButton.IsVisible = false;
                 }

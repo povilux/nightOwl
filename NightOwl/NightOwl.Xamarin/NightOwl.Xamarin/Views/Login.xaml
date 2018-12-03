@@ -12,50 +12,73 @@
             <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
-                <Label Text="Login to the system"
+                <Label Text="Welcome to Smart Vision app!"
                    Margin="0, 0, 0, 20"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    FontSize="Large"/>
-                <Label Text="Username"
+                <Label Text="Please, login to the system"
+                   Margin="0, 0, 0, 20"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
-                   FontSize="Medium"/>
-                <Entry x:Name="Username"
-                    VerticalOptions="CenterAndExpand" 
-                    HorizontalOptions="CenterAndExpand"
-                    WidthRequest="200"/>
-                <Label Text="Password"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   FontSize="Medium"/>
-                <Entry x:Name="Password"
-                    VerticalOptions="CenterAndExpand" 
-                    HorizontalOptions="CenterAndExpand"
-                    WidthRequest="200"
-                    IsPassword="True"/>
-                <Button Text="Login"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center"
-                    BackgroundColor="RoyalBlue"
-                    BorderWidth="2"
-                    BorderColor="White"                    
-                    TextColor="White"
-                    Font="Microsoft Sans Serif"
-                    FontSize="Medium"
-                    FontAttributes="Bold"
-                    Clicked="OnLoginButtonClicked"/>
-                <Button Text="Register"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center"
-                    BackgroundColor="RoyalBlue"
-                    BorderWidth="2"
-                    BorderColor="White"                    
-                    TextColor="White"
-                    Font="Microsoft Sans Serif"
-                    FontSize="Medium"
-                    FontAttributes="Bold"
-                    Clicked="OnRegisterButtonClicked"/>
+                   FontSize="Large"/>
+                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="Center"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                    <Label Text="Username:"
+                       WidthRequest="150"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Medium"/>
+                    <Entry x:Name="Username"
+                        VerticalOptions="CenterAndExpand" 
+                        HorizontalOptions="CenterAndExpand"
+                        WidthRequest="300"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="Center"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                    <Label Text="Password:"
+                       WidthRequest="150"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Medium"/>
+                    <Entry x:Name="Password"
+                        VerticalOptions="CenterAndExpand" 
+                        HorizontalOptions="CenterAndExpand"
+                        WidthRequest="300"
+                        IsPassword="True"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="Center"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.75}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                    <Button Text="Login"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="Center"
+                        BackgroundColor="RoyalBlue"
+                        BorderWidth="2"
+                        BorderColor="White"                    
+                        TextColor="White"
+                        Font="Microsoft Sans Serif"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        HeightRequest="50"
+                        WidthRequest="200"
+                        Clicked="OnLoginButtonClicked"/>
+                    <Button Text="Register"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="Center"
+                        BackgroundColor="RoyalBlue"
+                        BorderWidth="2"
+                        BorderColor="White"                    
+                        TextColor="White"
+                        Font="Microsoft Sans Serif"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        HeightRequest="50"
+                        WidthRequest="200"
+                        Clicked="OnRegisterButtonClicked"/>
+                </StackLayout>
             </StackLayout>
         </RelativeLayout>
     </ContentPage.Content>
