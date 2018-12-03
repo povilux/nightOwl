@@ -27,7 +27,7 @@
                     FontSize="Medium"
                     FontAttributes="Bold"
                     Clicked="OnSelectPersonButtonClicked"/>
-                <Image x:Name="image"
+                <Image x:Name="image" WidthRequest="100" HeightRequest="100"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand"/>
                 

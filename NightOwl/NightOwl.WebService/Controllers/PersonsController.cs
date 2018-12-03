@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Drawing;
+using System.Collections.Generic;
+using NightOwl.WebService.Extensions;
+using NightOwl.WebService.Services;
+using System.IO;
+using System.Text;
 
 namespace NightOwl.WebService.Controllers
 {
@@ -26,6 +32,7 @@ namespace NightOwl.WebService.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            // join: get person info & person face photos
             return Ok(_context.Persons.ToList());
         }
 
@@ -34,6 +41,7 @@ namespace NightOwl.WebService.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {            
+            // join: get person info & person face photos
             var person = await _context.Persons.FindAsync(id);
 
             if(person == null)
@@ -46,6 +54,7 @@ namespace NightOwl.WebService.Controllers
         [HttpGet("{creatorId}")]
         public IActionResult GetByCreatorId([FromRoute]Guid creatorId)
         {
+            // join: get person info & person face photos
             var persons = _context.Persons.Where(p => p.Creator.Id.Equals(creatorId.ToString())).ToList();
 
             if (persons == null)
@@ -58,6 +67,8 @@ namespace NightOwl.WebService.Controllers
         [HttpGet]
         public IActionResult GetPersonsByCreator()
         {
+            // join: get person info & person face photos
+
             var persons = _userManager.Users.
                 GroupJoin(_context.Persons.ToList(),
                 u => u.Id,
@@ -83,23 +94,28 @@ namespace NightOwl.WebService.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+
             var personExists = await _context.Persons.FindAsync(id);
 
             if (personExists == null)
                 return NotFound();
 
+
             var updated = _context.Persons.Update(person);
 
-            if(updated.Entity == null)
+
+            if (updated.Entity == null)
                 return BadRequest("Error while updating.");
 
             try
             {
                 await _context.SaveChangesAsync();
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                await cloudBlobService.UploadFaceBlobAsync(updated.Entity.Id.ToString(), person.Photos);
             }
-            catch(DbUpdateConcurrencyException)
+            catch(Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error while saving: " + ex.Message);
             }
             return Ok(updated.Entity);
         }
@@ -107,24 +123,29 @@ namespace NightOwl.WebService.Controllers
       
         // POST: api/Persons/Post/
         [HttpPost]
-        public IActionResult Post([FromBody]Person person)
+        public async Task<IActionResult> Post([FromBody]Person person)
         {
             if(!ModelState.IsValid)
-               return BadRequest(ModelState);
-         
+                return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
+
             var created = _context.Persons.Add(person);
+
 
             if(created.Entity == null)
                 return BadRequest("Error while adding user");
-
+            
             try
             {
-                 _context.SaveChanges();
+                _context.SaveChanges();
+
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                await cloudBlobService.UploadFaceBlobAsync(created.Entity.Id.ToString(), person.Photos);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error while saving: " + created.Entity.Id.ToString()+ " " + ex.Message);
             }
+            
             return Ok(created.Entity);
         }
 
@@ -144,6 +165,9 @@ namespace NightOwl.WebService.Controllers
 
             try
             {
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                await cloudBlobService.DeleteFaceBlobAsync(id.ToString());
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

@@ -8,6 +8,7 @@ namespace NightOwl.PersonRecognitionService.Services
     {
         byte[][] DetectFaces(Image<Bgr, byte> frame);
         Image<Bgr, byte> DrawFaces(Image<Bgr, byte> input);
+        Image<Gray, byte> DetectFaceAsGrayImage(Image<Bgr, byte> input);
         Rectangle[] DetectFacesAsRect(Image<Bgr, byte> input);
     }
 }

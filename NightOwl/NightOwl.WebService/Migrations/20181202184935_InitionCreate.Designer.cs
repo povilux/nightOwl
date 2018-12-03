@@ -10,8 +10,8 @@ using NightOwl.WebService.DAL;
 namespace NightOwl.WebService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20181120111223_Testing")]
-    partial class Testing
+    [Migration("20181202184935_InitionCreate")]
+    partial class InitionCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -131,6 +131,20 @@ namespace NightOwl.WebService.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("NightOwl.WebService.Models.Face", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BlobURI")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faces");
+                });
+
             modelBuilder.Entity("NightOwl.WebService.Models.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -142,7 +156,8 @@ namespace NightOwl.WebService.Migrations
                     b.Property<string>("BirthDate")
                         .IsRequired();
 
-                    b.Property<string>("CreatorId");
+                    b.Property<string>("CreatorId")
+                        .IsRequired();
 
                     b.Property<string>("MissingDate")
                         .IsRequired();
@@ -257,7 +272,8 @@ namespace NightOwl.WebService.Migrations
                 {
                     b.HasOne("NightOwl.WebService.Models.User", "Creator")
                         .WithMany("AddedPersons")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

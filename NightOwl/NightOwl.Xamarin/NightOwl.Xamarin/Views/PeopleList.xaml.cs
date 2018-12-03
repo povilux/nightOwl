@@ -45,7 +45,6 @@ namespace NightOwl.Xamarin.Views
         public async Task<IEnumerable<Person>> GetPersonsList()
         {
             var personList = await _personsService.GetPersonsList();
-
             if (personList.Success)
             {
                 return personList.Message.ToList();

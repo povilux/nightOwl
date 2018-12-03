@@ -2,17 +2,19 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using NightOwl.PersonRecognitionService.Components;
+using NightOwl.PersonRecognitionService.DAL;
 using NightOwl.PersonRecognitionService.Services;
 using NightOwl.PersonRecognitionWebService.Extensions;
 
 namespace NightOwl.PersonRecognitionService.Controllers
 {
     public class FacesController : ApiController
-    {        
+    {
         public FacesController()
         {
         }
@@ -26,7 +28,10 @@ namespace NightOwl.PersonRecognitionService.Controllers
 
             try
             {
-                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(trainer.Data, trainer.NumOfComponents, trainer.Threshold);
+                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(null, trainer.NumOfComponents, trainer.Threshold);
+
+               // trainer.Data = await faceRecognitionService.LoadFacesAsync(trainer.Data);
+                bool success = faceRecognitionService.TrainRecognizer(trainer.Data);
             }
             catch (Exception ex)
             {
@@ -40,7 +45,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
         public  IHttpActionResult Recognize([FromBody]byte[] photoByteArray)
         {
             try {
-                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService();
+                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(null);
 
                 string name = faceRecognitionService.RecognizeFace(photoByteArray);
                 return Ok(name);
@@ -54,10 +59,15 @@ namespace NightOwl.PersonRecognitionService.Controllers
         [HttpPost]
         public IHttpActionResult Detect([FromBody]byte[] photo)
         {
+            if (photo == null)
+                return BadRequest("No picture");
+
             try
-            {
+            {                
                 IFaceDetectionService faceDetectionService = new FaceDetectionService();
-                return Ok(faceDetectionService.DetectFaces(photo.ByteArrayToImage()));
+
+                Image<Gray, byte> facePhoto = faceDetectionService.DetectFaceAsGrayImage(photo.ByteArrayToImage());
+                return Ok(facePhoto.ToBitmap().ImageToByteArray());
             }
             catch (Exception ex)
             {

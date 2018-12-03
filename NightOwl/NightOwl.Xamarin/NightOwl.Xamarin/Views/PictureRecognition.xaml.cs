@@ -29,39 +29,6 @@ namespace NightOwl.Xamarin.Views
             _imageResizerService = DependencyService.Get<IImageResizerService>();
 
             pickPhoto.Clicked += OnSelectedPhotoAsync;
-
-            /*takePhoto.Clicked += async (sender, args) =>
-            {
-
-                if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-                {
-                    await DisplayAlert("No Camera", ":( No camera available.", "OK");
-                    return;
-                }
-
-                var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                {
-                    Directory = "Test",
-                    SaveToAlbum = true,
-                    CompressionQuality = 75,
-                    CustomPhotoSize = 50,
-                    PhotoSize = PhotoSize.MaxWidthHeight,
-                    MaxWidthHeight = 2000,
-                    DefaultCamera = CameraDevice.Front
-                });
-
-                if (file == null)
-                    return;
-
-                await DisplayAlert("File Location", file.Path, "OK");
-
-                image.Source = ImageSource.FromStream(() =>
-                {
-                    var stream = file.GetStream();
-                    file.Dispose();
-                    return stream;
-                });
-            };*/
         }
 
         public async void OnSelectedPhotoAsync(object sender, EventArgs e)
@@ -86,7 +53,7 @@ namespace NightOwl.Xamarin.Views
                 return stream;
             });
 
-            byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400);
+            byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream));
             
 
             image.Source = ImageSource.FromStream(() => new MemoryStream(photo));

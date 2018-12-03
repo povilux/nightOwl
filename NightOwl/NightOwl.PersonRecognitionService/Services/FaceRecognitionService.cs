@@ -3,6 +3,7 @@ using Emgu.CV.Face;
 using Emgu.CV.Structure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using NightOwl.PersonRecognitionService.DAL;
 using NightOwl.PersonRecognitionService.Models;
 using NightOwl.PersonRecognitionWebService.Extensions;
 using System;
@@ -24,18 +25,21 @@ namespace NightOwl.PersonRecognitionService.Services
         private readonly int _recognizerNumOfComponents;
         private readonly int _recognizerThreshold;
 
-        private string[] _FacesNamesArray { get; set; }
-
+        private IFaceDetectionService _faceDetectionService;
+        private DatabaseContext _context;
         private EigenFaceRecognizer _eigen;
 
-        // to do: should log exceptions 
-        public FaceRecognitionService()
+        private string[] _FacesNamesArray { get; set; }
+
+        public FaceRecognitionService(DatabaseContext context)
         {
             try
             {
                 _eigen = new EigenFaceRecognizer();
                 _FacesNamesArray = File.ReadAllLines(_recognizerFacesFileName);
                 _eigen.Read(_recognizerFileName);
+                _faceDetectionService = new FaceDetectionService();
+                _context = context;
             }
             catch (Exception ex)
             {
@@ -43,37 +47,43 @@ namespace NightOwl.PersonRecognitionService.Services
             }
         }
 
-        public FaceRecognitionService(IEnumerable<Face> Data, int recognizerNumOfComponents, int recognizerThreshold)
+        public FaceRecognitionService(DatabaseContext context, int recognizerNumOfComponents, int recognizerThreshold)
         {
             try
             {
                 _recognizerNumOfComponents = recognizerNumOfComponents;
                 _recognizerThreshold = recognizerThreshold;
-                _eigen = new EigenFaceRecognizer(_recognizerNumOfComponents, _recognizerThreshold);
+                _eigen = new EigenFaceRecognizer(_recognizerNumOfComponents, _recognizerThreshold); 
+                _faceDetectionService = new FaceDetectionService();
+                _context = context;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
+        public bool TrainRecognizer(IEnumerable<Face> Data)
+        {
+            try
+            {
+                if (_eigen == null)
+                    throw new Exception(ConfigurationManager.AppSettings["RecognizerError"]);
+
+                List<Image<Gray, byte>> FacesOnly = new List<Image<Gray, byte>>();
+                int nameId = 0, j = 0;
                 var FacesPhotos = new List<Image<Bgr, byte>>();
                 var FacesNamesArray = new int[Data.Count()];
                 _FacesNamesArray = new string[Data.Count()];
 
-                int nameId = 0, j = 0;
-
                 Data.ToList().ForEach(f => FacesPhotos.Add(f.Photo.ByteArrayToImage()));
-
-                IFaceDetectionService faceDetectionService = new FaceDetectionService();
-
-                List<Image<Gray, byte>> FacesOnly = new List<Image<Gray, byte>>();
-
+                // to do: remove face detection because we are giving a face photo already
                 foreach (var face in FacesPhotos)
                 {
-                    Rectangle[] faceRectangle = faceDetectionService.DetectFacesAsRect(face);
+                    var facePhoto = _faceDetectionService.DetectFaceAsGrayImage(face);
 
-                    if (faceRectangle.Count() > 1)
-                        throw new Exception("There is more than 1 face in the photo");
-                    if(faceRectangle.Count() == 0)
-                        throw new Exception("There is no faces in the photo");
-
-                    var faceOnly = face.Copy(faceRectangle[0]).ConvertToRecognition();
-                    FacesOnly.Add(faceOnly);
+                    if (facePhoto != null)
+                        FacesOnly.Add(facePhoto);
                 }
 
                 Data.ToList().ForEach(f =>
@@ -89,52 +99,7 @@ namespace NightOwl.PersonRecognitionService.Services
                     j++;
                 });
 
-                TrainRecognizer(FacesOnly.ToArray(), FacesNamesArray);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<bool> TrainRecognizer(Image<Gray, byte>[] images, int[] names)
-        {
-            try
-            {
-                if (_eigen == null)
-                    throw new Exception(ConfigurationManager.AppSettings["RecognizerError"]);
-
-                int i = 0;
-
-                CloudStorageAccount _cloudStorageAccount = CloudStorageAccount.Parse(Connections.CloudBlobStorageConnection);
-                CloudBlobClient _blobClient = _cloudStorageAccount.CreateCloudBlobClient();
-
-                string containerId = Guid.NewGuid().ToString();
-
-                CloudBlobContainer cloudBlobContainer = _blobClient.GetContainerReference(containerId);
-                await cloudBlobContainer.CreateIfNotExistsAsync().ConfigureAwait(false);
-
-                // Set the permissions so the blobs are public. 
-                BlobContainerPermissions permissions = new BlobContainerPermissions
-                {
-                    PublicAccess = BlobContainerPublicAccessType.Blob
-                };
-                await cloudBlobContainer.SetPermissionsAsync(permissions);
-
-
-                foreach (Image<Gray, byte> image in images)
-                {
-
-                    // Get the reference to the block blob from the container
-                    CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(i + ".bmp");
-
-                    // Upload the file
-                    byte[] byteArray = image.ToBitmap().ImageToByteArray();
-
-                    await blockBlob.UploadFromByteArrayAsync(byteArray , 0, byteArray.Length);
-                    i++;
-                }
-                _eigen.Train(images, names);
+                _eigen.Train(FacesOnly.ToArray(), FacesNamesArray);
                 _eigen.Write(_recognizerFileName);
                 File.WriteAllLines(_recognizerFacesFileName, _FacesNamesArray, Encoding.UTF8);
                 return true;
@@ -174,15 +139,6 @@ namespace NightOwl.PersonRecognitionService.Services
                 throw;
             }
         } 
-
-        public Image<Gray, byte> ConvertImageToGrayImage(Image image)
-        {
-            Bitmap masterImage = (Bitmap)image;
-
-            Image<Gray, byte> normalizedMasterImage = new Image<Gray, byte>(masterImage);
-            return normalizedMasterImage;
-        }
-
 
         private int FindIndexInArray(string[] array, string find)
         {
