@@ -17,6 +17,7 @@ namespace NightOwl.Xamarin.Views
         {
             InitializeComponent();
             masterpage.ListView.ItemSelected += OnItemSelected;
+            //NavigationPage.SetHasNavigationBar(this, false);
         }
 
         void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
