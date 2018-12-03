@@ -25,7 +25,16 @@ namespace NightOwl.WebService.Models
 
         public string AdditionalInfo { get; set; }
 
-        public User Creator { get; private set; }
+        [Required]
+        public string CreatorId { get; set; }
+
+        public User Creator { get;  set; }
+   
+        [NotMapped]
+        public ICollection<byte[]> Photos;
+
+        [Required]
+        public ICollection<Face> FacePhotos;
     }
 }
 

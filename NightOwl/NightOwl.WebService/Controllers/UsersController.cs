@@ -79,7 +79,7 @@ namespace NightOwl.WebService.Controllers
             var updatedPerson = await _userManager.UpdateAsync(user);
 
             if (!updatedPerson.Succeeded)
-                return BadRequest(updatedPerson.Errors);
+                return BadRequest(string.Join(Environment.NewLine, updatedPerson.Errors.Select(e => e.Description)));
 
             return Ok(user);
         }
@@ -121,7 +121,7 @@ namespace NightOwl.WebService.Controllers
             var createdPerson = await _userManager.CreateAsync(asd, asd.PasswordHash);
 
             if (!createdPerson.Succeeded)
-                return BadRequest(createdPerson.Errors);
+                return BadRequest(string.Join(Environment.NewLine, createdPerson.Errors.Select(e => e.Description)));
 
             return Ok(asd);
         }
@@ -138,7 +138,7 @@ namespace NightOwl.WebService.Controllers
             var deletedPerson = await _userManager.DeleteAsync(user);
 
             if (!deletedPerson.Succeeded )
-                return BadRequest(deletedPerson.Errors);
+                return BadRequest(string.Join(Environment.NewLine, deletedPerson.Errors.Select(e => e.Description)));
 
             return Ok(user);
         }

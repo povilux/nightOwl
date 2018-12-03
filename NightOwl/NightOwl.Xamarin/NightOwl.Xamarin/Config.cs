@@ -62,6 +62,14 @@ namespace NightOwl.Xamarin
             }
         }
 
+        public static string UpdatePersonEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonsAPIUrl"] + ConfigurationManager.AppSettings["UpdatePersonAPI"];
+            }
+        }
+
         //---------------------------------------------------------------
         // Faces controller end points
         public static string RecognizeFaceEndPoint

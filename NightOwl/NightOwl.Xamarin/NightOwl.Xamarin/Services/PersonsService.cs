@@ -42,5 +42,22 @@ namespace NightOwl.Xamarin.Services
             }
             return null;
         }
+
+        public async Task<APIMessage<Person>> UpdatePersonAsync(Person updatePerson, int id)
+        {
+            if (updatePerson != null)
+            {
+                try
+                {
+                    var response = await httpClient.PutAsync<Person>(APIEndPoints.UpdatePersonEndPoint + id, updatePerson);
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.Instance.LogException(ex);
+                }
+            }
+            return null;
+        }
     }
 }

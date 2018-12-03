@@ -17,6 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NightOwl.Xamarin", "NightOw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NightOwl.PersonRecognitionService", "NightOwl.PersonRecognitionService\NightOwl.PersonRecognitionService.csproj", "{BBA0EF80-F051-4459-852B-99AAD2C4A18D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B94B709-618E-460F-9A4B-5217C750D30D}"
+	ProjectSection(SolutionItems) = preProject
+		Connections.cs = Connections.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU

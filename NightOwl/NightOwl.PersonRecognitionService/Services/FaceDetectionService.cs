@@ -5,6 +5,7 @@ using System;
 using System.Configuration;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace NightOwl.PersonRecognitionService.Services
 {
@@ -30,6 +31,19 @@ namespace NightOwl.PersonRecognitionService.Services
             return input;
         }
 
+        public Image<Gray, byte> DetectFaceAsGrayImage(Image<Bgr, byte> photo)
+        {
+            Rectangle[] faces = DetectFacesAsRect(photo);
+
+            if (faces.Count() > 1)
+                throw new Exception("Too many faces in the photo!");
+
+            if (faces.Count() < 1)
+                throw new Exception("No face in the photo!");
+         
+            return photo.Copy(faces[0]).ConvertToRecognition().Clone();
+        }
+    
         public Rectangle[] DetectFacesAsRect(Image<Bgr, byte> input)
         {
             return _cascadeClassifier.DetectMultiScale(input,

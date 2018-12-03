@@ -18,12 +18,12 @@ namespace NightOwl.Xamarin.UWP
     {
         public ImageResizerService() { }
 
-        public async Task<byte[]> ResizeImageAsync(byte[] imageData, float width, float height)
+        public async Task<byte[]> ResizeImageAsync(byte[] imageData)
         {
             BitmapDecoder decoder = await BitmapDecoder.CreateAsync(imageData.ToRandomAccessMemory());
 
             BitmapTransform transform = new BitmapTransform();
-            const float sourceImageHeightLimit = 400;
+            const float sourceImageHeightLimit = 350;
 
             if (decoder.PixelHeight > sourceImageHeightLimit)
             {

@@ -27,7 +27,7 @@
                     FontSize="Medium"
                     FontAttributes="Bold"
                     Clicked="OnSelectPersonButtonClicked"/>
-                <Image x:Name="image"
+                <Image x:Name="image" WidthRequest="100" HeightRequest="100"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand"/>
                 
@@ -41,7 +41,8 @@
                     TextColor="White"
                     Font="Microsoft Sans Serif"
                     FontSize="Medium"
-                    FontAttributes="Bold"/>
+                    FontAttributes="Bold"
+                    Clicked="OnAddPersonPhotoClicked"/>
                 <Button x:Name="addPerson" Text="Add persons data" 
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"

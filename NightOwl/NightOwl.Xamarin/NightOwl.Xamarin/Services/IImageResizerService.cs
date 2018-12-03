@@ -7,6 +7,6 @@ namespace NightOwl.Xamarin.Services
 {
     public interface IImageResizerService
     {
-         Task<byte[]> ResizeImageAsync(byte[] imageData, float width, float height);
+         Task<byte[]> ResizeImageAsync(byte[] imageData);
     }
 }

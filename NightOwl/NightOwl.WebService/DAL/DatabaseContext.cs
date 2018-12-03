@@ -13,6 +13,7 @@ namespace NightOwl.WebService.DAL
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
         public DbSet<Person> Persons { get; set; }
+        public DbSet<Face> Faces { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
