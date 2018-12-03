@@ -21,7 +21,8 @@ namespace NightOwl.WebService.Services
             CloudStorageAccount _cloudStorageAccount = CloudStorageAccount.Parse(Connections.CloudBlobStorageConnection);
             CloudBlobClient _blobClient = _cloudStorageAccount.CreateCloudBlobClient();
 
-            CloudBlobContainer cloudBlobContainer = _blobClient.GetContainerReference(containerName + "-container");
+            CloudBlobContainer cloudBlobContainer = _blobClient.GetContainerReference(containerName);
+
             await cloudBlobContainer.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             // Set the permissions so the blobs are public. 
@@ -34,37 +35,39 @@ namespace NightOwl.WebService.Services
             await cloudBlobContainer.DeleteAsync();
         }
 
-        public async Task UploadFaceBlobAsync(string containerName, IEnumerable<byte[]> faces)
+        public async Task<ICollection<Face>> UploadFaceBlobAsync(int personID, string containerName, IEnumerable<byte[]> faces)
         {
-            // Connecting to cloud blob storage.
             CloudStorageAccount _cloudStorageAccount = CloudStorageAccount.Parse(Connections.CloudBlobStorageConnection);
-                CloudBlobClient _blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+            CloudBlobClient _blobClient = _cloudStorageAccount.CreateCloudBlobClient();
 
-            CloudBlobContainer cloudBlobContainer = _blobClient.GetContainerReference(containerName + "-container");
-               await cloudBlobContainer.CreateIfNotExistsAsync().ConfigureAwait(false);
+            CloudBlobContainer cloudBlobContainer = _blobClient.GetContainerReference(containerName);
+            await cloudBlobContainer.CreateIfNotExistsAsync().ConfigureAwait(false);
 
-                // Set the permissions so the blobs are public. 
-                BlobContainerPermissions permissions = new BlobContainerPermissions
+            BlobContainerPermissions permissions = new BlobContainerPermissions
+            {
+                PublicAccess = BlobContainerPublicAccessType.Blob
+            };
+            await cloudBlobContainer.SetPermissionsAsync(permissions);
+
+            ICollection<Face> faceBlobsList = new List<Face>();
+            int i = cloudBlobContainer.ListBlobs().Count();
+            string blobName = "";
+
+            foreach (byte[] face in faces)
+            {
+                blobName = i + ".bmp";
+
+                CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName);
+                await blockBlob.UploadFromByteArrayAsync(face, 0, face.Length);
+
+                faceBlobsList.Add(new Face()
                 {
-                    PublicAccess = BlobContainerPublicAccessType.Blob
-                };
-                await cloudBlobContainer.SetPermissionsAsync(permissions);
-
-                int i = 0;
-                
-                // Uploading blobs 
-                foreach (byte[] face in faces)
-                {
-                    // Get the reference to the block blob from the container
-                    CloudBlockBlob blockBlob = cloudBlobContainer.GetBlockBlobReference(i + ".bmp");
-
-                    // Upload the file
-                    await blockBlob.UploadFromByteArrayAsync(face, 0, face.Length);
-                    i++;
-                }
-            
-
+                    BlobURI = "https://nightowl.blob.core.windows.net/" + containerName + "/" + blobName,
+                    OwnerId = personID
+                });
+                i++;
+            }
+            return faceBlobsList;
         }
-
     }
 }

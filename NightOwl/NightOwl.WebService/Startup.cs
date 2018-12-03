@@ -33,7 +33,7 @@ namespace NightOwl.WebService
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<DatabaseContext>
-                (options => options.UseSqlServer(Connection.sqlConnection));
+                (options => options.UseSqlServer(Connections.sqlConnection));
 
             services.AddIdentity<User, IdentityRole>()
          .AddEntityFrameworkStores<DatabaseContext>();

@@ -86,7 +86,6 @@ namespace NightOwl.WebService.Controllers
 
         }
 
-
         // PUT: api/Persons/Put/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromBody] Person person, [FromRoute]int id)
@@ -94,30 +93,31 @@ namespace NightOwl.WebService.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-
-            var personExists = await _context.Persons.FindAsync(id);
-
-            if (personExists == null)
-                return NotFound();
-
-
-            var updated = _context.Persons.Update(person);
-
-
-            if (updated.Entity == null)
-                return BadRequest("Error while updating.");
-
             try
             {
-                await _context.SaveChangesAsync();
+                var updated = _context.Persons.Update(person);
+
+                if (updated.Entity == null)
+                    return BadRequest("Error while updating.");
+
                 ICloudBlobService cloudBlobService = new CloudBlobService();
-                await cloudBlobService.UploadFaceBlobAsync(updated.Entity.Id.ToString(), person.Photos);
+                ICollection<Face> faceBlobs = await cloudBlobService.UploadFaceBlobAsync(id, id.ToString() + "-container", person.Photos);
+
+                foreach (Face blob in faceBlobs)
+                {
+                    var faceBlobCreated = _context.Faces.Add(blob);
+
+                    if (faceBlobCreated.Entity == null)
+                        return BadRequest("Error while adding face to database");
+                }
+                _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving: " + ex.Message);
+                return BadRequest(ex.Message);
             }
-            return Ok(updated.Entity);
+
+            return Ok();
         }
 
       
@@ -130,20 +130,28 @@ namespace NightOwl.WebService.Controllers
 
             var created = _context.Persons.Add(person);
 
-
             if(created.Entity == null)
-                return BadRequest("Error while adding user");
+                return BadRequest("Error while adding user to database");
             
             try
             {
                 _context.SaveChanges();
 
                 ICloudBlobService cloudBlobService = new CloudBlobService();
-                await cloudBlobService.UploadFaceBlobAsync(created.Entity.Id.ToString(), person.Photos);
+                ICollection<Face> faceBlobs = await cloudBlobService.UploadFaceBlobAsync(created.Entity.Id, created.Entity.Id.ToString() + "-container", person.Photos);
+
+                foreach(Face blob in faceBlobs)
+                {
+                    var faceBlobCreated = _context.Faces.Add(blob);
+
+                    if (faceBlobCreated.Entity == null)
+                        return BadRequest("Error while adding face to database");
+                }
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {
-                return BadRequest("Error while saving: " + created.Entity.Id.ToString()+ " " + ex.Message);
+                return BadRequest("Error while saving: " + " " + ex.Message);
             }
             
             return Ok(created.Entity);
@@ -166,15 +174,14 @@ namespace NightOwl.WebService.Controllers
             try
             {
                 ICloudBlobService cloudBlobService = new CloudBlobService();
-                await cloudBlobService.DeleteFaceBlobAsync(id.ToString());
-
+                await cloudBlobService.DeleteFaceBlobAsync(id.ToString() + "-container");
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error while saving changes: " + ex.Message);
             }
-            return Ok(deletedPerson.Entity);
+            return Ok(true);
         }
     }
 }
