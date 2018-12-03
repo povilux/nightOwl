@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NightOwl.WebService.DAL;
 
 namespace NightOwl.WebService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20181202185434_InitionCreate2")]
+    partial class InitionCreate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,9 +160,7 @@ namespace NightOwl.WebService.Migrations
                     b.Property<string>("BirthDate")
                         .IsRequired();
 
-                    b.Property<Guid>("CreatorId");
-
-                    b.Property<string>("CreatorId1")
+                    b.Property<string>("CreatorId")
                         .IsRequired();
 
                     b.Property<string>("MissingDate")
@@ -171,7 +171,7 @@ namespace NightOwl.WebService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Persons");
                 });
@@ -284,7 +284,7 @@ namespace NightOwl.WebService.Migrations
                 {
                     b.HasOne("NightOwl.WebService.Models.User", "Creator")
                         .WithMany("AddedPersons")
-                        .HasForeignKey("CreatorId1")
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

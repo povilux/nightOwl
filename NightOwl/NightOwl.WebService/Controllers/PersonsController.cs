@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Drawing;
+using System.Collections.Generic;
+using NightOwl.WebService.Extensions;
+using NightOwl.WebService.Services;
+using System.IO;
+using System.Text;
 
 namespace NightOwl.WebService.Controllers
 {
@@ -26,6 +32,7 @@ namespace NightOwl.WebService.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            // join: get person info & person face photos
             return Ok(_context.Persons.ToList());
         }
 
@@ -34,6 +41,7 @@ namespace NightOwl.WebService.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {            
+            // join: get person info & person face photos
             var person = await _context.Persons.FindAsync(id);
 
             if(person == null)
@@ -46,6 +54,7 @@ namespace NightOwl.WebService.Controllers
         [HttpGet("{creatorId}")]
         public IActionResult GetByCreatorId([FromRoute]Guid creatorId)
         {
+            // join: get person info & person face photos
             var persons = _context.Persons.Where(p => p.Creator.Id.Equals(creatorId.ToString())).ToList();
 
             if (persons == null)
@@ -58,6 +67,8 @@ namespace NightOwl.WebService.Controllers
         [HttpGet]
         public IActionResult GetPersonsByCreator()
         {
+            // join: get person info & person face photos
+
             var persons = _userManager.Users.
                 GroupJoin(_context.Persons.ToList(),
                 u => u.Id,
@@ -75,7 +86,6 @@ namespace NightOwl.WebService.Controllers
 
         }
 
-
         // PUT: api/Persons/Put/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromBody] Person person, [FromRoute]int id)
@@ -83,48 +93,67 @@ namespace NightOwl.WebService.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var personExists = await _context.Persons.FindAsync(id);
-
-            if (personExists == null)
-                return NotFound();
-
-            var updated = _context.Persons.Update(person);
-
-            if(updated.Entity == null)
-                return BadRequest("Error while updating.");
-
             try
             {
-                await _context.SaveChangesAsync();
+                var updated = _context.Persons.Update(person);
+
+                if (updated.Entity == null)
+                    return BadRequest("Error while updating.");
+
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                ICollection<Face> faceBlobs = await cloudBlobService.UploadFaceBlobAsync(id, id.ToString() + "-container", person.Photos);
+
+                foreach (Face blob in faceBlobs)
+                {
+                    var faceBlobCreated = _context.Faces.Add(blob);
+
+                    if (faceBlobCreated.Entity == null)
+                        return BadRequest("Error while adding face to database");
+                }
+                _context.SaveChanges();
             }
-            catch(DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest(ex.Message);
             }
-            return Ok(updated.Entity);
+
+            return Ok();
         }
 
       
         // POST: api/Persons/Post/
         [HttpPost]
-        public IActionResult Post([FromBody]Person person)
+        public async Task<IActionResult> Post([FromBody]Person person)
         {
             if(!ModelState.IsValid)
-               return BadRequest(ModelState);
-         
+                return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
+
             var created = _context.Persons.Add(person);
 
             if(created.Entity == null)
-                return BadRequest("Error while adding user");
-
+                return BadRequest("Error while adding user to database");
+            
             try
             {
-                 _context.SaveChanges();
+                _context.SaveChanges();
+
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                ICollection<Face> faceBlobs = await cloudBlobService.UploadFaceBlobAsync(created.Entity.Id, created.Entity.Id.ToString() + "-container", person.Photos);
+
+                foreach(Face blob in faceBlobs)
+                {
+                    var faceBlobCreated = _context.Faces.Add(blob);
+
+                    if (faceBlobCreated.Entity == null)
+                        return BadRequest("Error while adding face to database");
+                }
+                _context.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error while saving: " + " " + ex.Message);
             }
+            
             return Ok(created.Entity);
         }
 
@@ -144,13 +173,15 @@ namespace NightOwl.WebService.Controllers
 
             try
             {
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                await cloudBlobService.DeleteFaceBlobAsync(id.ToString() + "-container");
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error while saving changes: " + ex.Message);
             }
-            return Ok(deletedPerson.Entity);
+            return Ok(true);
         }
     }
 }

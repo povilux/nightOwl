@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.MasterPage"
+             Title="nightOwl Master Page">
+    <ContentPage.Content>
+        <StackLayout x:Name="MasterStack" VerticalOptions="FillAndExpand">
+            <StackLayout x:Name="TopStack">
+                <Label Text="Menu" HorizontalOptions="Center" FontSize="Large" TextColor="Black"  Font="Microsoft Sans Serif"/>
+            </StackLayout>
+            <StackLayout x:Name="MidStack" VerticalOptions="FillAndExpand">
+                <ListView x:Name="listview" SeparatorVisibility="None" BackgroundColor="#5097A4" WidthRequest="100">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Image Source="{Binding IconSource}" Margin="0, 10, 0, 10"/>
+                                    <Label Grid.Column="1" Text="{Binding Title}" TextColor="White" FontSize="Medium" Font="Microsoft Sans Serif"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+            <StackLayout x:Name="BottomStack" VerticalOptions="EndAndExpand" BackgroundColor="#5097A4">
+                <Button Text="Logout"
+                    BackgroundColor="RoyalBlue"
+                    BorderWidth="2"
+                    BorderColor="White"
+                    Font="Microsoft Sans Serif"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    TextColor="White"></Button>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

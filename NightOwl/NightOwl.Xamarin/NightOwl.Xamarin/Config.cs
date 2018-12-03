@@ -38,6 +38,15 @@ namespace NightOwl.Xamarin
 
         //---------------------------------------------------------------
         // Persons controller end points
+        
+        public static string DeletePersonEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonsAPIUrl"] + ConfigurationManager.AppSettings["DeletePersonAPI"];
+            }
+        }
+
         public static string AddNewPersonEndPoint
         {
             get
@@ -59,6 +68,14 @@ namespace NightOwl.Xamarin
             get
             {
                 return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonsAPIUrl"] + ConfigurationManager.AppSettings["GetPersonByCreatorAPI"];
+            }
+        }
+
+        public static string UpdatePersonEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonsAPIUrl"] + ConfigurationManager.AppSettings["UpdatePersonAPI"];
             }
         }
 

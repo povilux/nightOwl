@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NightOwl.Xamarin.Components;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -6,6 +7,6 @@ namespace NightOwl.Xamarin.Services
 {
     public interface IFaceDetectionService
     {
-        Task<int> DetectFacesAsync(byte[] photoByteArray);
+        Task<APIMessage<byte[]>> DetectFacesAsync(byte[] photo);
     }
 }

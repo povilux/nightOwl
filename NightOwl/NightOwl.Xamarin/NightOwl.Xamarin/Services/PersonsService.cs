@@ -12,11 +12,11 @@ namespace NightOwl.Xamarin.Services
     {
         private IHttpClientService httpClient = HttpClientService.Instance;
 
-        public async Task<APIMessage<Person>> GetPersonsList()
+        public async Task<APIMessage<IEnumerable<Person>>> GetPersonsList()
         {    
             try
             {
-                var response = await httpClient.GetAsync<Person>(APIEndPoints.GetPersonEndPoint);
+                var response = await httpClient.GetAsync<IEnumerable<Person>>(APIEndPoints.GetPersonEndPoint);
                 return response;
             }
             catch (Exception ex)
@@ -33,6 +33,40 @@ namespace NightOwl.Xamarin.Services
                 try
                 {
                     var response = await httpClient.PostAsync<Person, Person>(APIEndPoints.AddNewPersonEndPoint, newPerson);
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.Instance.LogException(ex);
+                }
+            }
+            return null;
+        }
+
+        public async Task<APIMessage<bool>> DeletePersonAsync(int id = -1)
+        {
+            if (id != -1)
+            {
+                try
+                {
+                    var response = await httpClient.DeleteAsync<bool>(APIEndPoints.DeletePersonEndPoint + id);
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.Instance.LogException(ex);
+                }
+            }
+            return null;
+        }
+
+        public async Task<APIMessage<Person>> UpdatePersonAsync(Person updatePerson, int id)
+        {
+            if (updatePerson != null)
+            {
+                try
+                {
+                    var response = await httpClient.PutAsync<Person>(APIEndPoints.UpdatePersonEndPoint + id, updatePerson);
                     return response;
                 }
                 catch (Exception ex)

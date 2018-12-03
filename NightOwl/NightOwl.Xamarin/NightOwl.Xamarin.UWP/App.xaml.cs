@@ -55,7 +55,6 @@ namespace NightOwl.Xamarin.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 global::Xamarin.Forms.Forms.Init(e);
-                global::Xamarin.Forms.DependencyService.Register<FaceDetectionService>();
                 global::Xamarin.Forms.DependencyService.Register<ImageResizerService>(); 
                 ConfigurationManager.Initialise(PCLAppConfig.FileSystemStream.PortableStream.Current);
 

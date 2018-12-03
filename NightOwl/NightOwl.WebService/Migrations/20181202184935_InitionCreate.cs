@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NightOwl.WebService.Migrations
 {
-    public partial class Testing : Migration
+    public partial class InitionCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,6 +45,19 @@ namespace NightOwl.WebService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Faces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BlobURI = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Faces", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -163,7 +176,7 @@ namespace NightOwl.WebService.Migrations
                     BirthDate = table.Column<string>(nullable: false),
                     MissingDate = table.Column<string>(nullable: false),
                     AdditionalInfo = table.Column<string>(nullable: true),
-                    CreatorId = table.Column<string>(nullable: true)
+                    CreatorId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -173,7 +186,7 @@ namespace NightOwl.WebService.Migrations
                         column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -237,6 +250,9 @@ namespace NightOwl.WebService.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Faces");
 
             migrationBuilder.DropTable(
                 name: "Persons");
