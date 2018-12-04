@@ -7,7 +7,6 @@ namespace NightOwl.WebService.Models
 {
     public class User : IdentityUser
     {
-
         public ICollection<Person> AddedPersons { get; set; }
     }
 }

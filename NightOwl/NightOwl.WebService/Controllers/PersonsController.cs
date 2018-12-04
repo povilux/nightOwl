@@ -28,12 +28,85 @@ namespace NightOwl.WebService.Controllers
             _userManager = userManager;
         }
 
+        /* Select statment to get person & creator info. JOIN USAGE
+         * select p.Name, p.BirthDate, p.MissingDate, p.AdditionalInfo, c.UserName, c.Email
+from dbo.Persons p, dbo.AspNetUsers c
+where p.CreatorId = c.[Id];*/
+
         // GET: api/Persons/Get
         [HttpGet]
         public IActionResult Get()
         {
             // join: get person info & person face photos
-            return Ok(_context.Persons.ToList());
+            // return Ok(_context.Persons.ToList());
+
+            var faces =
+                  from f in _context.Faces.ToList() //.AsEnumerable()
+                  group f by f.OwnerId into g
+                  select new
+                  {
+                      OwnerId = g.Key,
+                      FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
+                  };
+
+            
+            var result = _context.Persons.Join(faces,
+                    p => p.Id,
+                    f => f.OwnerId,
+                    (p, f) => new Person
+                              {
+                                Id = p.Id,
+                                Name = p.Name,
+                                BirthDate = p.BirthDate,
+                                MissingDate = p.MissingDate,
+                                AdditionalInfo = p.AdditionalInfo,
+                                CreatorId = p.CreatorId,
+                                FacePhotos = f.FacePhoto.AsEnumerable()
+                              }
+                );
+            return Ok(result);
+
+
+            /*
+
+            var result = _context.Persons.Join(_context.Faces,
+                p => p.Id,
+                f => f.OwnerId,
+                (p, f) => new { p, f.BlobURI }
+           );
+           */
+            /*  var result = from p in _context.Persons
+              select p.Name, p.BirthDate, p.MissingDate, p.AdditionalInfo, c.UserName, c.Email
+              from dbo.Persons p, dbo.AspNetUsers c
+  where p.CreatorId = c.[Id]*/
+
+            /*
+            var eventsWithCount = (from e in context.Events
+                                   join c in counts on e.Id equals c.eventId into temp
+                                   from c in temp.DefaultIfEmpty()
+                                   select new
+                                   {
+                                       id = e.Id,
+                                       name = e.Name,
+                                       startTime = e.StartTime,
+                                       endTime = e.EndTime,
+                                       cooldownLength = e.CooldownLength,
+                                       creatorId = e.CreatorId,
+                                       participantCount = (c == null) ? 0 : c.count
+                                   }).ToList();*/
+
+            /*var result = from p in _context.Persons
+                         join f in _context.Faces on p.Id equals f.Owner
+                         select new
+                         {
+                             name = p.Name,
+                             bdate= p.BirthDate,
+                             mdate= p.MissingDate,
+                             add = p.AdditionalInfo,
+                             creator = p.CreatorId,
+                             faces = p.Photos,
+                             id = f.Id
+                         };*/
         }
 
 
@@ -47,6 +120,7 @@ namespace NightOwl.WebService.Controllers
             if(person == null)
                 return NotFound();
            
+
             return Ok(person);
         }
 
@@ -165,11 +239,26 @@ namespace NightOwl.WebService.Controllers
 
             if (person == null)
                 return NotFound();
-            
-            var deletedPerson = _context.Persons.Remove(person);
 
-            if (deletedPerson.Entity == null)
-                return BadRequest("Error while deleting.");
+            try
+            {
+              /*  var hist = _context.History
+                         .Where(h => h.PersonId == person.Id)
+                         .FirstOrDefault<PersonHistory>();*/
+
+                _context.Entry(person).Collection(p => p.History).Load();
+
+                var deletedPerson = _context.Persons.Remove(person);
+
+                if (deletedPerson.Entity == null)
+                    return BadRequest("Error while deleting.");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine + ex.Source);
+            }
+
 
             try
             {
@@ -185,4 +274,5 @@ namespace NightOwl.WebService.Controllers
         }
     }
 }
+ 
  
