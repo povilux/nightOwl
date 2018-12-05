@@ -21,7 +21,7 @@
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
                     <Label Text="Username:"
-                       WidthRequest="150"
+                       WidthRequest="250"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        FontSize="Medium"/>
@@ -34,7 +34,7 @@
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
                     <Label Text="Password:"
-                       WidthRequest="150"
+                       WidthRequest="250"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        FontSize="Medium"/>
@@ -47,8 +47,22 @@
                 <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="Center"
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                    <Label Text="Repeat Password:"
+                       WidthRequest="250"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Medium"/>
+                    <Entry x:Name="RepeatedPassword"
+                        VerticalOptions="CenterAndExpand" 
+                        HorizontalOptions="CenterAndExpand"
+                        WidthRequest="300"
+                        IsPassword="True"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="Center"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
                     <Label Text="Email:"
-                       WidthRequest="150"
+                       WidthRequest="250"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        FontSize="Medium"/>
@@ -56,6 +70,20 @@
                         VerticalOptions="CenterAndExpand" 
                         HorizontalOptions="CenterAndExpand"
                         WidthRequest="300"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="Center"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                    <Label Text="Phone number:"
+                       WidthRequest="250"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Medium"/>
+                    <Entry x:Name="PhoneNumber"
+                        VerticalOptions="CenterAndExpand" 
+                        HorizontalOptions="CenterAndExpand"
+                        WidthRequest="300"
+                        IsPassword="True"/>
                 </StackLayout>
                 <Button Text="Register"
                     HorizontalOptions="CenterAndExpand"

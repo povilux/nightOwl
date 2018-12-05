@@ -18,7 +18,7 @@ using Xamarin.Forms.Xaml;
 namespace NightOwl.Xamarin.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AddPerson : ContentPage
+    public partial class ManagePerson : ContentPage
     {
         private PersonViewModel PersonVM;
         private IImageResizerService _imageResizerService;
@@ -26,7 +26,7 @@ namespace NightOwl.Xamarin.Views
         private List<Face> trainingData = new List<Face>();
         private FaceRecognitionService _faceRecognitionService;
 
-        public AddPerson()
+        public ManagePerson()
         {
             InitializeComponent();
 
@@ -68,7 +68,7 @@ namespace NightOwl.Xamarin.Views
             });
 
             byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400);
-            image.Source = ImageSource.FromStream(() => new MemoryStream(photo));
+            image1.Source = ImageSource.FromStream(() => new MemoryStream(photo));
 
             PersonVM.Faces.Add(photo);
         }

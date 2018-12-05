@@ -33,7 +33,7 @@ namespace NightOwl.Xamarin
 
         async void OnAddNewPersonButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AddPerson());
+            await Navigation.PushAsync(new ManagePerson());
         }
 
         async void OnMapButtonClicked(object sender, EventArgs e)

@@ -29,7 +29,7 @@ namespace NightOwl.Xamarin.Views
             items.Add(new MasterMenuItem("Video", "C:\\Users\\vidma\\Desktop", typeof(VideoRecognition)));
             items.Add(new MasterMenuItem("Picture", "C:\\Users\\vidma\\Desktop", typeof(PictureRecognition)));
             items.Add(new MasterMenuItem("Camera", "C:\\Users\\vidma\\Desktop", typeof(CameraRecognition)));
-            items.Add(new MasterMenuItem("New Person", "C:\\Users\\vidma\\Desktop", typeof(AddPerson)));
+            items.Add(new MasterMenuItem("New Person", "C:\\Users\\vidma\\Desktop", typeof(ManagePerson)));
             items.Add(new MasterMenuItem("Map", "C:\\Users\\vidma\\Desktop", typeof(Map)));
             ListView.ItemsSource = items;
         }
