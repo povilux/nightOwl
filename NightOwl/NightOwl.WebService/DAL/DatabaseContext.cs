@@ -13,6 +13,9 @@ namespace NightOwl.WebService.DAL
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
         public DbSet<Person> Persons { get; set; }
+        public DbSet<Face> Faces { get; set; }
+        public DbSet<PersonHistory> History { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

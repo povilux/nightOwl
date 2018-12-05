@@ -1,4 +1,7 @@
-﻿namespace NightOwl.Xamarin.Components
+﻿using System;
+using System.Collections.Generic;
+
+namespace NightOwl.Xamarin.Components
 {
     public class Person
     {
@@ -7,6 +10,8 @@
         public string BirthDate { get; set; }
         public string MissingDate { get; set; }
         public string AdditionalInfo { get; set; }
-        public User Creator { get; set; }
+        public string CreatorId { get; set; }
+
+        public ICollection<byte[]> Photos;
     }
 }

@@ -5,7 +5,7 @@
              Title="nightOwl Master Page">
     <ContentPage.Content>
         <StackLayout x:Name="MasterStack" VerticalOptions="FillAndExpand">
-            <StackLayout x:Name="TopStack" BackgroundColor="#5097A4">
+            <StackLayout x:Name="TopStack">
                 <Label Text="Menu" HorizontalOptions="Center" FontSize="Large" TextColor="Black"  Font="Microsoft Sans Serif"/>
             </StackLayout>
             <StackLayout x:Name="MidStack" VerticalOptions="FillAndExpand">

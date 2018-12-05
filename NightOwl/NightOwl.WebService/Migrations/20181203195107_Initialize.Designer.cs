@@ -10,8 +10,8 @@ using NightOwl.WebService.DAL;
 namespace NightOwl.WebService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20181120111223_Testing")]
-    partial class Testing
+    [Migration("20181203195107_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -131,6 +131,25 @@ namespace NightOwl.WebService.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("NightOwl.WebService.Models.Face", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("BlobURI")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("OwnerId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Faces");
+                });
+
             modelBuilder.Entity("NightOwl.WebService.Models.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -155,6 +174,36 @@ namespace NightOwl.WebService.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("NightOwl.WebService.Models.PersonHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("CoordX");
+
+                    b.Property<double>("CoordY");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int?>("PersonId");
+
+                    b.Property<string>("SourceFaceUrl")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("SpottedFaceUrl")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.HasIndex("SourceFaceUrl");
+
+                    b.ToTable("History");
                 });
 
             modelBuilder.Entity("NightOwl.WebService.Models.User", b =>
@@ -253,11 +302,32 @@ namespace NightOwl.WebService.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("NightOwl.WebService.Models.Face", b =>
+                {
+                    b.HasOne("NightOwl.WebService.Models.Person", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("NightOwl.WebService.Models.Person", b =>
                 {
                     b.HasOne("NightOwl.WebService.Models.User", "Creator")
                         .WithMany("AddedPersons")
                         .HasForeignKey("CreatorId");
+                });
+
+            modelBuilder.Entity("NightOwl.WebService.Models.PersonHistory", b =>
+                {
+                    b.HasOne("NightOwl.WebService.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId");
+
+                    b.HasOne("NightOwl.WebService.Models.Face", "SourceFace")
+                        .WithMany("History")
+                        .HasForeignKey("SourceFaceUrl")
+                        .HasPrincipalKey("BlobURI")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

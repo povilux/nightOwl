@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NightOwl.WebService.DAL;
+﻿using NightOwl.WebService.DAL;
 using NightOwl.WebService.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
+using NightOwl.WebService.Services;
 
 namespace NightOwl.WebService.Controllers
 {
@@ -13,6 +14,9 @@ namespace NightOwl.WebService.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
+        private const int _sectionSize = 5;
+        private const string _containerNamePrefix = "-container";
+
         private readonly DatabaseContext _context;
         private readonly UserManager<User> _userManager;
 
@@ -26,55 +30,238 @@ namespace NightOwl.WebService.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_context.Persons.ToList());
+            try
+            {
+                var faces =
+                      from f in _context.Faces.AsEnumerable()
+                      group f by f.OwnerId into g
+                      select new
+                      {
+                          OwnerId = g.Key,
+                          FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
+                      };
+
+                var result = _context.Persons
+                               .Join(faces,
+                                 p => p.Id,
+                                 f => f.OwnerId,
+                                 (p, f) => new { p, f })
+                               .Join(_userManager.Users,
+                                 pp => pp.p.CreatorId,
+                                 u => u.Id,
+                                 (pp, u) => new { pp, u })
+                               .Select(pfu =>
+                                 new Person
+                                 {
+                                     Id = pfu.pp.p.Id,
+                                     Name = pfu.pp.p.Name,
+                                     BirthDate = pfu.pp.p.BirthDate,
+                                     MissingDate = pfu.pp.p.MissingDate,
+                                     AdditionalInfo = pfu.pp.p.AdditionalInfo,
+                                     FacePhotos = pfu.pp.f.FacePhoto,
+                                     CreatorId = pfu.u.Id,
+                                     CreatorName = pfu.u.UserName,
+                                     CreatorEmail = pfu.u.Email
+                                 }
+                              );
+
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
+            }
         }
 
+        // GET: api/Persons/GetPart/sectionNumber
+        [HttpGet("{section}")]
+        public IActionResult GetPart([FromRoute]int section)
+        {
+            if (section < 0)
+                return BadRequest("Invalid section number (section should be bigger than 0)");
+
+            try
+            {
+                var faces =
+                      from f in _context.Faces.AsEnumerable()
+                      group f by f.OwnerId into g
+                      select new
+                      {
+                          OwnerId = g.Key,
+                          FacePhoto = g.Select(f => new { Id = f.Id, BlobURI = f.BlobURI })
+                      };
+
+                var persons = _context.Persons
+                               .Join(faces,
+                                 p => p.Id,
+                                 f => f.OwnerId,
+                                 (p, f) => new { p, f })
+                               .Join(_userManager.Users,
+                                 pp => pp.p.CreatorId,
+                                 u => u.Id,
+                                 (pp, u) => new { pp, u })
+                               .Select(pfu =>
+                                 new
+                                 {
+                                     Id = pfu.pp.p.Id,
+                                     Name = pfu.pp.p.Name,
+                                     BirthDate = pfu.pp.p.BirthDate,
+                                     MissingDate = pfu.pp.p.MissingDate,
+                                     AdditionalInfo = pfu.pp.p.AdditionalInfo,
+                                     Photos = pfu.pp.f.FacePhoto,
+                                     CreatorId = pfu.u.Id,
+                                     CreatorName = pfu.u.UserName,
+                                     CreatorEmail = pfu.u.Email
+                                 }
+                              );
+
+                var result = persons.Skip(_sectionSize * section).Take(_sectionSize);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
+            }
+        }
 
         // GET: api/Persons/Get/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
-        {            
-            var person = await _context.Persons.FindAsync(id);
+        {
+            try
+            {
+                // join: get person info & person face photos
+                var person = await _context.Persons.FindAsync(id);
 
-            if(person == null)
-                return NotFound();
-           
-            return Ok(person);
+                if (person == null)
+                    return NotFound();
+
+                var user = _userManager.Users.Where(u => u.Id == person.CreatorId).
+                    Select(u => new { u.UserName, u.Email, u.PhoneNumber }).FirstOrDefault();
+
+                person.FacePhotos = from f in _context.Faces
+                                    where
+                                      f.OwnerId == id
+                                    select new Face
+                                    {
+                                        Id = f.Id,
+                                        BlobURI = f.BlobURI
+                                    };
+
+                person.CreatorName = user.UserName;
+                person.CreatorEmail = user.Email;
+                person.CreatorPhone = user.PhoneNumber;
+
+
+                return Ok(person);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
+            }
         }
 
         // GET: api/Persons/GetByCreatorId/5
         [HttpGet("{creatorId}")]
         public IActionResult GetByCreatorId([FromRoute]Guid creatorId)
         {
-            var persons = _context.Persons.Where(p => p.Creator.Id.Equals(creatorId.ToString())).ToList();
+            try
+            {
+                var persons = _context.Persons.Where(p => p.Creator.Id.Equals(creatorId.ToString())).ToList();
 
-            if (persons == null)
-                return NotFound();
+                if (persons == null)
+                    return NotFound();
 
-            return Ok(persons);
+                var faces =
+                  from f in _context.Faces
+                  group f by f.OwnerId into g
+                  select new
+                  {
+                      OwnerId = g.Key,
+                      FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
+                  };
+
+                var result = persons
+                               .Join(faces,
+                                 p => p.Id,
+                                 f => f.OwnerId,
+                                 (p, f) => new { p, f })
+                               .Select(pf =>
+                                 new Person
+                                 {
+                                     Id = pf.p.Id,
+                                     Name = pf.p.Name,
+                                     BirthDate = pf.p.BirthDate,
+                                     MissingDate = pf.p.MissingDate,
+                                     AdditionalInfo = pf.p.AdditionalInfo,
+                                     FacePhotos = pf.f.FacePhoto,
+                                     CreatorId = pf.p.CreatorId
+                                 }
+                              );
+
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
+            }
         }
 
+        // to do: transfer to Users controller
         // GET: api/Persons/GetPersonsByCreator/
         [HttpGet]
         public IActionResult GetPersonsByCreator()
         {
-            var persons = _userManager.Users.
-                GroupJoin(_context.Persons.ToList(),
-                u => u.Id,
-                p => p.Creator.Id,
-                (u, personsGroup) => new
-                {
-                    u.UserName,
-                    Persons = personsGroup
-                });
+            try
+            {
+                var faces =
+      from f in _context.Faces
+      group f by f.OwnerId into g
+      select new
+      {
+          OwnerId = g.Key,
+          FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
+      };
 
-            if (persons == null)
-                return NotFound();
+                var result = _context.Persons
+                               .Join(faces,
+                                 p => p.Id,
+                                 f => f.OwnerId,
+                                 (p, f) => new { p, f })
+                               .Select(pf =>
+                                 new Person
+                                 {
+                                     Id = pf.p.Id,
+                                     Name = pf.p.Name,
+                                     BirthDate = pf.p.BirthDate,
+                                     MissingDate = pf.p.MissingDate,
+                                     AdditionalInfo = pf.p.AdditionalInfo,
+                                     FacePhotos = pf.f.FacePhoto,
+                                     CreatorId = pf.p.CreatorId
+                                 }
+                              );
 
-            return Ok(persons.ToList());
+                var persons = _userManager.Users.
+                    GroupJoin(result,
+                    u => u.Id,
+                    p => p.Creator.Id,
+                    (u, personsGroup) => new
+                    {
+                        u.UserName,
+                        Persons = personsGroup
+                    });
 
+                if (persons == null)
+                    return NotFound();
+
+                return Ok(persons.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
+            }
         }
-
 
         // PUT: api/Persons/Put/5
         [HttpPut("{id}")]
@@ -83,48 +270,67 @@ namespace NightOwl.WebService.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var personExists = await _context.Persons.FindAsync(id);
-
-            if (personExists == null)
-                return NotFound();
-
-            var updated = _context.Persons.Update(person);
-
-            if(updated.Entity == null)
-                return BadRequest("Error while updating.");
-
             try
             {
-                await _context.SaveChangesAsync();
+                var updated = _context.Persons.Update(person);
+
+                if (updated.Entity == null)
+                    return BadRequest("Error while updating.");
+
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                ICollection<Face> faceBlobs = await cloudBlobService.UploadFaceBlobAsync(id, id.ToString() + _containerNamePrefix, person.Photos);
+
+                foreach (Face blob in faceBlobs)
+                {
+                    var faceBlobCreated = _context.Faces.Add(blob);
+
+                    if (faceBlobCreated.Entity == null)
+                        return BadRequest("Error while adding face to database");
+                }
+                _context.SaveChanges();
             }
-            catch(DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
             }
-            return Ok(updated.Entity);
+
+            return Ok();
         }
 
       
         // POST: api/Persons/Post/
         [HttpPost]
-        public IActionResult Post([FromBody]Person person)
+        public async Task<IActionResult> Post([FromBody]Person person)
         {
             if(!ModelState.IsValid)
-               return BadRequest(ModelState);
-         
+                return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
+
             var created = _context.Persons.Add(person);
 
             if(created.Entity == null)
-                return BadRequest("Error while adding user");
-
+                return BadRequest("Error while adding user to database");
+            
             try
             {
-                 _context.SaveChanges();
+                _context.SaveChanges();
+
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                ICollection<Face> faceBlobs = await cloudBlobService.UploadFaceBlobAsync(created.Entity.Id, created.Entity.Id.ToString() + _containerNamePrefix, person.Photos);
+
+                foreach(Face blob in faceBlobs)
+                {
+                    var faceBlobCreated = _context.Faces.Add(blob);
+
+                    if (faceBlobCreated.Entity == null)
+                        return BadRequest("Error while adding face to database");
+                }
+                _context.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
             }
+
             return Ok(created.Entity);
         }
 
@@ -136,22 +342,25 @@ namespace NightOwl.WebService.Controllers
 
             if (person == null)
                 return NotFound();
-            
-            var deletedPerson = _context.Persons.Remove(person);
-
-            if (deletedPerson.Entity == null)
-                return BadRequest("Error while deleting.");
 
             try
             {
+                var deletedPerson = _context.Persons.Remove(person);
+
+                if (deletedPerson.Entity == null)
+                    return BadRequest("Error while deleting.");
+
+                ICloudBlobService cloudBlobService = new CloudBlobService();
+                await cloudBlobService.DeleteFaceBlobAsync(id.ToString() + "-container");
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return BadRequest("Error while saving");
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
             }
-            return Ok(deletedPerson.Entity);
+            return Ok(true);
         }
     }
 }
+ 
  

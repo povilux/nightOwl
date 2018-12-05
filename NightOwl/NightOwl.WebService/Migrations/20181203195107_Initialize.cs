@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NightOwl.WebService.Migrations
 {
-    public partial class Testing : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -176,6 +176,57 @@ namespace NightOwl.WebService.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Faces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BlobURI = table.Column<string>(maxLength: 100, nullable: false),
+                    OwnerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Faces", x => x.Id);
+                    table.UniqueConstraint("AK_Faces_BlobURI", x => x.BlobURI);
+                    table.ForeignKey(
+                        name: "FK_Faces_Persons_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "History",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(nullable: false),
+                    SourceFaceUrl = table.Column<string>(maxLength: 100, nullable: false),
+                    SpottedFaceUrl = table.Column<string>(nullable: false),
+                    PersonId = table.Column<int>(nullable: true),
+                    CoordX = table.Column<double>(nullable: false),
+                    CoordY = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_History", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_History_Persons_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_History_Faces_SourceFaceUrl",
+                        column: x => x.SourceFaceUrl,
+                        principalTable: "Faces",
+                        principalColumn: "BlobURI",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -216,6 +267,21 @@ namespace NightOwl.WebService.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Faces_OwnerId",
+                table: "Faces",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_History_PersonId",
+                table: "History",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_History_SourceFaceUrl",
+                table: "History",
+                column: "SourceFaceUrl");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Persons_CreatorId",
                 table: "Persons",
                 column: "CreatorId");
@@ -239,10 +305,16 @@ namespace NightOwl.WebService.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Persons");
+                name: "History");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Faces");
+
+            migrationBuilder.DropTable(
+                name: "Persons");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

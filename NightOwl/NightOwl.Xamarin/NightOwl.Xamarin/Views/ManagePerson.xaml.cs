@@ -18,25 +18,27 @@ using Xamarin.Forms.Xaml;
 namespace NightOwl.Xamarin.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ManagePerson : ContentPage
+    public partial class AddPerson : ContentPage
     {
         private PersonViewModel PersonVM;
         private IImageResizerService _imageResizerService;
         private PersonsService _personsService;
-        private List<Face> trainingData = new List<Face>();
+        private IList<Face> trainingData = new List<Face>();
         private FaceRecognitionService _faceRecognitionService;
+        private IFaceDetectionService _faceDetectionService;
 
-        public ManagePerson()
+        private int _PersonSelected = -1;
+
+        public AddPerson()
         {
             InitializeComponent();
 
             PersonVM = new PersonViewModel();
             _personsService = new PersonsService();
             _faceRecognitionService = new FaceRecognitionService();
+            _faceDetectionService = new FaceDetectionService();
             _imageResizerService = DependencyService.Get<IImageResizerService>();
 
-            addPerson.Clicked += OnAddPersonsDataButtonClicked;
-            addPhotoButton.Clicked += OnAddPersonPhotoClicked;
         }
 
         /*   public void OnPersonSelectedFromList(object sender, PersonSelectedEventArgs e)
@@ -67,10 +69,24 @@ namespace NightOwl.Xamarin.Views
                 return stream;
             });
 
-            byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream), 400, 400);
-            image1.Source = ImageSource.FromStream(() => new MemoryStream(photo));
+            try
+            {
+                byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream));
+                var facePhoto = await _faceDetectionService.DetectFacesAsync(photo);
 
-            PersonVM.Faces.Add(photo);
+                if (!facePhoto.Success)
+                {
+                    await DisplayAlert("Error", facePhoto.Error, "Close");
+                    return;
+                }
+
+                image.Source = ImageSource.FromStream(() => new MemoryStream(facePhoto.Message));
+                PersonVM.Faces.Add(facePhoto.Message);
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert("Exception", ex.Message, "Close");
+            }
         }
 
         async void OnSelectPersonButtonClicked(object sender, EventArgs e)
@@ -79,25 +95,53 @@ namespace NightOwl.Xamarin.Views
             {
                 ClearData();
                 SetValues(personObject);
+                _PersonSelected = personObject.Id;
             });
             //PeopleList peopleList = new PeopleList();
             //peopleList.PersonSelected += OnPersonSelectedFromList;
             await Navigation.PushAsync(new PeopleList());
         }
 
-        async void OnAddPersonsDataButtonClicked(object sender, EventArgs e)
+        async void OnDeletePersonClicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(nameTextBox.Text))
+            if(_PersonSelected == -1)
             {
-                await DisplayAlert("Error", "reik irayti varda", "error");
+                await DisplayAlert("Error", "You need to chose person!", "Close");
                 return;
             }
 
-            if(PersonVM.Faces.Count < 1)
+            addPerson.IsEnabled = false;
+
+            var deletePerson = await _personsService.DeletePersonAsync(_PersonSelected);
+                  
+
+            if (deletePerson.Success)
             {
-                await DisplayAlert("Error", "reik bent vienos nuotraukos", "error");
+                await DisplayAlert("Success", "Person deleted", "Close");
+            }
+            else
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], deletePerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                ErrorLogger.Instance.LogError(deletePerson.Error);
+            }
+        }
+
+        async void OnAddPersonsDataButtonClicked(object sender, EventArgs e)
+        {
+
+            if (string.IsNullOrEmpty(nameTextBox.Text))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["AddPersonInvalidNoName"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 return;
             }
+
+            if(_PersonSelected == -1 && PersonVM.Faces.Count < 1)
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["AddPersonInvalidNo"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
+            addPerson.IsEnabled = false;
 
             PersonVM.Username = nameTextBox.Text;
             PersonVM.BirthDate = birthdatePicker.Date;
@@ -109,50 +153,66 @@ namespace NightOwl.Xamarin.Views
 
             try
             {
-                var addPerson = await _personsService.AddNewPersonAsync(
-                                                                            new Person
-                                                                            {
-                                                                                Name = PersonVM.Username,
-                                                                                BirthDate = PersonVM.BirthDate.ToString(),
-                                                                                MissingDate = PersonVM.MissingDate.ToString(),
-                                                                                AdditionalInfo = PersonVM.AdditionalInfo.ToString()
-                                                                            }
-                                                                        );
-
-                if (addPerson.Success)
+                if (_PersonSelected == -1)
                 {
-                    foreach (byte[] face in PersonVM.Faces)
-                    {
-                        trainingData.Add(new Face
+                    var addPerson = await _personsService.AddNewPersonAsync(
+                        new Person
                         {
-                            Photo = face,
-                            PersonName = PersonVM.Username
-                        });
-                    }
+                            Name = PersonVM.Username,
+                            BirthDate = PersonVM.BirthDate.ToString(),
+                            MissingDate = PersonVM.MissingDate.ToString(),
+                            AdditionalInfo = PersonVM.AdditionalInfo,
+                            CreatorId = App.CurrentUser.ToString(),
+                            Photos = PersonVM.Faces
+                        }
+                    );
 
-                    bool trainSuccess = await TrainRecognizer();
-
-                    if (trainSuccess)
+                    if (addPerson.Success)
                     {
-                        ClearData();
-                        await DisplayAlert("Person added", "Person successfully created.", "Close");
+                        await DisplayAlert("Success", "Person added", "Close");
                     }
                     else
                     {
-                        PersonVM.Faces.Clear();
-                        await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                        await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], addPerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                        ErrorLogger.Instance.LogError(addPerson.Error);
                     }
                 }
                 else
                 {
-                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], addPerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                    ErrorLogger.Instance.LogError(addPerson.Error);
+                    var updatePerson = await _personsService.UpdatePersonAsync(
+                                          new Person
+                                          {
+                                              Id = PersonVM.Id,
+                                              Name = PersonVM.Username,
+                                              BirthDate = PersonVM.BirthDate.ToString(),
+                                              MissingDate = PersonVM.MissingDate.ToString(),
+                                              AdditionalInfo = PersonVM.AdditionalInfo,
+                                              CreatorId = App.CurrentUser.ToString(),
+                                              Photos = PersonVM.Faces
+                                          },
+                                          _PersonSelected
+                                      );
+
+                    if (updatePerson.Success)
+                    {
+                        await DisplayAlert("Success", "Person updated", "Close");
+                    }
+                    else
+                    {
+                        await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], updatePerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                        ErrorLogger.Instance.LogError(updatePerson.Error);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 ErrorLogger.Instance.LogException(ex);
                 await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+            }
+            finally
+            {
+                addPerson.IsEnabled = true;
             }
         }
 
@@ -161,37 +221,37 @@ namespace NightOwl.Xamarin.Views
             if(!string.IsNullOrEmpty(person.Name))
                 nameTextBox.Text = person.Name;
 
-          /*  if (!string.IsNullOrEmpty(person.BirthDate))
+            if (!string.IsNullOrEmpty(person.BirthDate))
             {
-                var birthDate = DateTime.ParseExact(person.BirthDate,
-                                      "yyyyMMdd",
+                   /*    var birthDate = DateTime.ParseExact(person.BirthDate,
+                                       "dd / m/ yyyy hh:mm:ss tt",
                                        CultureInfo.InvariantCulture);
-                birthdatePicker.Date = birthDate;
+                birthdatePicker.Date = birthDate;*/
             }
 
             if (!string.IsNullOrEmpty(person.MissingDate))
             {
-                var missingDate = DateTime.ParseExact(person.MissingDate,
-                                  "yyyyMMdd",
+              /*  var missingDate = DateTime.ParseExact(person.MissingDate,
+                                       "dd / m/ yyyy hh:mm:ss tt",
                                    CultureInfo.InvariantCulture);
-                missingdatePicker.Date = missingDate;
-            */
+                missingdatePicker.Date = missingDate;*/
+            }
 
             if(!string.IsNullOrEmpty(person.AdditionalInfo))
                 addInfoTextBox.Text = person.AdditionalInfo;
+
+            PersonVM.Id = person.Id;
         }
 
         private async Task<bool> TrainRecognizer()
         {
             if (trainingData.Count == 0)
-            {
-                ErrorLogger.Instance.LogError("No training data while adding person..");
                 return false;
-            }
+            
             Trainer trainer = new Trainer
             {
                 Data = trainingData,
-                Threshold = 4000,
+                Threshold = int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]),
                 NumOfComponents = trainingData.Count
             };
 

@@ -12,34 +12,36 @@ namespace NightOwl.Xamarin.Services
     {
         private IHttpClientService httpClient = HttpClientService.Instance;
 
-        public async Task<APIMessage<int>> DetectFacesAPIAsync(byte[] photo)
-        {
-            if (photo != null)
-            {
-                try
-                {
-                    var response = await httpClient.PostAsync<int, byte[]>(APIEndPoints.DetectFacesEndPoint, photo);
-                    return response;
-                }
-                catch (Exception ex)
-                {
-                    ErrorLogger.Instance.LogException(ex);
-                }
-            }
-            return null;
-        }
-
-        public async Task<int> DetectFacesAsync(byte[] photo)
+      /*  public async Task<byte[]> DetectFacesAsync(byte[] photo)
         {
             var detection = await DetectFacesAPIAsync(photo);
 
             if (!detection.Success)
             {
                 ErrorLogger.Instance.LogError(detection.Error);
-                return 0;
+                return null;
             }
             else
                 return detection.Message;
+        }*/
+
+
+        public async Task<APIMessage<byte[]>> DetectFacesAsync(byte[] photo)
+        {
+            if (photo != null)
+            {
+                try
+                {
+                    var response = await httpClient.PostAsync<byte[], byte[]>(APIEndPoints.DetectFacesEndPoint, photo);
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.Instance.LogException(ex);
+                    throw ex;
+                }
+            }
+            return null;
         }
     }
 }
