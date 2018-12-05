@@ -38,6 +38,16 @@ namespace NightOwl.WebService.Models
 
         [JsonIgnore]
         public IEnumerable<PersonHistory> History { get; set; }
+
+        [NotMapped]
+        public string CreatorName;
+
+        [NotMapped]
+        public string CreatorEmail;
+
+        [NotMapped]
+        public string CreatorPhone;
+
     }
 }
 
