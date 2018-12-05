@@ -10,7 +10,7 @@ using NightOwl.WebService.DAL;
 namespace NightOwl.WebService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20181205122912_PersonHistoryFKs")]
+    [Migration("20181205123309_PersonHistoryFKs")]
     partial class PersonHistoryFKs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,8 +190,6 @@ namespace NightOwl.WebService.Migrations
 
                     b.Property<int>("PersonId");
 
-                    b.Property<int?>("SourceFaceId");
-
                     b.Property<string>("SourceFaceUrl")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -203,7 +201,7 @@ namespace NightOwl.WebService.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.HasIndex("SourceFaceId");
+                    b.HasIndex("SourceFaceUrl");
 
                     b.ToTable("History");
                 });
@@ -328,7 +326,9 @@ namespace NightOwl.WebService.Migrations
 
                     b.HasOne("NightOwl.WebService.Models.Face", "SourceFace")
                         .WithMany("History")
-                        .HasForeignKey("SourceFaceId");
+                        .HasForeignKey("SourceFaceUrl")
+                        .HasPrincipalKey("BlobURI")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

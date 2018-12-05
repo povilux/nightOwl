@@ -32,14 +32,15 @@ namespace NightOwl.WebService.Controllers
         {
             try
             {
+
                 var faces =
-                      from f in _context.Faces.AsEnumerable()
-                      group f by f.OwnerId into g
-                      select new
-                      {
-                          OwnerId = g.Key,
-                          FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
-                      };
+                    (from f in _context.Faces
+                    group f by f.OwnerId into g
+                    select new
+                    {
+                        OwnerId = g.Key,
+                        FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
+                    }).ToList();
 
                 var result = _context.Persons
                                .Join(faces,
@@ -47,23 +48,24 @@ namespace NightOwl.WebService.Controllers
                                  f => f.OwnerId,
                                  (p, f) => new { p, f })
                                .Join(_userManager.Users,
-                                 pp => pp.p.CreatorId,
-                                 u => u.Id,
-                                 (pp, u) => new { pp, u })
-                               .Select(pfu =>
+                                  pp => pp.p.CreatorId,
+                                  u => u.Id,
+                                  (pp, u) => new { pp, u })
+                               .Select((ppf) =>
                                  new Person
                                  {
-                                     Id = pfu.pp.p.Id,
-                                     Name = pfu.pp.p.Name,
-                                     BirthDate = pfu.pp.p.BirthDate,
-                                     MissingDate = pfu.pp.p.MissingDate,
-                                     AdditionalInfo = pfu.pp.p.AdditionalInfo,
-                                     FacePhotos = pfu.pp.f.FacePhoto,
-                                     CreatorId = pfu.u.Id,
-                                     CreatorName = pfu.u.UserName,
-                                     CreatorEmail = pfu.u.Email
+                                     Id = ppf.pp.p.Id,
+                                     Name = ppf.pp.p.Name,
+                                     BirthDate = ppf.pp.p.BirthDate,
+                                     MissingDate = ppf.pp.p.MissingDate,
+                                     AdditionalInfo = ppf.pp.p.AdditionalInfo,
+                                     FacePhotos = ppf.pp.f.FacePhoto,
+                                     CreatorId = ppf.pp.p.CreatorId,
+                                     CreatorName = ppf.u.UserName,
+                                     CreatorEmail = ppf.u.Email,
+                                     CreatorPhone = ppf.u.PhoneNumber
                                  }
-                              );
+                              ).ToList();
 
                 return Ok(result);
             }
@@ -83,37 +85,39 @@ namespace NightOwl.WebService.Controllers
             try
             {
                 var faces =
-                      from f in _context.Faces.AsEnumerable()
+                      (from f in _context.Faces.AsEnumerable()
                       group f by f.OwnerId into g
                       select new
                       {
                           OwnerId = g.Key,
-                          FacePhoto = g.Select(f => new { Id = f.Id, BlobURI = f.BlobURI })
-                      };
+                          FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
+                      }).ToList();
 
                 var persons = _context.Persons
-                               .Join(faces,
-                                 p => p.Id,
-                                 f => f.OwnerId,
-                                 (p, f) => new { p, f })
-                               .Join(_userManager.Users,
-                                 pp => pp.p.CreatorId,
-                                 u => u.Id,
-                                 (pp, u) => new { pp, u })
-                               .Select(pfu =>
-                                 new
-                                 {
-                                     Id = pfu.pp.p.Id,
-                                     Name = pfu.pp.p.Name,
-                                     BirthDate = pfu.pp.p.BirthDate,
-                                     MissingDate = pfu.pp.p.MissingDate,
-                                     AdditionalInfo = pfu.pp.p.AdditionalInfo,
-                                     Photos = pfu.pp.f.FacePhoto,
-                                     CreatorId = pfu.u.Id,
-                                     CreatorName = pfu.u.UserName,
-                                     CreatorEmail = pfu.u.Email
-                                 }
-                              );
+                   .Join(faces,
+                     p => p.Id,
+                     f => f.OwnerId,
+                     (p, f) => new { p, f })
+                   .Join(_userManager.Users,
+                      pp => pp.p.CreatorId,
+                      u => u.Id,
+                      (pp, u) => new { pp, u })
+                   .Select((ppf) =>
+                         new Person
+                         {
+                             Id = ppf.pp.p.Id,
+                             Name = ppf.pp.p.Name,
+                             BirthDate = ppf.pp.p.BirthDate,
+                             MissingDate = ppf.pp.p.MissingDate,
+                             AdditionalInfo = ppf.pp.p.AdditionalInfo,
+                             FacePhotos = ppf.pp.f.FacePhoto,
+                             CreatorId = ppf.pp.p.CreatorId,
+                             CreatorName = ppf.u.UserName,
+                             CreatorEmail = ppf.u.Email,
+                             CreatorPhone = ppf.u.PhoneNumber
+                         }
+                      ).ToList();
+
 
                 var result = persons.Skip(_sectionSize * section).Take(_sectionSize);
 
