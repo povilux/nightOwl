@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NightOwl.WebService.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class Inition : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -188,7 +188,6 @@ namespace NightOwl.WebService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Faces", x => x.Id);
-                    table.UniqueConstraint("AK_Faces_BlobURI", x => x.BlobURI);
                     table.ForeignKey(
                         name: "FK_Faces_Persons_OwnerId",
                         column: x => x.OwnerId,
@@ -203,12 +202,13 @@ namespace NightOwl.WebService.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(nullable: false),
-                    SourceFaceUrl = table.Column<string>(maxLength: 100, nullable: false),
-                    SpottedFaceUrl = table.Column<string>(nullable: false),
-                    PersonId = table.Column<int>(nullable: true),
                     CoordX = table.Column<double>(nullable: false),
-                    CoordY = table.Column<double>(nullable: false)
+                    CoordY = table.Column<double>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    SourceFaceUrl = table.Column<string>(maxLength: 100, nullable: true),
+                    SourceFaceId = table.Column<int>(nullable: true),
+                    SpottedFaceUrl = table.Column<string>(nullable: false),
+                    PersonId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -218,13 +218,13 @@ namespace NightOwl.WebService.Migrations
                         column: x => x.PersonId,
                         principalTable: "Persons",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_History_Faces_SourceFaceUrl",
-                        column: x => x.SourceFaceUrl,
+                        name: "FK_History_Faces_SourceFaceId",
+                        column: x => x.SourceFaceId,
                         principalTable: "Faces",
-                        principalColumn: "BlobURI",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -277,9 +277,9 @@ namespace NightOwl.WebService.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_History_SourceFaceUrl",
+                name: "IX_History_SourceFaceId",
                 table: "History",
-                column: "SourceFaceUrl");
+                column: "SourceFaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Persons_CreatorId",

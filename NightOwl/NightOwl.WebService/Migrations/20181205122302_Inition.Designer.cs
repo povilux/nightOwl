@@ -10,8 +10,8 @@ using NightOwl.WebService.DAL;
 namespace NightOwl.WebService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20181203195107_Initialize")]
-    partial class Initialize
+    [Migration("20181205122302_Inition")]
+    partial class Inition
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -190,8 +190,9 @@ namespace NightOwl.WebService.Migrations
 
                     b.Property<int?>("PersonId");
 
+                    b.Property<int?>("SourceFaceId");
+
                     b.Property<string>("SourceFaceUrl")
-                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("SpottedFaceUrl")
@@ -201,7 +202,7 @@ namespace NightOwl.WebService.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.HasIndex("SourceFaceUrl");
+                    b.HasIndex("SourceFaceId");
 
                     b.ToTable("History");
                 });
@@ -305,7 +306,7 @@ namespace NightOwl.WebService.Migrations
             modelBuilder.Entity("NightOwl.WebService.Models.Face", b =>
                 {
                     b.HasOne("NightOwl.WebService.Models.Person", "Owner")
-                        .WithMany()
+                        .WithMany("FacePhotos")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -313,21 +314,19 @@ namespace NightOwl.WebService.Migrations
             modelBuilder.Entity("NightOwl.WebService.Models.Person", b =>
                 {
                     b.HasOne("NightOwl.WebService.Models.User", "Creator")
-                        .WithMany("AddedPersons")
+                        .WithMany()
                         .HasForeignKey("CreatorId");
                 });
 
             modelBuilder.Entity("NightOwl.WebService.Models.PersonHistory", b =>
                 {
                     b.HasOne("NightOwl.WebService.Models.Person", "Person")
-                        .WithMany()
+                        .WithMany("History")
                         .HasForeignKey("PersonId");
 
                     b.HasOne("NightOwl.WebService.Models.Face", "SourceFace")
                         .WithMany("History")
-                        .HasForeignKey("SourceFaceUrl")
-                        .HasPrincipalKey("BlobURI")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SourceFaceId");
                 });
 #pragma warning restore 612, 618
         }

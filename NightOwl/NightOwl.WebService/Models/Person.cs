@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NightOwl.WebService.Models
 {
@@ -25,19 +22,20 @@ namespace NightOwl.WebService.Models
 
         public string AdditionalInfo { get; set; }
 
+        [Required]
+        public IEnumerable<Face> FacePhotos { get; set; }
+
+
         public string CreatorId { get; set; }
 
         [JsonIgnore]
         public User Creator { get; set; }
 
-        [NotMapped]
-        public ICollection<byte[]> Photos { get; set; }
-
-        [Required]
-        public IEnumerable<Face> FacePhotos { get; set; }
-
         [JsonIgnore]
         public IEnumerable<PersonHistory> History { get; set; }
+
+        [NotMapped]
+        public ICollection<byte[]> Photos { get; set; }
 
         [NotMapped]
         public string CreatorName;
@@ -47,7 +45,6 @@ namespace NightOwl.WebService.Models
 
         [NotMapped]
         public string CreatorPhone;
-
     }
 }
 

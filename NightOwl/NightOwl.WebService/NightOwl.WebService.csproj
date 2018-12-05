@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20181205122500_PersonHistoryFK.cs" />
+    <Compile Remove="Migrations\20181205122500_PersonHistoryFK.Designer.cs" />
+    <Compile Remove="Migrations\20181205122653_PersonHistoryFaceSFK.cs" />
+    <Compile Remove="Migrations\20181205122653_PersonHistoryFaceSFK.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\Connections.cs" Link="Connections.cs" />
   </ItemGroup>
 
