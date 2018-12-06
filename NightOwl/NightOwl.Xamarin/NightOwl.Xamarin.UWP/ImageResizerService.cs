@@ -14,7 +14,7 @@ using Windows.Storage.Streams;
 [assembly: Dependency(typeof(NightOwl.Xamarin.UWP.ImageResizerService))]
 namespace NightOwl.Xamarin.UWP
 {
-    class ImageResizerService : IImageResizerService
+    internal class ImageResizerService : IImageResizerService
     {
         public ImageResizerService() { }
 

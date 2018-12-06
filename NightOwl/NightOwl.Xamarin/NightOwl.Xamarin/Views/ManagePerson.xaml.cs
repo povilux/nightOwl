@@ -18,7 +18,7 @@ using Xamarin.Forms.Xaml;
 namespace NightOwl.Xamarin.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AddPerson : ContentPage
+    public partial class ManagePerson : ContentPage
     {
         private PersonViewModel PersonVM;
         private IImageResizerService _imageResizerService;
@@ -29,7 +29,7 @@ namespace NightOwl.Xamarin.Views
 
         private int _PersonSelected = -1;
 
-        public AddPerson()
+        public ManagePerson()
         {
             InitializeComponent();
 
@@ -80,7 +80,7 @@ namespace NightOwl.Xamarin.Views
                     return;
                 }
 
-                image.Source = ImageSource.FromStream(() => new MemoryStream(facePhoto.Message));
+                image1.Source = ImageSource.FromStream(() => new MemoryStream(facePhoto.Message));
                 PersonVM.Faces.Add(facePhoto.Message);
             }
             catch(Exception ex)

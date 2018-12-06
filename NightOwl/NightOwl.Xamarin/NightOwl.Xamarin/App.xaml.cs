@@ -4,6 +4,7 @@ using NightOwl.Xamarin.Views;
 using System;
 using System.Configuration;
 using Xamarin.Forms;
+using Xamarin.Forms.DataGrid;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -16,7 +17,7 @@ namespace NightOwl.Xamarin
         public App()
         {
             InitializeComponent();
-
+            DataGridComponent.Init();
             if (CurrentUser == Guid.Empty)
                 MainPage = new NavigationPage(new Login(new UserService()));
             
