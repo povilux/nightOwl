@@ -22,7 +22,6 @@ namespace NightOwl.WebService.Models
 
         public string AdditionalInfo { get; set; }
 
-        [Required]
         public IEnumerable<Face> FacePhotos { get; set; }
 
 
@@ -38,13 +37,13 @@ namespace NightOwl.WebService.Models
         public ICollection<byte[]> Photos { get; set; }
 
         [NotMapped]
-        public string CreatorName;
+        public string CreatorName { get; set; }
 
         [NotMapped]
-        public string CreatorEmail;
+        public string CreatorEmail { get; set; }
 
         [NotMapped]
-        public string CreatorPhone;
+        public string CreatorPhone { get; set; }
     }
 }
 

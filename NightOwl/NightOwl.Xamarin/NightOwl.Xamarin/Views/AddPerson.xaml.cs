@@ -80,7 +80,7 @@ namespace NightOwl.Xamarin.Views
                     return;
                 }
 
-                image.Source = ImageSource.FromStream(() => new MemoryStream(facePhoto.Message));
+                image1.Source = ImageSource.FromStream(() => new MemoryStream(facePhoto.Message));
                 PersonVM.Faces.Add(facePhoto.Message);
             }
             catch(Exception ex)
@@ -96,6 +96,28 @@ namespace NightOwl.Xamarin.Views
                 ClearData();
                 SetValues(personObject);
                 _PersonSelected = personObject.Id;
+
+
+
+                ICollection<Image> imageField = new List<Image>
+                {
+                    image1,
+                    image2,
+                    image3,
+                    image4,
+                    image5,
+                    image6
+                };
+
+                int i = 0;
+                foreach (Image img in imageField)
+                {
+                    if (personObject.FacePhotos.Count() <= i)
+                        break;
+
+                    img.Source = ImageSource.FromUri(new Uri(personObject.FacePhotos.ElementAt(i).BlobURI));
+                    i++;
+                }
             });
             //PeopleList peopleList = new PeopleList();
             //peopleList.PersonSelected += OnPersonSelectedFromList;

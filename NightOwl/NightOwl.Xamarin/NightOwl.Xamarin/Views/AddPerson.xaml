@@ -27,10 +27,25 @@
                     FontSize="Medium"
                     FontAttributes="Bold"
                     Clicked="OnSelectPersonButtonClicked"/>
-                <Image x:Name="image" WidthRequest="100" HeightRequest="100"
-                    VerticalOptions="CenterAndExpand" 
-                    HorizontalOptions="CenterAndExpand"/>
-                
+                <Image x:Name="image1" Grid.Row="0" Grid.Column="0"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
+                <Image x:Name="image2" Grid.Row="0" Grid.Column="1"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
+                <Image x:Name="image3" Grid.Row="0" Grid.Column="2"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
+                <Image x:Name="image4" Grid.Row="1" Grid.Column="0"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
+                <Image x:Name="image5" Grid.Row="1" Grid.Column="1"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
+                <Image x:Name="image6" Grid.Row="1" Grid.Column="2"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
+
                 <Button x:Name="addPhotoButton"
                     Text="Add photo"
                     HorizontalOptions="CenterAndExpand"
