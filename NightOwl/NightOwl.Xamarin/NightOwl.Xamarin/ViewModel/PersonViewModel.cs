@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NightOwl.Xamarin.Components;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,6 +13,7 @@ namespace NightOwl.Xamarin.ViewModel
         public string AdditionalInfo;
         public DateTime MissingDate;
 
-        public ICollection<byte[]> Faces = new List<byte[]>();
+       // public IList<byte[]> Faces = new List<byte[]>();
+        public IList<Face> Faces = new List<Face>();
     }
 }

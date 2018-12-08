@@ -39,7 +39,10 @@ namespace NightOwl.Xamarin.Views
         }
         protected async override void OnAppearing()
         {
-            BindingContext = await GetPersonsList();
+            IEnumerable<Person> personsList = await GetPersonsList();
+
+            if(personsList != null) 
+                BindingContext = personsList;
         }
 
         public async Task<IEnumerable<Person>> GetPersonsList()

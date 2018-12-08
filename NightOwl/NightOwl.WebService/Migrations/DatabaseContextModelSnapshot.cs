@@ -136,9 +136,14 @@ namespace NightOwl.WebService.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("BlobURI")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<int>("OwnerId");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
@@ -158,10 +163,7 @@ namespace NightOwl.WebService.Migrations
                     b.Property<string>("BirthDate")
                         .IsRequired();
 
-                    b.Property<Guid>("CreatorId");
-
-                    b.Property<string>("CreatorId1")
-                        .IsRequired();
+                    b.Property<string>("CreatorId");
 
                     b.Property<string>("MissingDate")
                         .IsRequired();
@@ -171,9 +173,40 @@ namespace NightOwl.WebService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("NightOwl.WebService.Models.PersonHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("CoordX");
+
+                    b.Property<double>("CoordY");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("PersonId");
+
+                    b.Property<int?>("SourceFaceId");
+
+                    b.Property<string>("SourceFaceUrl")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("SpottedFaceUrl")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.HasIndex("SourceFaceId");
+
+                    b.ToTable("History");
                 });
 
             modelBuilder.Entity("NightOwl.WebService.Models.User", b =>
@@ -275,7 +308,7 @@ namespace NightOwl.WebService.Migrations
             modelBuilder.Entity("NightOwl.WebService.Models.Face", b =>
                 {
                     b.HasOne("NightOwl.WebService.Models.Person", "Owner")
-                        .WithMany()
+                        .WithMany("FacePhotos")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -283,9 +316,20 @@ namespace NightOwl.WebService.Migrations
             modelBuilder.Entity("NightOwl.WebService.Models.Person", b =>
                 {
                     b.HasOne("NightOwl.WebService.Models.User", "Creator")
-                        .WithMany("AddedPersons")
-                        .HasForeignKey("CreatorId1")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+                });
+
+            modelBuilder.Entity("NightOwl.WebService.Models.PersonHistory", b =>
+                {
+                    b.HasOne("NightOwl.WebService.Models.Person", "Person")
+                        .WithMany("History")
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("NightOwl.WebService.Models.Face", "SourceFace")
+                        .WithMany("History")
+                        .HasForeignKey("SourceFaceId");
                 });
 #pragma warning restore 612, 618
         }
