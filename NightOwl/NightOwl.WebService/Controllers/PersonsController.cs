@@ -35,8 +35,9 @@ namespace NightOwl.WebService.Controllers
 
                 var faces =
                     (from f in _context.Faces
+                    orderby f.RowVersion descending
                     group f by f.OwnerId into g
-                    select new
+                    select new 
                     {
                         OwnerId = g.Key,
                         FacePhoto = g.Select(f => new Face { Id = f.Id, BlobURI = f.BlobURI })
@@ -86,7 +87,8 @@ namespace NightOwl.WebService.Controllers
             {
                 var faces =
                       (from f in _context.Faces.AsEnumerable()
-                      group f by f.OwnerId into g
+                       orderby f.RowVersion descending
+                       group f by f.OwnerId into g
                       select new
                       {
                           OwnerId = g.Key,
@@ -145,6 +147,7 @@ namespace NightOwl.WebService.Controllers
                     Select(u => new { u.UserName, u.Email, u.PhoneNumber }).FirstOrDefault();
 
                 person.FacePhotos = from f in _context.Faces
+                                    orderby f.RowVersion descending
                                     where
                                       f.OwnerId == id
                                     select new Face
@@ -179,6 +182,7 @@ namespace NightOwl.WebService.Controllers
 
                 var faces =
                   from f in _context.Faces
+                  orderby f.RowVersion descending
                   group f by f.OwnerId into g
                   select new
                   {
@@ -221,6 +225,7 @@ namespace NightOwl.WebService.Controllers
             {
                 var faces =
       from f in _context.Faces
+      orderby f.RowVersion descending
       group f by f.OwnerId into g
       select new
       {

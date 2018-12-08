@@ -12,16 +12,35 @@
             <StackLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                 RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                 RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
-                <Label Text="Manage missing persons data:"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    FontSize="Large"/>
+
+
                 <StackLayout  Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" 
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+
                     <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+
+                        <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Start"
+                             VerticalOptions="CenterAndExpand">
+                            
+                            <Button x:Name="editPerson" Text="Show existing person"
+                                HorizontalOptions="StartAndExpand"
+                                VerticalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                Clicked="OnSelectPersonButtonClicked"
+                                WidthRequest="300"/>
+
+                        </StackLayout>
+
                         <StackLayout Orientation="Horizontal"
                              HorizontalOptions="Center"
                              VerticalOptions="CenterAndExpand">
@@ -70,40 +89,142 @@
                             <DatePicker x:Name="missingdatePicker"
                                 WidthRequest="300"/>
                         </StackLayout>
-                        <Button x:Name="addPerson" Text="Save" 
+                        
+                        <StackLayout Orientation="Horizontal"
                             HorizontalOptions="Center"
-                            VerticalOptions="CenterAndExpand"
-                            BackgroundColor="RoyalBlue"
-                            BorderWidth="2"
-                            BorderColor="White"                    
-                            TextColor="White"
-                            Font="Microsoft Sans Serif"
-                            FontSize="Medium"
-                            FontAttributes="Bold"
-                            Clicked="OnAddPersonsDataButtonClicked"
-                            WidthRequest="300"/>
-                        <Button Text="Select existing person"
+                            VerticalOptions="CenterAndExpand">
+                            <Label x:Name="creatorNameLabel" Text="Creator name:"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250" IsVisible="False"/>
+                            <Label x:Name="creatorNameValue" Text=""
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250" IsVisible="False"/>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal"
                             HorizontalOptions="Center"
-                            VerticalOptions="CenterAndExpand"
-                            BackgroundColor="RoyalBlue"
-                            BorderWidth="2"
-                            BorderColor="White"                    
-                            TextColor="White"
-                            Font="Microsoft Sans Serif"
-                            FontSize="Medium"
-                            FontAttributes="Bold"
-                            Clicked="OnSelectPersonButtonClicked"
-                            WidthRequest="300"/>
-                    </StackLayout>
+                            VerticalOptions="CenterAndExpand">
+                            <Label x:Name="creatorEmailLabel" Text="Creator email:"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250" IsVisible="False"/>
+                            <Label x:Name="creatorEmailValue" Text=""
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250" IsVisible="False"/>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand">
+                            <Label x:Name="creatorPhoneLabel" Text="Creator phone number:"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250" IsVisible="False"/>
+                            <Label x:Name="creatorPhoneValue" Text=""
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250" IsVisible="False"/>
+                        </StackLayout>
+                    
+
+                        <StackLayout Orientation="Horizontal"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand">
+                            
+                            <Button x:Name="addPerson" Text="Save" 
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                Clicked="OnAddPersonsDataButtonClicked"
+                                WidthRequest="300"/>
+
+                            <Button x:Name="deletePerson" Text="Remove" 
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                Clicked="OnDeletePersonClicked"
+                                WidthRequest="300"/>
+                        </StackLayout>
+
+                </StackLayout>
                     <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                         RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                         RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+
+                        <StackLayout Orientation="Horizontal"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand">
+
+                            <Button x:Name="PrevPhotos"
+                                Text="Previous"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                WidthRequest="150"
+                                Clicked="OnPreviousImgPageClicked"
+                             />
+                            <Button x:Name="NextPhotos"
+                                Text="Next"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                WidthRequest="100"
+                                Clicked="OnNextImgPageClicked"
+                            />
+
+                            <Button x:Name="addPhotoButton"
+                            Text="Add photo"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand"
+                            BackgroundColor="RoyalBlue"
+                            BorderWidth="2"
+                            BorderColor="White"                    
+                            TextColor="White"
+                            Font="Microsoft Sans Serif"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            WidthRequest="200"
+                            Clicked="OnAddPersonPhotoClicked"/>
+                        </StackLayout>
+                        
                         <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                         RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                         RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -119,41 +240,9 @@
                             <Image x:Name="image3" Grid.Row="0" Grid.Column="2"
                                 VerticalOptions="CenterAndExpand" 
                                 HorizontalOptions="Center"/>
-                            <Image x:Name="image4" Grid.Row="1" Grid.Column="0"
-                                VerticalOptions="CenterAndExpand" 
-                                HorizontalOptions="Center"/>
-                            <Image x:Name="image5" Grid.Row="1" Grid.Column="1"
-                                VerticalOptions="CenterAndExpand" 
-                                HorizontalOptions="Center"/>
-                            <Image x:Name="image6" Grid.Row="1" Grid.Column="2"
-                                VerticalOptions="CenterAndExpand" 
-                                HorizontalOptions="Center"/>
                         </Grid>
-                        <Button x:Name="MorePhotos"
-                            Text="More photos"
-                            HorizontalOptions="Center"
-                            VerticalOptions="CenterAndExpand"
-                            BackgroundColor="RoyalBlue"
-                            BorderWidth="2"
-                            BorderColor="White"                    
-                            TextColor="White"
-                            Font="Microsoft Sans Serif"
-                            FontSize="Medium"
-                            FontAttributes="Bold"
-                            WidthRequest="300"/>
-                        <Button x:Name="addPhotoButton"
-                            Text="Add photo"
-                            HorizontalOptions="Center"
-                            VerticalOptions="CenterAndExpand"
-                            BackgroundColor="RoyalBlue"
-                            BorderWidth="2"
-                            BorderColor="White"                    
-                            TextColor="White"
-                            Font="Microsoft Sans Serif"
-                            FontSize="Medium"
-                            FontAttributes="Bold"
-                            WidthRequest="300"
-                            Clicked="OnAddPersonPhotoClicked"/>
+                       
+                        
                     </StackLayout>
                 </StackLayout>
             </StackLayout>

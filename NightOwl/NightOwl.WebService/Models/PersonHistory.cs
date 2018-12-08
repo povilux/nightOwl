@@ -22,7 +22,6 @@ namespace NightOwl.WebService.Models
 
         [MaxLength(100)]
         [ForeignKey("SourceFaceUrl")]
-        [Required]
         public string SourceFaceUrl { get; set; }
 
         [JsonIgnore]
@@ -31,9 +30,7 @@ namespace NightOwl.WebService.Models
         [Required]
         public string SpottedFaceUrl { get; set; }
 
-        [Required]
         public int PersonId { get; set; }
-
         public Person Person { get; set; }
 
 

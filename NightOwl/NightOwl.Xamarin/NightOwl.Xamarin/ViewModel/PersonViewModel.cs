@@ -13,7 +13,7 @@ namespace NightOwl.Xamarin.ViewModel
         public string AdditionalInfo;
         public DateTime MissingDate;
 
-        public IList<byte[]> Faces = new List<byte[]>();
-        public IEnumerable<Face> FacesUrl = new List<Face>();
+       // public IList<byte[]> Faces = new List<byte[]>();
+        public IList<Face> Faces = new List<Face>();
     }
 }

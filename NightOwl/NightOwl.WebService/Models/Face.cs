@@ -26,5 +26,12 @@ namespace NightOwl.WebService.Models
 
         [JsonIgnore]
         public IEnumerable<PersonHistory> History { get; set; }
+
+        [NotMapped]
+        public byte[] PhotoByteArr { get; set; }
+
+        [JsonIgnore]
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }

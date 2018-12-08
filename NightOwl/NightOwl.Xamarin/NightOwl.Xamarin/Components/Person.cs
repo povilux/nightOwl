@@ -10,10 +10,9 @@ namespace NightOwl.Xamarin.Components
         public string BirthDate { get; set; }
         public string MissingDate { get; set; }
         public string AdditionalInfo { get; set; }
-        public string CreatorId { get; set; }
+        public Guid CreatorId { get; set; }
 
-        public ICollection<byte[]> Photos;
-
+        public IList<byte[]> Photos;
         public IEnumerable<Face> FacePhotos { get; set; }
 
 

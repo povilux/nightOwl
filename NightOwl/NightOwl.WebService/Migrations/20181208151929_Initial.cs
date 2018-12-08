@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NightOwl.WebService.Migrations
 {
-    public partial class Inition : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -183,7 +183,8 @@ namespace NightOwl.WebService.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BlobURI = table.Column<string>(maxLength: 100, nullable: false),
-                    OwnerId = table.Column<int>(nullable: false)
+                    OwnerId = table.Column<int>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -208,7 +209,7 @@ namespace NightOwl.WebService.Migrations
                     SourceFaceUrl = table.Column<string>(maxLength: 100, nullable: true),
                     SourceFaceId = table.Column<int>(nullable: true),
                     SpottedFaceUrl = table.Column<string>(nullable: false),
-                    PersonId = table.Column<int>(nullable: true)
+                    PersonId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,7 +219,7 @@ namespace NightOwl.WebService.Migrations
                         column: x => x.PersonId,
                         principalTable: "Persons",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_History_Faces_SourceFaceId",
                         column: x => x.SourceFaceId,

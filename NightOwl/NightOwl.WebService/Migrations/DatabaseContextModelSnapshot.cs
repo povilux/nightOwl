@@ -141,6 +141,10 @@ namespace NightOwl.WebService.Migrations
 
                     b.Property<int>("OwnerId");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
@@ -188,8 +192,9 @@ namespace NightOwl.WebService.Migrations
 
                     b.Property<int>("PersonId");
 
+                    b.Property<int?>("SourceFaceId");
+
                     b.Property<string>("SourceFaceUrl")
-                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("SpottedFaceUrl")
@@ -199,7 +204,7 @@ namespace NightOwl.WebService.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.HasIndex("SourceFaceUrl");
+                    b.HasIndex("SourceFaceId");
 
                     b.ToTable("History");
                 });
@@ -324,9 +329,7 @@ namespace NightOwl.WebService.Migrations
 
                     b.HasOne("NightOwl.WebService.Models.Face", "SourceFace")
                         .WithMany("History")
-                        .HasForeignKey("SourceFaceUrl")
-                        .HasPrincipalKey("BlobURI")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SourceFaceId");
                 });
 #pragma warning restore 612, 618
         }

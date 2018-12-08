@@ -6,17 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181205122500_PersonHistoryFK.cs" />
-    <Compile Remove="Migrations\20181205122500_PersonHistoryFK.Designer.cs" />
-    <Compile Remove="Migrations\20181205122653_PersonHistoryFaceSFK.cs" />
-    <Compile Remove="Migrations\20181205122653_PersonHistoryFaceSFK.Designer.cs" />
-    <Compile Remove="Migrations\20181205122912_PersonHistoryFKs.cs" />
-    <Compile Remove="Migrations\20181205122912_PersonHistoryFKs.Designer.cs" />
-    <Compile Remove="Migrations\20181205123834_PersonHistoryFaceFKUpdate.cs" />
-    <Compile Remove="Migrations\20181205123834_PersonHistoryFaceFKUpdate.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\Connections.cs" Link="Connections.cs" />
   </ItemGroup>
 

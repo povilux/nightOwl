@@ -21,11 +21,6 @@ namespace NightOwl.WebService.DAL
             base.OnModelCreating(builder);
 
 
-            builder.Entity<PersonHistory>()
-                .HasOne(s => s.SourceFace)
-                .WithMany(c => c.History)
-                .HasForeignKey(s => s.SourceFaceUrl)
-                .HasPrincipalKey(c => c.BlobURI);
         }
     }
 

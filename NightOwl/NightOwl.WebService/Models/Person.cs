@@ -34,7 +34,7 @@ namespace NightOwl.WebService.Models
         public IEnumerable<PersonHistory> History { get; set; }
 
         [NotMapped]
-        public ICollection<byte[]> Photos { get; set; }
+        public IList<byte[]> Photos { get; set; }
 
         [NotMapped]
         public string CreatorName { get; set; }
