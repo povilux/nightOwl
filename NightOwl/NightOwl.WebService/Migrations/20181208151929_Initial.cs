@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NightOwl.WebService.Migrations
 {
-    public partial class InitionCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,19 +45,6 @@ namespace NightOwl.WebService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Faces",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BlobURI = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Faces", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,7 +163,7 @@ namespace NightOwl.WebService.Migrations
                     BirthDate = table.Column<string>(nullable: false),
                     MissingDate = table.Column<string>(nullable: false),
                     AdditionalInfo = table.Column<string>(nullable: true),
-                    CreatorId = table.Column<string>(nullable: false)
+                    CreatorId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -186,7 +173,59 @@ namespace NightOwl.WebService.Migrations
                         column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Faces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BlobURI = table.Column<string>(maxLength: 100, nullable: false),
+                    OwnerId = table.Column<int>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Faces", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Faces_Persons_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "History",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CoordX = table.Column<double>(nullable: false),
+                    CoordY = table.Column<double>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    SourceFaceUrl = table.Column<string>(maxLength: 100, nullable: true),
+                    SourceFaceId = table.Column<int>(nullable: true),
+                    SpottedFaceUrl = table.Column<string>(nullable: false),
+                    PersonId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_History", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_History_Persons_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "Persons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_History_Faces_SourceFaceId",
+                        column: x => x.SourceFaceId,
+                        principalTable: "Faces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -229,6 +268,21 @@ namespace NightOwl.WebService.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Faces_OwnerId",
+                table: "Faces",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_History_PersonId",
+                table: "History",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_History_SourceFaceId",
+                table: "History",
+                column: "SourceFaceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Persons_CreatorId",
                 table: "Persons",
                 column: "CreatorId");
@@ -252,13 +306,16 @@ namespace NightOwl.WebService.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "History");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "Faces");
 
             migrationBuilder.DropTable(
                 name: "Persons");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
