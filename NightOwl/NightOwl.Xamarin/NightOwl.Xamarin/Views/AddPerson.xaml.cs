@@ -27,7 +27,9 @@ namespace NightOwl.Xamarin.Views
         private FaceRecognitionService _faceRecognitionService;
         private IFaceDetectionService _faceDetectionService;
 
-        private int _PersonSelected = -1;
+        private Person _PersonSelected = null;
+
+        private ICollection<Image> _ImageSlots = new List<Image>();
 
         public AddPerson()
         {
@@ -39,6 +41,12 @@ namespace NightOwl.Xamarin.Views
             _faceDetectionService = new FaceDetectionService();
             _imageResizerService = DependencyService.Get<IImageResizerService>();
 
+            _ImageSlots.Add(image1);
+            _ImageSlots.Add(image2);
+            _ImageSlots.Add(image3);
+            _ImageSlots.Add(image4);
+            _ImageSlots.Add(image5);
+            _ImageSlots.Add(image6);
         }
 
         /*   public void OnPersonSelectedFromList(object sender, PersonSelectedEventArgs e)
@@ -80,8 +88,12 @@ namespace NightOwl.Xamarin.Views
                     return;
                 }
 
-                image1.Source = ImageSource.FromStream(() => new MemoryStream(facePhoto.Message));
-                PersonVM.Faces.Add(facePhoto.Message);
+                PersonVM.Faces.Insert(0, facePhoto.Message);
+
+                var facePhotoSource = PersonVM.Faces.Zip(_ImageSlots, (n, w) => new { Photo = n, Slot = w });
+
+                foreach (var face in facePhotoSource)
+                    face.Slot.Source = ImageSource.FromStream(() => new MemoryStream(face.Photo));
             }
             catch(Exception ex)
             {
@@ -95,29 +107,7 @@ namespace NightOwl.Xamarin.Views
             {
                 ClearData();
                 SetValues(personObject);
-                _PersonSelected = personObject.Id;
-
-
-
-                ICollection<Image> imageField = new List<Image>
-                {
-                    image1,
-                    image2,
-                    image3,
-                    image4,
-                    image5,
-                    image6
-                };
-
-                int i = 0;
-                foreach (Image img in imageField)
-                {
-                    if (personObject.FacePhotos.Count() <= i)
-                        break;
-
-                    img.Source = ImageSource.FromUri(new Uri(personObject.FacePhotos.ElementAt(i).BlobURI));
-                    i++;
-                }
+                _PersonSelected = personObject;
             });
             //PeopleList peopleList = new PeopleList();
             //peopleList.PersonSelected += OnPersonSelectedFromList;
@@ -126,7 +116,7 @@ namespace NightOwl.Xamarin.Views
 
         async void OnDeletePersonClicked(object sender, EventArgs e)
         {
-            if(_PersonSelected == -1)
+            if(_PersonSelected == null)
             {
                 await DisplayAlert("Error", "You need to chose person!", "Close");
                 return;
@@ -134,9 +124,8 @@ namespace NightOwl.Xamarin.Views
 
             addPerson.IsEnabled = false;
 
-            var deletePerson = await _personsService.DeletePersonAsync(_PersonSelected);
+            var deletePerson = await _personsService.DeletePersonAsync(_PersonSelected.Id);
                   
-
             if (deletePerson.Success)
             {
                 await DisplayAlert("Success", "Person deleted", "Close");
@@ -157,7 +146,7 @@ namespace NightOwl.Xamarin.Views
                 return;
             }
 
-            if(_PersonSelected == -1 && PersonVM.Faces.Count < 1)
+            if(_PersonSelected == null && PersonVM.Faces.Count < 1)
             {
                 await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["AddPersonInvalidNo"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 return;
@@ -175,7 +164,7 @@ namespace NightOwl.Xamarin.Views
 
             try
             {
-                if (_PersonSelected == -1)
+                if (_PersonSelected == null)
                 {
                     var addPerson = await _personsService.AddNewPersonAsync(
                         new Person
@@ -212,7 +201,7 @@ namespace NightOwl.Xamarin.Views
                                               CreatorId = App.CurrentUser.ToString(),
                                               Photos = PersonVM.Faces
                                           },
-                                          _PersonSelected
+                                          _PersonSelected.Id
                                       );
 
                     if (updatePerson.Success)
@@ -263,6 +252,13 @@ namespace NightOwl.Xamarin.Views
                 addInfoTextBox.Text = person.AdditionalInfo;
 
             PersonVM.Id = person.Id;
+            PersonVM.FacesUrl = person.FacePhotos;
+
+            var filteredPersons = PersonVM.FacesUrl;
+            var facePhotoSource = filteredPersons.Zip(_ImageSlots, (n, w) => new { Photo = n, Slot = w });
+
+            foreach (var face in facePhotoSource)
+                face.Slot.Source = ImageSource.FromUri(new Uri(face.Photo.BlobURI));
         }
 
         private async Task<bool> TrainRecognizer()

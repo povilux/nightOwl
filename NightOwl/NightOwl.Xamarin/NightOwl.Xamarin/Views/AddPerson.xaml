@@ -10,102 +10,152 @@
                 <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
             </Grid>
             <StackLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                <Label Text="Manage missing persons data:"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    FontSize="Large"/>
+                <StackLayout  Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" 
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
-                <Label Text="Manage missing person data:"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   FontSize="Medium"/>
-                <Button Text="Select person from the list"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center"
-                    BackgroundColor="RoyalBlue"
-                    BorderWidth="2"
-                    BorderColor="White"                    
-                    TextColor="White"
-                    Font="Microsoft Sans Serif"
-                    FontSize="Medium"
-                    FontAttributes="Bold"
-                    Clicked="OnSelectPersonButtonClicked"/>
-                <Image x:Name="image1" Grid.Row="0" Grid.Column="0"
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                        <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             VerticalOptions="CenterAndExpand">
+                            <Label Text="Name, Surname:"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250"/>
+                            <Entry x:Name="nameTextBox"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                WidthRequest="300"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand">
+                            <Label Text="Birth date:"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250"/>
+                            <DatePicker x:Name="birthdatePicker"
+                                WidthRequest="300"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand">
+                            <Label Text="Additional information:"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250"/>
+                            <Entry x:Name="addInfoTextBox"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                WidthRequest="300"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand">
+                            <Label Text="Missing date:"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontSize="Medium"
+                                WidthRequest="250"/>
+                            <DatePicker x:Name="missingdatePicker"
+                                WidthRequest="300"/>
+                        </StackLayout>
+                        <Button x:Name="addPerson" Text="Save" 
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand"
+                            BackgroundColor="RoyalBlue"
+                            BorderWidth="2"
+                            BorderColor="White"                    
+                            TextColor="White"
+                            Font="Microsoft Sans Serif"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            Clicked="OnAddPersonsDataButtonClicked"
+                            WidthRequest="300"/>
+                        <Button Text="Select existing person"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand"
+                            BackgroundColor="RoyalBlue"
+                            BorderWidth="2"
+                            BorderColor="White"                    
+                            TextColor="White"
+                            Font="Microsoft Sans Serif"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            Clicked="OnSelectPersonButtonClicked"
+                            WidthRequest="300"/>
+                    </StackLayout>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                        RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                        RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                        RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                        RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="image1" Grid.Row="0" Grid.Column="0"
                                 VerticalOptions="CenterAndExpand" 
                                 HorizontalOptions="Center"/>
-                <Image x:Name="image2" Grid.Row="0" Grid.Column="1"
+                            <Image x:Name="image2" Grid.Row="0" Grid.Column="1"
                                 VerticalOptions="CenterAndExpand" 
                                 HorizontalOptions="Center"/>
-                <Image x:Name="image3" Grid.Row="0" Grid.Column="2"
+                            <Image x:Name="image3" Grid.Row="0" Grid.Column="2"
                                 VerticalOptions="CenterAndExpand" 
                                 HorizontalOptions="Center"/>
-                <Image x:Name="image4" Grid.Row="1" Grid.Column="0"
+                            <Image x:Name="image4" Grid.Row="1" Grid.Column="0"
                                 VerticalOptions="CenterAndExpand" 
                                 HorizontalOptions="Center"/>
-                <Image x:Name="image5" Grid.Row="1" Grid.Column="1"
+                            <Image x:Name="image5" Grid.Row="1" Grid.Column="1"
                                 VerticalOptions="CenterAndExpand" 
                                 HorizontalOptions="Center"/>
-                <Image x:Name="image6" Grid.Row="1" Grid.Column="2"
+                            <Image x:Name="image6" Grid.Row="1" Grid.Column="2"
                                 VerticalOptions="CenterAndExpand" 
                                 HorizontalOptions="Center"/>
-
-                <Button x:Name="addPhotoButton"
-                    Text="Add photo"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center"
-                    BackgroundColor="RoyalBlue"
-                    BorderWidth="2"
-                    BorderColor="White"                    
-                    TextColor="White"
-                    Font="Microsoft Sans Serif"
-                    FontSize="Medium"
-                    FontAttributes="Bold"
-                    Clicked="OnAddPersonPhotoClicked"/>
-                <Button x:Name="addPerson" Text="Add persons data" 
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center"
-                    BackgroundColor="RoyalBlue"
-                    BorderWidth="2"
-                    BorderColor="White"                    
-                    TextColor="White"
-                    Font="Microsoft Sans Serif"
-                    FontSize="Medium"
-                    FontAttributes="Bold"
-                    Clicked="OnAddPersonsDataButtonClicked"/>
-                <Button x:Name="deletePerson" Text="DeletePerson" 
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="Center"
-                    BackgroundColor="RoyalBlue"
-                    BorderWidth="2"
-                    BorderColor="White"                    
-                    TextColor="White"
-                    Font="Microsoft Sans Serif"
-                    FontSize="Medium"
-                    FontAttributes="Bold"
-                    Clicked="OnDeletePersonClicked"/>
-                <Label Text="Name, Surname"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    FontSize="Medium"/>
-                <Entry x:Name="nameTextBox"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    WidthRequest="400"/>
-                <Label Text="Birth date"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    FontSize="Medium"/>
-                <DatePicker x:Name="birthdatePicker"/>
-                <Label Text="Additional information"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    FontSize="Medium"/>
-                <Entry x:Name="addInfoTextBox"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    WidthRequest="400"/>
-                <Label Text="Missing date"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    FontSize="Medium"/>
-                <DatePicker x:Name="missingdatePicker"/>
+                        </Grid>
+                        <Button x:Name="MorePhotos"
+                            Text="More photos"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand"
+                            BackgroundColor="RoyalBlue"
+                            BorderWidth="2"
+                            BorderColor="White"                    
+                            TextColor="White"
+                            Font="Microsoft Sans Serif"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            WidthRequest="300"/>
+                        <Button x:Name="addPhotoButton"
+                            Text="Add photo"
+                            HorizontalOptions="Center"
+                            VerticalOptions="CenterAndExpand"
+                            BackgroundColor="RoyalBlue"
+                            BorderWidth="2"
+                            BorderColor="White"                    
+                            TextColor="White"
+                            Font="Microsoft Sans Serif"
+                            FontSize="Medium"
+                            FontAttributes="Bold"
+                            WidthRequest="300"
+                            Clicked="OnAddPersonPhotoClicked"/>
+                    </StackLayout>
+                </StackLayout>
             </StackLayout>
         </RelativeLayout>
     </ContentPage.Content>
