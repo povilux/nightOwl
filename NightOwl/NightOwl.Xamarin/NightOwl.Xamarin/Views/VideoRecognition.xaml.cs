@@ -16,19 +16,23 @@ namespace NightOwl.Xamarin.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class VideoRecognition : ContentPage
 	{
-        private IVideoRecognitionService _VideoRecognitionService;
+        private IVideoPicker _videoPicker;
 
         public VideoRecognition ()
         {
             InitializeComponent();
-       /*     _VideoRecognitionService = DependencyService.Get<IVideoRecognitionService>();
+            _videoPicker = DependencyService.Get<IVideoPicker>();
 
-            var layout = new StackLayout();
-            layout.Children.Add(_VideoRecognitionService.CreateMediaPlayerElement());
-            Content = layout;
-            */
+
         }
 
+        async void OnPickVideoClicked(object sender, EventArgs e)
+        {
+            string url = await _videoPicker.GetVideoFileAsync();
+            mediaPlayer.Source = url;
+            await DisplayAlert("as0", mediaPlayer.Source, "asd");
 
+            mediaPlayer.Play = true;
+        }
     }
 }
