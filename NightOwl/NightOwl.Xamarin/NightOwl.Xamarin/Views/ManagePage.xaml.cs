@@ -25,10 +25,14 @@ namespace NightOwl.Xamarin.Views
             _personsService = new PersonsService();
             GetPersons();
             picker.SelectedIndexChanged += PickerIndexChanged;
+
             listToShow.ItemSelected += (object sender, SelectedItemChangedEventArgs e) =>
             {
-                _personSelected = (Person)e.SelectedItem;
-                Navigation.PushAsync(new AddPerson(_personSelected));
+                if (e.SelectedItem != null)
+                {
+                    _personSelected = (Person)e.SelectedItem;
+                    Navigation.PushAsync(new AddPerson(_personSelected));
+                }
             };
 		}
 
@@ -38,6 +42,11 @@ namespace NightOwl.Xamarin.Views
         }
 
 
+        protected override void OnAppearing()
+        {
+            _personSelected = null;
+            listToShow.SelectedItem = null;
+        }
 
         async void OnAddPersonButtonClicked(object sender, EventArgs e)
         {

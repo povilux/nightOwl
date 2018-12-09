@@ -311,6 +311,9 @@ namespace NightOwl.Xamarin.Views
 
         private void SetValues(Person person)
         {
+            if (person.CreatorId == null)
+                return;
+
             bool sameCreator = string.Equals(person.CreatorId, App.CurrentUser);
 
             addPerson.IsVisible = sameCreator;

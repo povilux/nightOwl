@@ -12,10 +12,5 @@ namespace NightOwl.Xamarin.UWP
     {
         public VideoRecognitionService() { }
 
-        public View CreateMediaPlayerElement()
-        {
-            MediaPlayer mediaPlayer = new MediaPlayer();
-            return (View)mediaPlayer;
-        }
     }
 }
