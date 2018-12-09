@@ -15,6 +15,8 @@ namespace NightOwl.WebService.Controllers
     [ApiController]
     public class PersonHistoryController : ControllerBase
     {
+        private int _sectionSize = 10;
+
         // POST: api/PersonHistory/Post/
         [HttpPost]
         public IActionResult Post([FromBody]PersonHistory historyData)
@@ -72,6 +74,7 @@ namespace NightOwl.WebService.Controllers
                             return Ok(newRow);
                         }
                     }
+
                 }
 
             }
@@ -82,33 +85,116 @@ namespace NightOwl.WebService.Controllers
         }
 
         // GET: api/PersonHistory/GetByPersonId
-        [HttpGet("{personId}")]
-        public IActionResult GetByPersonId([FromRoute]int personId)
+        [HttpGet("{personName}/{page}")]
+        public IActionResult GetByName([FromRoute]string personName, [FromRoute]int page)
         {
-            if (personId < 0)
-                return BadRequest("Invalid person ID");
+            if (string.IsNullOrEmpty(personName))
+                return BadRequest("Invalid person Name");
+
+            if (page < 0)
+                return BadRequest("Invalid page number");
+
             try
             {
                 using (var connection = new SqlConnection(Connections.sqlConnection))
                 {
+                    DataTable dtCount, historyTable;
 
-                    using (var selectCommand = new SqlCommand("SELECT Id, Date, SourceFaceUrl, SpottedFaceUrl, PersonId, CoordX, CoordY FROM History WHERE PersonId=@id", connection))
+                    using (var selectCommand = new SqlCommand("" +
+                        "SELECT h.Id, h.Date, h.SourceFaceUrl, h.SpottedFaceUrl, h.PersonId, h.CoordX, h.CoordY, p.Name AS PersonName " +
+                        "FROM History h, " +
+                        "Persons p " +
+                        "WHERE (PersonId IN (SELECT Id FROM Persons WHERE Name=@name)) " +
+                        "AND p.Id = h.PersonId " +
+                        "ORDER BY h.PersonId, h.Date DESC " +
+                        "OFFSET @skip ROWS " +
+                        "FETCH NEXT @take ROWS ONLY", connection))
                     {
                         using (var dataAdapter = new SqlDataAdapter())
                         {
-                            selectCommand.Parameters.AddWithValue("@id", personId);
+                            selectCommand.Parameters.AddWithValue("@name", personName);
+                            selectCommand.Parameters.AddWithValue("@skip", page * _sectionSize);
+                            selectCommand.Parameters.AddWithValue("@take", _sectionSize);
 
                             dataAdapter.SelectCommand = selectCommand;
 
-                            DataTable dataTable = new DataTable();
-                            dataAdapter.Fill(dataTable);
-
-                            DataSet dataSet = new DataSet();
-                            dataAdapter.Fill(dataSet, "History");
-
-                            return Ok(dataTable);
+                            historyTable = new DataTable();
+                            dataAdapter.Fill(historyTable);
                         }
                     }
+
+                    using (var selectCommand = new SqlCommand("" +
+                      "SELECT COUNT(*) " +
+                      "FROM History " +
+                      "WHERE PersonId IN (SELECT Id FROM Persons WHERE Name=@name) ", connection))
+                    {
+                        using (var dataAdapter = new SqlDataAdapter())
+                        {
+                            selectCommand.Parameters.AddWithValue("@name", personName);
+                            dataAdapter.SelectCommand = selectCommand;
+
+                            dtCount = new DataTable();
+                            dataAdapter.Fill(dtCount);
+                        }
+                    }
+
+                    int count = int.Parse(dtCount.Rows[0][0].ToString());
+                    return Ok(new { PersonHistories = historyTable, PersonHistoriesCount = count });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace + Environment.NewLine + Environment.NewLine + ex.Source);
+            }
+        }
+
+        // GET: api/PersonHistory/Get
+        [HttpGet("{page}")]
+        public IActionResult Get([FromRoute]int page)
+        {
+            if (page < 0)
+                return BadRequest("Invalid page number");
+
+            try
+            {
+                using (var connection = new SqlConnection(Connections.sqlConnection))
+                {
+                    DataTable dtCount, historyTable;
+
+                    using (var selectCommand = new SqlCommand("" +
+                        "SELECT h.Id, h.Date, h.SourceFaceUrl, h.SpottedFaceUrl, h.PersonId, h.CoordX, h.CoordY, p.Name AS PersonName " +
+                        "FROM History AS h, Persons AS p " +
+                        "WHERE p.Id = h.PersonId " +
+                        "ORDER BY h.Date DESC " +
+                        "OFFSET @skip ROWS " +
+                        "FETCH NEXT @take ROWS ONLY", connection))
+                    {
+                        using (var dataAdapter = new SqlDataAdapter())
+                        {
+                            selectCommand.Parameters.AddWithValue("@skip", page * _sectionSize);
+                            selectCommand.Parameters.AddWithValue("@take", _sectionSize);
+
+                            dataAdapter.SelectCommand = selectCommand;
+
+                            historyTable = new DataTable();
+                            dataAdapter.Fill(historyTable);
+
+                        }
+                    }
+
+                    using (var selectCommand = new SqlCommand("SELECT COUNT(*) FROM History", connection))
+                    {
+                        using (var dataAdapter = new SqlDataAdapter())
+                        {
+                            dataAdapter.SelectCommand = selectCommand;
+
+                            dtCount = new DataTable();
+                            dataAdapter.Fill(dtCount);
+                        }
+                    }
+
+                    int count = int.Parse(dtCount.Rows[0][0].ToString());
+                    return Ok(new { PersonHistories = historyTable, PersonHistoriesCount = count });
                 }
             }
             catch (Exception ex)

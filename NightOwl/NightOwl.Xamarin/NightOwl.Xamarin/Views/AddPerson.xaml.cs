@@ -149,29 +149,13 @@ namespace NightOwl.Xamarin.Views
                 PersonVM.Faces.Insert(0, new Face { PhotoByteArr = facePhoto.Message, BlobURI = string.Empty } );
                 SetPhotos();
 
-                if (PersonVM.Faces.Count() > _ImageSlots.Count() && _ImagesPage == 0)
+                if (PersonVM.Faces.Count() > (_ImageSlots.Count() * (_ImagesPage + 1)))
                     NextPhotos.IsVisible = true;
             }
             catch(Exception ex)
             {
                 await DisplayAlert("Exception", ex.Message.ToString(), "Close");
             }
-        }
-
-        async void OnSelectPersonButtonClicked(object sender, EventArgs e)
-        {
-            MessagingCenter.Subscribe<PeopleList, Person>(this, "PersonPicked", (personSender, personObject) =>
-            {
-                ClearData();
-                SetValues(personObject);
-                _PersonSelected = personObject;
-    
-                if(_PersonSelected.FacePhotos.Count() > _ImageSlots.Count())
-                    NextPhotos.IsVisible = true;
-
-                PrevPhotos.IsVisible = false;
-            });
-            await Navigation.PushAsync(new PeopleList());
         }
 
         async void OnDeletePersonClicked(object sender, EventArgs e)
@@ -184,7 +168,6 @@ namespace NightOwl.Xamarin.Views
 
             addPerson.IsEnabled = false;
             deletePerson.IsEnabled = false;
-            editPerson.IsEnabled = false;
 
             var actionDeletePerson = await _personsService.DeletePersonAsync(_PersonSelected.Id);
                   
@@ -194,7 +177,6 @@ namespace NightOwl.Xamarin.Views
 
                 addPerson.IsEnabled = true;
                 deletePerson.IsEnabled = true;
-                editPerson.IsEnabled = true;
                 ClearData();
             }
             else
@@ -219,7 +201,6 @@ namespace NightOwl.Xamarin.Views
             }
 
             addPerson.IsEnabled = false;
-            editPerson.IsEnabled = false;
             deletePerson.IsEnabled = false;
 
             PersonVM.Username = nameTextBox.Text;
@@ -304,7 +285,6 @@ namespace NightOwl.Xamarin.Views
                     await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
 
                 addPerson.IsEnabled = true;
-                editPerson.IsEnabled = true;
                 deletePerson.IsEnabled = true;
             }
         }
@@ -380,7 +360,6 @@ namespace NightOwl.Xamarin.Views
             PrevPhotos.IsVisible = false;
 
             addPerson.IsEnabled = true;
-            editPerson.IsEnabled = true;
             deletePerson.IsEnabled = true;
 
             creatorNameLabel.IsVisible = false;
