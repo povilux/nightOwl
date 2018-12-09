@@ -120,7 +120,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FacesNames.txt" />
     <Content Include="Global.asax" />
     <Content Include="haarcascade_frontalface_default.xml" />
     <Content Include="License-LGPL.txt" />
@@ -132,6 +131,7 @@
     </Compile>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Components\Person.cs" />
     <Compile Include="Components\RecognitionData.cs" />
     <Compile Include="Components\Trainer.cs" />
     <Compile Include="Controllers\FacesController.cs" />
@@ -155,7 +155,6 @@
     <Content Include="connection.config" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\NightOwlPersonRecognitionService - Web Deploy.pubxml" />
-    <Content Include="recognizer.yaml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
