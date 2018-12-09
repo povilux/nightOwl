@@ -38,6 +38,24 @@ namespace NightOwl.Xamarin.Services
             return null;
         }
 
+        public async Task<APIMessage<IEnumerable<PersonHistory>>> AddPersonHistoryListAsync(IEnumerable<PersonHistory> newHistory)
+        {
+            if (newHistory != null)
+            {
+                try
+                {
+                    var response = await httpClient.PostAsync<IEnumerable<PersonHistory>, IEnumerable<PersonHistory>>(APIEndPoints.AddHistoryListEndPoint, newHistory);
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.Instance.LogException(ex);
+                }
+            }
+            return null;
+        }
+        
+
         public async Task<APIMessage<PersonHistory>> AddPersonHistoryAsync(PersonHistory newHistory)
         {
             if (newHistory != null)

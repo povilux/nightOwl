@@ -130,5 +130,13 @@ namespace NightOwl.Xamarin
                 return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonHistoryAPIUrl"] + ConfigurationManager.AppSettings["AddHistoryAPI"];
             }
         }
+
+        public static string AddHistoryListEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonHistoryAPIUrl"] + ConfigurationManager.AppSettings["AddHistoryListAPI"];
+            }
+        }
     }
 }

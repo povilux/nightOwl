@@ -4,6 +4,7 @@ namespace NightOwl.Xamarin.Components
 {
     public struct Face
     {
+        public int Id { get; set; }
         public byte[] PhotoByteArr { get; set; }
         public string PersonName { get; set; }
 

@@ -14,15 +14,9 @@ namespace NightOwl.Xamarin.Components
 
         public string SourceFaceUrl { get; set; }
         public string SpottedFaceUrl { get; set; }
+        public int SourceFaceId { get; set; }
 
         public int PersonId { get; set; }
         public string PersonName { get; set; }
-        public string CreatorName { get; set; }
-        public string CreatorEmail { get; set; }
-
-        public override string ToString()
-        {
-            return Id + "; " + Date + "; " + PersonName + "; " + CreatorName;
-        }
     }
 }
