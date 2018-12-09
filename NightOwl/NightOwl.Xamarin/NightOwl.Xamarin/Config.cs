@@ -104,5 +104,39 @@ namespace NightOwl.Xamarin
                 return ConfigurationManager.AppSettings["RecognizerServiceAPIUrl"] + ConfigurationManager.AppSettings["FacesAPIUrl"] + ConfigurationManager.AppSettings["DetectFaceAPI"];
             }
         }
+
+        //---------------------------------------------------------------
+        // Persons history controller end points
+        public static string GetPersonHistoryEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonHistoryAPIUrl"] + ConfigurationManager.AppSettings["GetHistoryAPI"];
+            }
+        }
+
+        public static string GetPersonHistoryByNameEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonHistoryAPIUrl"] + ConfigurationManager.AppSettings["GetHistoryByNameAPI"];
+            }
+        }
+
+        public static string AddHistoryEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonHistoryAPIUrl"] + ConfigurationManager.AppSettings["AddHistoryAPI"];
+            }
+        }
+
+        public static string AddHistoryListEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DataServiceAPIUrl"] + ConfigurationManager.AppSettings["PersonHistoryAPIUrl"] + ConfigurationManager.AppSettings["AddHistoryListAPI"];
+            }
+        }
     }
 }

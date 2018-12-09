@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NightOwl.Xamarin.Components;
+using NightOwl.Xamarin.Services;
 using NightOwl.Xamarin.Views;
 
 using Xamarin.Forms;
@@ -17,6 +18,9 @@ namespace NightOwl.Xamarin.Views
         public ListView ListView { get { return listview; } }
         public List<MasterMenuItem> items;
 
+        public delegate void LogoutEventHandler(object sender, EventArgs args);
+        public event LogoutEventHandler LogoutClicked;
+
         public MasterPage()
         {
             InitializeComponent();
@@ -25,14 +29,19 @@ namespace NightOwl.Xamarin.Views
 
         void SetItems()
         {
-            items = new List<MasterMenuItem>();
-            items.Add(new MasterMenuItem("Video", "Images\\video.png", typeof(VideoRecognition)));
-            items.Add(new MasterMenuItem("Picture", "Images\\photo.png", typeof(PictureRecognition)));
-            items.Add(new MasterMenuItem("Camera", "Images\\camera.png", typeof(CameraRecognition)));
-            items.Add(new MasterMenuItem("Manage people", "Images\\plus.png", typeof(ManagePage)));
-            items.Add(new MasterMenuItem("History", "Images\\history.png", typeof(HistoryPage)));
-            items.Add(new MasterMenuItem("Map", "Images\\map.png", typeof(Map)));
+            items = new List<MasterMenuItem>
+            {
+                new MasterMenuItem("Video recognition", "Images\\video.png", typeof(VideoRecognition)),
+                new MasterMenuItem("Picture recognition", "Images\\photo.png", typeof(PictureRecognition)),
+                new MasterMenuItem("Persons management", "Images\\plus.png", typeof(ManagePage)),
+                new MasterMenuItem("History", "Images\\history.png", typeof(HistoryPage))
+        };
             ListView.ItemsSource = items;
+        }
+
+        private void OnLogoutClicked(object sender, EventArgs e)
+        {
+            LogoutClicked?.Invoke(sender, e);
         }
     }
 }

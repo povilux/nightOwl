@@ -149,29 +149,13 @@ namespace NightOwl.Xamarin.Views
                 PersonVM.Faces.Insert(0, new Face { PhotoByteArr = facePhoto.Message, BlobURI = string.Empty } );
                 SetPhotos();
 
-                if (PersonVM.Faces.Count() > _ImageSlots.Count() && _ImagesPage == 0)
+                if (PersonVM.Faces.Count() > (_ImageSlots.Count() * (_ImagesPage + 1)))
                     NextPhotos.IsVisible = true;
             }
             catch(Exception ex)
             {
                 await DisplayAlert("Exception", ex.Message.ToString(), "Close");
             }
-        }
-
-        async void OnSelectPersonButtonClicked(object sender, EventArgs e)
-        {
-            MessagingCenter.Subscribe<PeopleList, Person>(this, "PersonPicked", (personSender, personObject) =>
-            {
-                ClearData();
-                SetValues(personObject);
-                _PersonSelected = personObject;
-    
-                if(_PersonSelected.FacePhotos.Count() > _ImageSlots.Count())
-                    NextPhotos.IsVisible = true;
-
-                PrevPhotos.IsVisible = false;
-            });
-            await Navigation.PushAsync(new PeopleList());
         }
 
         async void OnDeletePersonClicked(object sender, EventArgs e)
@@ -183,30 +167,27 @@ namespace NightOwl.Xamarin.Views
             }
 
             addPerson.IsEnabled = false;
-            //deletePerson.IsEnabled = false;
-            editPerson.IsEnabled = false;
+            deletePerson.IsEnabled = false;
 
-            var deletePerson = await _personsService.DeletePersonAsync(_PersonSelected.Id);
+            var actionDeletePerson = await _personsService.DeletePersonAsync(_PersonSelected.Id);
                   
-            if (deletePerson.Success)
+            if (actionDeletePerson.Success)
             {
                 await DisplayAlert("Success", "Person deleted", "Close");
 
                 addPerson.IsEnabled = true;
-                //deletePerson.IsEnabled = true;
-                editPerson.IsEnabled = true;
+                deletePerson.IsEnabled = true;
                 ClearData();
             }
             else
             {
-                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], deletePerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                ErrorLogger.Instance.LogError(deletePerson.Error);
+                await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], actionDeletePerson.Error, ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                ErrorLogger.Instance.LogError(actionDeletePerson.Error);
             }
         }
 
         async void OnAddPersonsDataButtonClicked(object sender, EventArgs e)
         {
-
             if (string.IsNullOrEmpty(nameTextBox.Text))
             {
                 await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["AddPersonInvalidNoName"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
@@ -220,8 +201,7 @@ namespace NightOwl.Xamarin.Views
             }
 
             addPerson.IsEnabled = false;
-            editPerson.IsEnabled = false;
-            //deletePerson.IsEnabled = false;
+            deletePerson.IsEnabled = false;
 
             PersonVM.Username = nameTextBox.Text;
             PersonVM.BirthDate = birthdatePicker.Date;
@@ -301,15 +281,26 @@ namespace NightOwl.Xamarin.Views
             }
             finally
             {
+                if(!await TrainRecognizer())
+                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+
                 addPerson.IsEnabled = true;
-                editPerson.IsEnabled = true;
-                //deletePerson.IsEnabled = true;
+                deletePerson.IsEnabled = true;
             }
         }
 
         private void SetValues(Person person)
         {
-            if(!string.Equals(person.CreatorId, App.CurrentUser))
+            if (person.CreatorId == null)
+                return;
+
+            bool sameCreator = string.Equals(person.CreatorId, App.CurrentUser);
+
+            addPerson.IsVisible = sameCreator;
+            addPhotoButton.IsVisible = sameCreator;
+            deletePerson.IsVisible = sameCreator;
+
+            if (!sameCreator)
             {
                 creatorNameLabel.IsVisible = true;
                 creatorNameValue.IsVisible = true;
@@ -324,7 +315,7 @@ namespace NightOwl.Xamarin.Views
                 creatorPhoneValue.Text = person.CreatorPhone;
             }
 
-            if(!string.IsNullOrEmpty(person.Name))
+            if (!string.IsNullOrEmpty(person.Name))
                 nameTextBox.Text = person.Name;
 
             if (!string.IsNullOrEmpty(person.BirthDate))
@@ -351,29 +342,7 @@ namespace NightOwl.Xamarin.Views
             SetPhotos();
         }
 
-        private async Task<bool> TrainRecognizer()
-        {
-            if (trainingData.Count == 0)
-                return false;
-            
-            Trainer trainer = new Trainer
-            {
-                Data = trainingData,
-                Threshold = int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]),
-                NumOfComponents = trainingData.Count
-            };
-
-            var trainRecognizer = await _faceRecognitionService.TrainFacesAsync(trainer);
-
-            if (trainRecognizer.Success)
-                return true;
-  
-            trainingData.Clear();
-            ErrorLogger.Instance.LogError(trainRecognizer.Error);
-            return false;
-        }
-
-        public void ClearData()
+        private void ClearData()
         {
             PersonVM.Faces.Clear();
             PersonVM.Username = "";
@@ -391,8 +360,7 @@ namespace NightOwl.Xamarin.Views
             PrevPhotos.IsVisible = false;
 
             addPerson.IsEnabled = true;
-            editPerson.IsEnabled = true;
-            //deletePerson.IsEnabled = true;
+            deletePerson.IsEnabled = true;
 
             creatorNameLabel.IsVisible = false;
             creatorNameValue.IsVisible = false;
@@ -408,6 +376,18 @@ namespace NightOwl.Xamarin.Views
 
             foreach (var img in _ImageSlots)
                 img.Source = null;
+        }
+        private async Task<bool> TrainRecognizer()
+        {
+
+            var trainRecognizer = await _faceRecognitionService.TrainFacesAsync(int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));
+
+            if (trainRecognizer.Success)
+                return true;
+
+            trainingData.Clear();
+            ErrorLogger.Instance.LogError(trainRecognizer.Error);
+            return false;
         }
 
         public byte[] GetByteArrayFromStream(Func<Stream> stream)

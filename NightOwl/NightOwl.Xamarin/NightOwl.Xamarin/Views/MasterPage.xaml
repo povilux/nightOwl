@@ -5,11 +5,42 @@
              Title="nightOwl Master Page">
     <ContentPage.Content>
         <StackLayout x:Name="MasterStack" VerticalOptions="FillAndExpand">
-            <StackLayout x:Name="TopStack">
-                <Label Text="Menu" HorizontalOptions="Center" FontSize="Large" TextColor="Black"  Font="Microsoft Sans Serif"/>
+            <StackLayout x:Name="TopStack" BackgroundColor="#5097A4">
+                <Label Text="." HorizontalOptions="Center" TextColor="#5097A4"  Font="Microsoft Sans Serif" FontSize="Small" />
+                <Label Text="." HorizontalOptions="Center"  TextColor="#5097A4"  Font="Microsoft Sans Serif" FontSize="Small"/>
+
             </StackLayout>
             <StackLayout x:Name="MidStack" VerticalOptions="FillAndExpand">
-                <ListView x:Name="listview" SeparatorVisibility="None" BackgroundColor="#5097A4" WidthRequest="100">
+                
+                <ListView x:Name="listview" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                            SeparatorVisibility="None" BackgroundColor="#50974A4"  HasUnevenRows="True">
+<!--
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+
+                                    <Grid BackgroundColor="RoyalBlue" Padding="30,0,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="60"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="15" />
+                                            <ColumnDefinition Width="250"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackLayout Grid.Column="0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                            <Image Source="{Binding IconSource}" HorizontalOptions="CenterAndExpand"/>
+                                        </StackLayout>
+
+                                        <StackLayout Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                            <Label Text="{Binding Title}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="White" FontSize="Medium" Font="Microsoft Sans Serif"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>-->
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -25,16 +56,18 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                
+             
             </StackLayout>
             <StackLayout x:Name="BottomStack" VerticalOptions="EndAndExpand" BackgroundColor="#5097A4">
-                <Button Text="Logout"
+                <Button x:Name="LogoutButton" Text="Logout"
                     BackgroundColor="RoyalBlue"
                     BorderWidth="2"
                     BorderColor="White"
                     Font="Microsoft Sans Serif"
                     FontSize="Medium"
                     FontAttributes="Bold"
-                    TextColor="White"></Button>
+                    TextColor="White" Clicked="OnLogoutClicked"></Button>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

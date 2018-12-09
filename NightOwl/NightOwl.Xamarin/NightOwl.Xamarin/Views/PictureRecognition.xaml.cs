@@ -1,15 +1,18 @@
-﻿using NightOwl.Xamarin.Services;
+﻿using NightOwl.Xamarin.Components;
+using NightOwl.Xamarin.Services;
 using PCLAppConfig;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.DataGrid;
 using Xamarin.Forms.Xaml;
 
 namespace NightOwl.Xamarin.Views
@@ -29,9 +32,22 @@ namespace NightOwl.Xamarin.Views
             _imageResizerService = DependencyService.Get<IImageResizerService>();
 
             pickPhoto.Clicked += OnSelectedPhotoAsync;
+            PersonsData.ItemSelected += OnPersonSelected;
         }
 
-        public async void OnSelectedPhotoAsync(object sender, EventArgs e)
+        void OnPersonSelected(object sender, EventArgs e)
+        {
+            DisplayAlert("asd", PersonsData.SelectedItem.ToString(), "asd");
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+           // _personSelected = null;
+            PersonsData.SelectedItem = null;
+        }
+
+        async void OnSelectedPhotoAsync(object sender, EventArgs e)
         {
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
@@ -54,24 +70,21 @@ namespace NightOwl.Xamarin.Views
             });
 
             byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream));
-            
-
             image.Source = ImageSource.FromStream(() => new MemoryStream(photo));
 
             try
             {
-                string recognizedPersons = await RecognizePersonsFromPhtAsync(photo);
+                IEnumerable<Person> recognizedPersons = await RecognizePersonsFromPhtAsync(photo);
 
-                if(recognizedPersons == null)
+                if (recognizedPersons == null)
                 {
-                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                    await DisplayAlert(ConfigurationManager.AppSettings["NotRecognizedPersonTitle"], ConfigurationManager.AppSettings["NotRecognizedPersonText"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                    PersonsData.ItemsSource = null;
+                    BindingContext = null;
                     return;
                 }
 
-                if (!string.IsNullOrEmpty(recognizedPersons))
-                    await DisplayAlert(ConfigurationManager.AppSettings["RecognizedPersonTitle"], string.Join(Environment.NewLine, recognizedPersons), ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                else
-                    await DisplayAlert(ConfigurationManager.AppSettings["NotRecognizedPersonTitle"], ConfigurationManager.AppSettings["NotRecognizedPersonText"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);           
+                PersonsData.ItemsSource = recognizedPersons;
             }
             catch (Exception ex)
             {
@@ -106,19 +119,49 @@ namespace NightOwl.Xamarin.Views
             return face;
         }
 
-        public async Task<string> RecognizePersonsFromPhtAsync(byte[] photo)
+        public async Task<IEnumerable<Person>> RecognizePersonsFromPhtAsync(byte[] photo)
         {
             var recognition = await _faceRecognitionService.RecognizeFacesAsync(photo);
 
-           if (recognition.Success)
-           {
-                return recognition.Message;
+            if (recognition.Success)
+            {
+                if (recognition.Message == null || recognition.Message.Count() <= 0)
+                    return null;
+
+                IPersonHistoryService historyService = new PersonHistoryService();
+                ICollection<PersonHistory> historyList = new List<PersonHistory>();
+
+                foreach (Person person in recognition.Message)
+                {
+                    historyList.Add(new PersonHistory
+                    {
+                        PersonId = person.Id,
+                        Date = DateTime.Now,
+                        SourceFaceUrl = person.FacePhotos.ElementAt(0).BlobURI,
+                        SpottedFaceUrl = "asdf",
+                        SourceFaceId = person.FacePhotos.ElementAt(0).Id,
+                        CoordX = 5.0,
+                        CoordY = 5.0
+                    });
+                }
+                var actionAddHistory = await historyService.AddPersonHistoryListAsync(historyList);
+
+                if (actionAddHistory.Success)
+                {
+                    return recognition.Message;
+                }
+                else
+                {
+                    ErrorLogger.Instance.LogError(actionAddHistory.Error);
+                    throw new Exception(actionAddHistory.Error);
+                }
            }
            else
            {
                 ErrorLogger.Instance.LogError(recognition.Error);
-                return null;
-            }
+                throw new Exception(recognition.Error);
+           }
         }
     }
+
 }

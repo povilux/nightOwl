@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.RecognizedPeople">
+    <ContentPage.Content>
+        <ScrollView>
+            <RelativeLayout>
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                    <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
+                </Grid>
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Text="Person recognized by:"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Large"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0"
+                            x:Name="FaceFromMedia"
+                            VerticalOptions="CenterAndExpand" 
+                            HorizontalOptions="CenterAndExpand"/>
+                        <Image Grid.Column="1"
+                            x:Name="FaceFromRecognized"
+                            VerticalOptions="CenterAndExpand" 
+                            HorizontalOptions="CenterAndExpand"/>
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0"
+                                x:Name="Yes"
+                                Text="Person recognized successfully"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Large"
+                                WidthRequest="400"
+                                FontAttributes="Bold"
+                                Clicked="OnYesButtonClicked"/>
+                            <Button Grid.Row="1"
+                                x:Name="No"
+                                Text="Person recognized unsuccessfully"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Large"
+                                WidthRequest="400"
+                                FontAttributes="Bold"
+                                Clicked="OnNoButtonClicked"/>
+                        </Grid>
+                    </Grid>
+                    <Label x:Name="Name"
+                       Grid.Row="2"
+                       VerticalOptions="Center"
+                       FontSize="Large"/>
+                </Grid>
+            </RelativeLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
