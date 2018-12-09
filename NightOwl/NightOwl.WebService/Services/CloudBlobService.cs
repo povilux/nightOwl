@@ -62,7 +62,7 @@ namespace NightOwl.WebService.Services
 
                 faceBlobsList.Add(new Face()
                 {
-                    BlobURI = "https://nightowl.blob.core.windows.net/" + containerName + "/" + blobName,
+                    BlobURI = "https://nightowlfaces.blob.core.windows.net/" + containerName + "/" + blobName,
                     OwnerId = personID
                 });
                 i++;
