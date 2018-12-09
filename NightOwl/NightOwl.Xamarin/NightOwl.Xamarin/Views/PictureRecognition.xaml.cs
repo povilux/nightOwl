@@ -123,18 +123,44 @@ namespace NightOwl.Xamarin.Views
         {
             var recognition = await _faceRecognitionService.RecognizeFacesAsync(photo);
 
-           if (recognition.Success)
-           {
+            if (recognition.Success)
+            {
                 if (recognition.Message == null || recognition.Message.Count() <= 0)
                     return null;
 
-                return recognition.Message;
+                IPersonHistoryService historyService = new PersonHistoryService();
+                ICollection<PersonHistory> historyList = new List<PersonHistory>();
+
+                foreach (Person person in recognition.Message)
+                {
+                    historyList.Add(new PersonHistory
+                    {
+                        PersonId = person.Id,
+                        Date = DateTime.Now,
+                        SourceFaceUrl = person.FacePhotos.ElementAt(0).BlobURI,
+                        SpottedFaceUrl = "asdf",
+                        SourceFaceId = person.FacePhotos.ElementAt(0).Id,
+                        CoordX = 5.0,
+                        CoordY = 5.0
+                    });
+                }
+                var actionAddHistory = await historyService.AddPersonHistoryListAsync(historyList);
+
+                if (actionAddHistory.Success)
+                {
+                    return recognition.Message;
+                }
+                else
+                {
+                    ErrorLogger.Instance.LogError(actionAddHistory.Error);
+                    throw new Exception(actionAddHistory.Error);
+                }
            }
            else
            {
                 ErrorLogger.Instance.LogError(recognition.Error);
                 throw new Exception(recognition.Error);
-            }
+           }
         }
     }
 
