@@ -39,7 +39,13 @@ namespace NightOwl.Xamarin.Views
         {
             DisplayAlert("asd", PersonsData.SelectedItem.ToString(), "asd");
         }
-        
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+           // _personSelected = null;
+            PersonsData.SelectedItem = null;
+        }
 
         async void OnSelectedPhotoAsync(object sender, EventArgs e)
         {

@@ -31,11 +31,10 @@ namespace NightOwl.Xamarin.Views
         {
             items = new List<MasterMenuItem>
             {
-                new MasterMenuItem("Video recognition", "C:\\Users\\vidma\\Desktop", typeof(VideoRecognition)),
-                new MasterMenuItem("Picture recognition", "C:\\Users\\vidma\\Desktop", typeof(PictureRecognition)),
-                //items.Add(new MasterMenuItem("Camera", "C:\\Users\\vidma\\Desktop", typeof(CameraRecognition)));
-                new MasterMenuItem("Persons management", "C:\\Users\\vidma\\Desktop", typeof(AddPerson)),
-                new MasterMenuItem("Recognition history", "C:\\Users\\vidma\\Desktop", typeof(Map))
+                new MasterMenuItem("Video recognition", "Images\\video.png", typeof(VideoRecognition)),
+                new MasterMenuItem("Picture recognition", "Images\\photo.png", typeof(PictureRecognition)),
+                new MasterMenuItem("Persons management", "Images\\plus.png", typeof(ManagePage)),
+                new MasterMenuItem("Recognition history", "Images\\map.png", typeof(Map))
             };
             ListView.ItemsSource = items;
         }
