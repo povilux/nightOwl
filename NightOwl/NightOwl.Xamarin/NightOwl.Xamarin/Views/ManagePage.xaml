@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.ManagePage">
+    <ContentPage.Content>
+        <RelativeLayout>
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
+            </Grid>
+            <StackLayout>
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="30, 30, 100, 50" 
+                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                      RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Filtruoti pagal:" Grid.Row="0" Grid.Column="0" 
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
+                           FontSize="Medium"/>
+                    <Picker x:Name ="picker" Grid.Row="0" Grid.Column="1" 
+                            WidthRequest="50">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Tik mano kurti</x:String>
+                                <x:String>Visi</x:String>
+          <!--                      <x:String>Pažymėti</x:String>          -->
+                            </x:Array> 
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <Button x:Name="addPerson" Text="Add New" Grid.Row="0" Grid.Column="2"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                Clicked="OnAddPersonButtonClicked"
+                                WidthRequest="200"/>
+                </Grid>
+                <ListView x:Name="listToShow" SeparatorVisibility="Default" WidthRequest="600"
+                          HorizontalOptions="Center" ItemsSource="{Binding .}">
+                    <ListView.Header>
+                        <Grid BackgroundColor="White">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+         <!--                       <ColumnDefinition Width="160"/>      -->
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="nameButton" Text="Name" Grid.Row="0" Grid.Column="0" BackgroundColor="White" Clicked="OnNameButtonClicked"
+                                    WidthRequest="140" HorizontalOptions="CenterAndExpand"/>
+                            <Button x:Name="birthdayButton" Text="Birth date" Grid.Row="0" Grid.Column="1" BackgroundColor="White"
+                                    WidthRequest="140" HorizontalOptions="CenterAndExpand" Clicked="OnBirthdayButtonClicked"/>
+                            <Button x:Name="missingButton" Text="Missing date" Grid.Row="0" Grid.Column="2" BackgroundColor="White"
+                                    WidthRequest="140" HorizontalOptions="CenterAndExpand" Clicked="OnMissingButtonClicked"/>
+                            <Button x:Name="addInfoButton" Text="More info" Grid.Row="0" Grid.Column="3" BackgroundColor="White"
+                                    WidthRequest="140" HorizontalOptions="CenterAndExpand" Clicked="OnAddInfoButtonClicked"/>
+     <!--                       <Button x:Name="interestedButton" Text="Interested" Grid.Row="0" Grid.Column="4" BackgroundColor="White"
+                                    WidthRequest="160" HorizontalOptions="CenterAndExpand" Clicked="OnInterestedButtonClicked"/>      -->
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid x:Name="dataGrid" BackgroundColor="White">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+              <!--                          <ColumnDefinition Width="160"/>           -->
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Name}" Grid.Column="0" BackgroundColor="White" WidthRequest="150"/>
+                                    <Label Text="{Binding BirthDate}" Grid.Column="1" BackgroundColor="White" WidthRequest="150"/>
+                                    <Label Text="{Binding MissingDate}" Grid.Column="2" BackgroundColor="White" WidthRequest="150"/>
+                                    <Label Text="{Binding AdditionalInfo}" Grid.Column="3" BackgroundColor="White" WidthRequest="150"/>
+                    <!--                <Button x:Name="personButton"  Grid.Column="4" BackgroundColor="White" WidthRequest="160"/>   -->
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>
