@@ -21,18 +21,7 @@
                         <StackLayout Orientation="Horizontal"
                              HorizontalOptions="Center"
                              VerticalOptions="CenterAndExpand">
-                            <Button x:Name="editPerson" Text="Show existing person"
-                                HorizontalOptions="StartAndExpand"
-                                VerticalOptions="CenterAndExpand"
-                                BackgroundColor="RoyalBlue"
-                                BorderWidth="2"
-                                BorderColor="White"                    
-                                TextColor="White"
-                                Font="Microsoft Sans Serif"
-                                FontSize="Medium"
-                                FontAttributes="Bold"
-                                Clicked="OnSelectPersonButtonClicked"
-                                WidthRequest="300"/>
+                         
                         </StackLayout>
                         <StackLayout Orientation="Horizontal"
                              HorizontalOptions="Center"
@@ -180,45 +169,54 @@
                         <StackLayout Orientation="Horizontal"
                             HorizontalOptions="Center"
                             VerticalOptions="CenterAndExpand">
-                            <Button x:Name="PrevPhotos"
-                                Text="Previous"
-                                HorizontalOptions="Center"
-                                VerticalOptions="CenterAndExpand"
-                                BackgroundColor="RoyalBlue"
-                                BorderWidth="2"
-                                BorderColor="White"                    
-                                TextColor="White"
-                                Font="Microsoft Sans Serif"
-                                FontSize="Medium"
-                                FontAttributes="Bold"
-                                WidthRequest="200"
-                                Clicked="OnPreviousImgPageClicked"/>
-                            <Button x:Name="NextPhotos"
-                                Text="Next"
-                                HorizontalOptions="Center"
-                                VerticalOptions="CenterAndExpand"
-                                BackgroundColor="RoyalBlue"
-                                BorderWidth="2"
-                                BorderColor="White"                    
-                                TextColor="White"
-                                Font="Microsoft Sans Serif"
-                                FontSize="Medium"
-                                FontAttributes="Bold"
-                                WidthRequest="200"
-                                Clicked="OnNextImgPageClicked"/>
-                            <Button x:Name="addPhotoButton"
-                                Text="Add photo"
-                                HorizontalOptions="Center"
-                                VerticalOptions="CenterAndExpand"
-                                BackgroundColor="RoyalBlue"
-                                BorderWidth="2"
-                                BorderColor="White"                    
-                                TextColor="White"
-                                Font="Microsoft Sans Serif"
-                                FontSize="Medium"
-                                FontAttributes="Bold"
-                                WidthRequest="200"
-                                Clicked="OnAddPersonPhotoClicked"/>
+
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
+                                <Button x:Name="PrevPhotos"
+                                    Text="Previous"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="CenterAndExpand"
+                                    BackgroundColor="RoyalBlue"
+                                    BorderWidth="2"
+                                    BorderColor="White"                    
+                                    TextColor="White"
+                                    Font="Microsoft Sans Serif"
+                                    FontSize="Medium"
+                                    FontAttributes="Bold"
+                                    WidthRequest="150"
+                                    Clicked="OnPreviousImgPageClicked"
+                                />
+
+                                <Button x:Name="NextPhotos"
+                                    Text="Next"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="CenterAndExpand"
+                                    BackgroundColor="RoyalBlue"
+                                    BorderWidth="2"
+                                    BorderColor="White"                    
+                                    TextColor="White"
+                                    Font="Microsoft Sans Serif"
+                                    FontSize="Medium"
+                                    FontAttributes="Bold"
+                                    WidthRequest="150"
+                                    Clicked="OnNextImgPageClicked"
+                                />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
+                                    <Button x:Name="addPhotoButton"
+                                        Text="Add photo"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="CenterAndExpand"
+                                        BackgroundColor="RoyalBlue"
+                                        BorderWidth="2"
+                                        BorderColor="White"                    
+                                        TextColor="White"
+                                        Font="Microsoft Sans Serif"
+                                        FontSize="Medium"
+                                        FontAttributes="Bold"
+                                        WidthRequest="200"
+                                        Clicked="OnAddPersonPhotoClicked"
+                                    />
+                            </StackLayout>
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>

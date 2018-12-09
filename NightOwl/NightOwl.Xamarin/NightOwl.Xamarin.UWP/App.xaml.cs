@@ -55,7 +55,8 @@ namespace NightOwl.Xamarin.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 global::Xamarin.Forms.Forms.Init(e);
-                global::Xamarin.Forms.DependencyService.Register<ImageResizerService>(); 
+                global::Xamarin.Forms.DependencyService.Register<ImageResizerService>();
+                global::Xamarin.Forms.DependencyService.Register<VideoPicker>();
                 ConfigurationManager.Initialise(PCLAppConfig.FileSystemStream.PortableStream.Current);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

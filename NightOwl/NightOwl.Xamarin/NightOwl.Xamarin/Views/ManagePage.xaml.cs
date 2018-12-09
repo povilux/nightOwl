@@ -21,7 +21,7 @@ namespace NightOwl.Xamarin.Views
 		public ManagePage ()
 		{
 			InitializeComponent ();
-            picker.SelectedIndex = 1;                               // parenkam, kad atidarius puslapi rodytu visus
+            picker.SelectedIndex = 1; 
             _personsService = new PersonsService();
             GetPersons();
             picker.SelectedIndexChanged += PickerIndexChanged;
@@ -46,6 +46,7 @@ namespace NightOwl.Xamarin.Views
         {
             _personSelected = null;
             listToShow.SelectedItem = null;
+            GetPersons();
         }
 
         async void OnAddPersonButtonClicked(object sender, EventArgs e)
@@ -85,19 +86,6 @@ namespace NightOwl.Xamarin.Views
         {
             _personList = (List<Person>)await GetPersonsList();
 
-            /*
-            Person testp = new Person();
-            testp.Name = "Jonas";
-            testp.BirthDate = "1900";
-            testp.MissingDate = "2000";
-            Person testp2 = new Person();
-            testp2.Name = "Algis";
-            testp2.BirthDate = "1950";
-            testp2.MissingDate = "2015";
-            _personList.Add(testp);
-            _personList.Add(testp2);
-            */
-
             if (_personList != null)
             {
                 if (picker.SelectedIndex == 0)
@@ -127,7 +115,7 @@ namespace NightOwl.Xamarin.Views
             }
             else
             {
-                await DisplayAlert("Error", personList.Error /*"System error"*/, "Close");
+                await DisplayAlert("Error", personList.Error, "Close");
                 return null;
             }
         }
