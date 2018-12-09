@@ -10,9 +10,6 @@
                 <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
             </Grid>
             <StackLayout>
-                <Image x:Name="imageToShow"
-                                VerticalOptions="CenterAndExpand" 
-                                HorizontalOptions="Center"/>
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="30, 30, 100, 50" 
                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                       RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
@@ -66,30 +63,23 @@
                     </Grid.ColumnDefinitions>
                     <Button x:Name="previousPageButton" Image="Images\\back.png" BackgroundColor="Transparent" Clicked="OnPreviousButtonClicked"
                             Grid.Row="0" Grid.Column="0" WidthRequest="30"/>
-                    <Label x:Name="pageNumberLabel"
+                    <Label x:Name="pageNumberLabel" BackgroundColor="Transparent" FontSize="Medium" FontAttributes="Bold"
+                           VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
                            Grid.Row="0" Grid.Column="1"/>
                     <Button x:Name="nextPageButton" Image="Images\\next.png" BackgroundColor="Transparent" Clicked="OnNextButtonClicked"
                             Grid.Row="0" Grid.Column="2" WidthRequest="30"/>
                 </Grid>
-
-                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="Center" Padding="100, 0, 0, 0" 
-                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
-                      RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="Center" Padding="0, 0, 0, 0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="450"/>
                         <ColumnDefinition Width="450"/>
                     </Grid.ColumnDefinitions>
-
-            
-                        <!--<Image x:Name="imageToShow" 
-                                VerticalOptions="CenterAndExpand" 
-                                HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"/>
-                       -->
-
-                    <ListView x:Name="listToShow" SeparatorVisibility="Default" WidthRequest="450"
+                    <Image x:Name="imageToShow" Grid.Row="0" Grid.Column="0"
+                           VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <ListView x:Name="listToShow" SeparatorVisibility="Default" WidthRequest="450" HeightRequest="230"
                           HorizontalOptions="Center" ItemsSource="{Binding .}"
                               Grid.Row="0" Grid.Column="1">
                         <ListView.Header>

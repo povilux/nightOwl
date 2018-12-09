@@ -35,6 +35,8 @@ namespace NightOwl.Xamarin.Views
             personNameButton.IsVisible = false;
             personDateButton.IsVisible = false;
 
+            listToShow.IsVisible = false;
+
             filterPicker.SelectedIndexChanged += FilterPickerIndexChanged;
             historyListToShow = new List<PersonHistory>();
 
@@ -115,6 +117,7 @@ namespace NightOwl.Xamarin.Views
             currentPageNumber = 1;
             numberOfItems = 0;
             imageToShow.Source = null;
+            listToShow.IsVisible = true;
 
             await GetHistoryPages();
  
@@ -127,6 +130,8 @@ namespace NightOwl.Xamarin.Views
                 numberOfPages = numberOfItems / 10;
             }
 
+            previousPageButton.IsVisible = false;
+            nextPageButton.IsVisible = false;
             if(numberOfPages > 1)
             {
                 nextPageButton.IsVisible = true;
