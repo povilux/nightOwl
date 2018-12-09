@@ -49,7 +49,19 @@ namespace NightOwl.Xamarin.Views
             PrevPhotos.IsVisible = false;
         }
 
-        void OnNextImgPageClicked(object sender, EventArgs e)
+        public AddPerson(Person p) : this()
+        {
+            ClearData();
+            SetValues(p);
+            _PersonSelected = p;
+
+            if (_PersonSelected.FacePhotos.Count() > _ImageSlots.Count())
+                NextPhotos.IsVisible = true;
+
+            PrevPhotos.IsVisible = false;
+        }
+
+        public void OnNextImgPageClicked(object sender, EventArgs e)
         {
             _ImagesPage++;
 
@@ -64,7 +76,7 @@ namespace NightOwl.Xamarin.Views
             SetPhotos();
         }
 
-        void OnPreviousImgPageClicked(object sender, EventArgs e)
+        public void OnPreviousImgPageClicked(object sender, EventArgs e)
         {
             _ImagesPage--;
 
