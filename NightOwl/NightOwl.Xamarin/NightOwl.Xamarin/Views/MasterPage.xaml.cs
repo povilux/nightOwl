@@ -30,6 +30,7 @@ namespace NightOwl.Xamarin.Views
             items.Add(new MasterMenuItem("Picture", "Images\\photo.png", typeof(PictureRecognition)));
             items.Add(new MasterMenuItem("Camera", "Images\\camera.png", typeof(CameraRecognition)));
             items.Add(new MasterMenuItem("Manage people", "Images\\plus.png", typeof(ManagePage)));
+            items.Add(new MasterMenuItem("History", "Images\\history.png", typeof(HistoryPage)));
             items.Add(new MasterMenuItem("Map", "Images\\map.png", typeof(Map)));
             ListView.ItemsSource = items;
         }

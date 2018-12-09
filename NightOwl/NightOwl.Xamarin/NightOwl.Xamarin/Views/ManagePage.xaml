@@ -21,7 +21,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Text="Filtruoti pagal:" Grid.Row="0" Grid.Column="0" 
+                    <Label Text="Filter by:" Grid.Row="0" Grid.Column="0" 
                            HorizontalOptions="Center"
                            VerticalOptions="CenterAndExpand"
                            FontSize="Medium"/>
@@ -29,8 +29,8 @@
                             WidthRequest="50">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
-                                <x:String>Tik mano kurti</x:String>
-                                <x:String>Visi</x:String>
+                                <x:String>Created by me</x:String>
+                                <x:String>All</x:String>
           <!--                      <x:String>Pažymėti</x:String>          -->
                             </x:Array> 
                         </Picker.ItemsSource>
