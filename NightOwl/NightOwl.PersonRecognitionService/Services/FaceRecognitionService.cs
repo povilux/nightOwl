@@ -70,7 +70,7 @@ namespace NightOwl.PersonRecognitionService.Services
 
                 IEnumerable<Person> personsList = new List<Person>();
 
-                var response = await HttpClient.GetAsync(new Uri("https://nightowlwebservice.azurewebsites.net/api/Persons/Get"));
+                var response = await HttpClient.GetAsync(new Uri("https://nightowldataservice.azurewebsites.net/api/Persons/Get"));
                 var contents = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
@@ -150,7 +150,7 @@ namespace NightOwl.PersonRecognitionService.Services
 
                 IEnumerable<Person> personsList = new List<Person>();
 
-                var response = await HttpClient.GetAsync(new Uri("https://nightowlwebservice.azurewebsites.net/api/Persons/Get"));
+                var response = await HttpClient.GetAsync(new Uri("https://nightowldataservice.azurewebsites.net/api/Persons/Get"));
                 var contents = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)

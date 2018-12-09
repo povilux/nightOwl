@@ -148,73 +148,13 @@ namespace NightOwl.WindowsForms.Views
 
             if (browser.ShowDialog() == DialogResult.OK)
             {
-                /*try
-                {
-                    byte[] array = { 1, 2, 3 };
-                            var name = RecognizeAsync(array);
-
-                            MessageBox.Show("Name: " + name.Result);
-                            Console.WriteLine("Recognized");
-                        
-                    
-                }
-                catch (BadHttpRequestException ex)
-                {
-                    Console.WriteLine("Neteisinga uzklausa:" + ex);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("ERRORRRAS:" + ex);
-                }*/
-
-                foreach (var file in browser.FileNames.ToList())
-                {
-                    Bitmap imageIn = new Bitmap(file);
-                    MemoryStream ms = new MemoryStream();
-                    imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-
-                    /*trainingData.Add(new Face3
-                    {
-                        Photo = ms.ToArray(),
-                        PersonName = textBox1.Text
-                    });*/
-                    try
-                    {
-                        RecognizeAsync(ms.ToArray());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Bad error: " + ex);
-                    }
-                }
-
+              
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var trainer = new Trainer()
-            {
-                Data = trainingData,
-                NumOfComponents = trainingData.Count,
-                Threshold = 3900
-            };
-
-            try
-            {
-                   SendAsync(trainer);
-               // Face3 face = new Face3 { PersonName = " ", Photo = ms.ToArray() };
-               // RecognizeAsync(face);
-                //   MessageBox.Show("Result:" + result.Result);
-            }
-            catch (BadHttpRequestException ex)
-            {
-                Console.WriteLine("Neteisinga uzklausa:" + ex);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRORRRAS:" + ex);
-            }
+         
         }
     }
 }
