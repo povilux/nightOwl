@@ -11,13 +11,13 @@ namespace NightOwl.Xamarin.Services
     {
         private IHttpClientService httpClient = HttpClientService.Instance;
 
-        public async Task<APIMessage<string>> RecognizeFacesAsync(byte[] photo)
+        public async Task<APIMessage<IEnumerable<Person>>> RecognizeFacesAsync(byte[] photo)
         {
             if (photo != null)
             {
                 try
                 {
-                    var response = await httpClient.PostAsync<string, byte[]>(APIEndPoints.RecognizeFaceEndPoint, photo);
+                    var response = await httpClient.PostAsync<IEnumerable<Person>, byte[]>(APIEndPoints.RecognizeFaceEndPoint, photo);
                     return response;
                 }
                 catch (Exception ex)
@@ -28,20 +28,18 @@ namespace NightOwl.Xamarin.Services
             return null;
         }
 
-        public async Task<APIMessage<string>> TrainFacesAsync(Trainer trainingData)
+        public async Task<APIMessage<string>> TrainFacesAsync()
         {
-            if (trainingData != null)
-            {
                 try
                 {
-                    var response = await httpClient.PostAsync<string, Trainer>(APIEndPoints.TrainFaceEndPoint, trainingData);
+                    var response = await httpClient.PostAsync<string, object>(APIEndPoints.TrainFaceEndPoint, null);
                     return response;
                 }
                 catch (Exception ex)
                 {
                     ErrorLogger.Instance.LogException(ex);
                 }
-            }
+            
             return null;
         }
     }

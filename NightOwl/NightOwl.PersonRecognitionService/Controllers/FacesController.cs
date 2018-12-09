@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
 
         // POST: api/Faces/Train
         [HttpPost]
-        public IHttpActionResult Train([FromBody]Trainer trainer)
+        public async Task<IHttpActionResult> Train([FromBody]Trainer trainer)
         {
             if (!ModelState.IsValid)
                 return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
@@ -31,7 +32,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
                 IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(null, trainer.NumOfComponents, trainer.Threshold);
 
                // trainer.Data = await faceRecognitionService.LoadFacesAsync(trainer.Data);
-                bool success = faceRecognitionService.TrainRecognizer(trainer.Data);
+                bool success = await faceRecognitionService.TrainRecognizer();
             }
             catch (Exception ex)
             {
@@ -47,8 +48,9 @@ namespace NightOwl.PersonRecognitionService.Controllers
             try {
                 IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(null);
 
-                string name = faceRecognitionService.RecognizeFace(photoByteArray);
-                return Ok(name);
+               // IEnumerable<int> personsId = faceRecognitionService.RecognizeFace(photoByteArray);
+                return Ok(3);
+
             }
             catch(Exception ex)
             {

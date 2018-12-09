@@ -10,7 +10,7 @@ namespace NightOwl.PersonRecognitionService.Services
 {
     public interface IFaceRecognitionService
     {
-        string RecognizeFace(byte[] photo);
-        bool TrainRecognizer(IEnumerable<Face> Data);
+        IEnumerable<int> RecognizeFace(byte[] photo);
+        Task<bool> TrainRecognizer();
     }
 }

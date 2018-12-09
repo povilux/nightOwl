@@ -7,6 +7,6 @@ namespace NightOwl.Xamarin.Services
 {
     public interface IFaceRecognitionService
     {
-        Task<APIMessage<string>> RecognizeFacesAsync(byte[] photo);
+        Task<APIMessage<IEnumerable<Person>>> RecognizeFacesAsync(byte[] photo);
     }
 }

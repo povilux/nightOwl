@@ -249,7 +249,6 @@ GitHubVS.sln.DotSettings
 
 #Config files for asp.net core and asp.net
 appsettings.*.json
-web.config
 /NightOwl/NightOwl.WindowsForms/Data/Pictures
 /NightOwl/NightOwl.WebAPIService
 /NightOwl/PersonRecognitionWebService/recognizer.yaml

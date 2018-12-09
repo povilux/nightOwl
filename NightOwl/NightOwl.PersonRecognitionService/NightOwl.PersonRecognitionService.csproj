@@ -132,6 +132,7 @@
     </Compile>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Components\Person.cs" />
     <Compile Include="Components\RecognitionData.cs" />
     <Compile Include="Components\Trainer.cs" />
     <Compile Include="Controllers\FacesController.cs" />

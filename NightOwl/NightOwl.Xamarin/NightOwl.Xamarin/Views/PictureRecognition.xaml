@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NightOwl.Xamarin.Views.PictureRecognition"
              xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid">
+    
     <ContentPage.Content>
+        
         <ScrollView>
             <RelativeLayout>
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
@@ -24,17 +26,7 @@
                         <Image x:Name="image"
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand"/>
-                        <!--<Button x:Name="takePhoto"
-                            Text="Take photo"
-                            VerticalOptions="CenterAndExpand" 
-                            HorizontalOptions="CenterAndExpand"
-                            BackgroundColor="RoyalBlue"
-                            BorderWidth="2"
-                            BorderColor="White"                    
-                            TextColor="White"
-                            Font="Microsoft Sans Serif"
-                            FontSize="Large"
-                            FontAttributes="Bold"/>-->
+                      
                         <Button x:Name="pickPhoto"
                             Text="Pick photo"
                             VerticalOptions="CenterAndExpand" 
@@ -50,12 +42,13 @@
                     <StackLayout Grid.Row="0" Grid.Column="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                         RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                         RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
-                        <dg:DataGrid ItemsSource="{Binding Teams}" SelectionEnabled="True" SelectedItem="{Binding SelectedTeam}"
-                           RowHeight="70" HeaderHeight="50" BorderColor="#CCCCCC" HeaderBackground="#E0E6F8"
+                        <dg:DataGrid x:Name="PersonsData"  SelectionEnabled="True" SelectedItem="{Binding SelectedTeam}"
+                           RowHeight="70" HeaderHeight="50" BorderColor="#CCCCCC"
                            PullToRefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
                             <dg:DataGrid.Columns>
-                                <dg:DataGridColumn Title="Recognized people" PropertyName="Recognized people" Width="*"/>
+                                <dg:DataGridColumn Title="Recognized people" PropertyName="Name" Width="*"/>
                             </dg:DataGrid.Columns>
+                            
                         </dg:DataGrid>
                     </StackLayout>
                 </Grid>
