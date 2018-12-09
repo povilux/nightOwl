@@ -42,13 +42,12 @@
                     <StackLayout Grid.Row="0" Grid.Column="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                         RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                         RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
-                        <dg:DataGrid x:Name="PersonsData"  SelectionEnabled="True" SelectedItem="{Binding SelectedTeam}"
+                        <dg:DataGrid x:Name="PersonsData"  Margin="20" SelectionEnabled="True" SelectedItem="{Binding SelectedTeam}"
                            RowHeight="70" HeaderHeight="50" BorderColor="#CCCCCC"
                            PullToRefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
                             <dg:DataGrid.Columns>
                                 <dg:DataGridColumn Title="Recognized people" PropertyName="Name" Width="*"/>
                             </dg:DataGrid.Columns>
-                            
                         </dg:DataGrid>
                     </StackLayout>
                 </Grid>

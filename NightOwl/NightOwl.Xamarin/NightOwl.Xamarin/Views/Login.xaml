@@ -13,20 +13,20 @@
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
                 <Label Text="Welcome to Smart Vision app!"
-                   Margin="0, 0, 0, 20"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   FontSize="Large"/>
+                       Margin="0, 10, 0, 20"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Large"/>
                 <Label Text="Please, login to the system"
-                   Margin="0, 0, 0, 20"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   FontSize="Large"/>
+                       Margin="0, 0, 0, 20"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Large"/>
                 <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="Center"
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
                     <Label Text="Username:"
-                       WidthRequest="150"
+                       WidthRequest="200"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        FontSize="Medium"/>
@@ -39,7 +39,7 @@
                     RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.75}">
                     <Label Text="Password:"
-                       WidthRequest="150"
+                       WidthRequest="200"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        FontSize="Medium"/>
@@ -63,7 +63,7 @@
                         FontSize="Medium"
                         FontAttributes="Bold"
                         HeightRequest="50"
-                        WidthRequest="200"
+                        WidthRequest="250"
                         Clicked="OnLoginButtonClicked"/>
                     <Button Text="Register"
                         HorizontalOptions="CenterAndExpand"
@@ -76,7 +76,7 @@
                         FontSize="Medium"
                         FontAttributes="Bold"
                         HeightRequest="50"
-                        WidthRequest="200"
+                        WidthRequest="250"
                         Clicked="OnRegisterButtonClicked"/>
                 </StackLayout>
             </StackLayout>
