@@ -25,26 +25,20 @@ namespace NightOwl.PersonRecognitionService.Services
         private readonly string _recognizerFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["RecognizerTrainFile"]);
         private readonly string _recognizerFacesFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["RecognizerNamesFile"]);
 
-        private readonly int _recognizerNumOfComponents;
         private readonly int _recognizerThreshold;
 
-        private IFaceDetectionService _faceDetectionService;
-        private DatabaseContext _context;
+        private readonly IFaceDetectionService _faceDetectionService;
         private EigenFaceRecognizer _eigen;
-
-        private string[] _FacesNamesArray { get; set; }
 
         private int[] _PersonsIdArray;
 
-        public FaceRecognitionService(DatabaseContext context)
+        public FaceRecognitionService()
         {
             try
             {
                 _eigen = new EigenFaceRecognizer();
-                _FacesNamesArray = File.ReadAllLines(_recognizerFacesFileName);
                 _eigen.Read(_recognizerFileName);
                 _faceDetectionService = new FaceDetectionService();
-                _context = context;
             }
             catch (Exception ex)
             {
@@ -52,15 +46,13 @@ namespace NightOwl.PersonRecognitionService.Services
             }
         }
 
-        public FaceRecognitionService(DatabaseContext context, int recognizerNumOfComponents, int recognizerThreshold)
+        public FaceRecognitionService(int recognizerThreshold)
         {
             try
             {
-                _recognizerNumOfComponents = recognizerNumOfComponents;
                 _recognizerThreshold = recognizerThreshold;
-                _eigen = new EigenFaceRecognizer(_recognizerNumOfComponents, _recognizerThreshold); 
+                _eigen = new EigenFaceRecognizer(0, _recognizerThreshold); 
                 _faceDetectionService = new FaceDetectionService();
-                _context = context;
             }
             catch (Exception ex)
             {
@@ -79,7 +71,7 @@ namespace NightOwl.PersonRecognitionService.Services
 
                 IEnumerable<Person> personsList = new List<Person>();
 
-                var response = await HttpClient.GetAsync(new Uri("https://nightowlwebservice.azurewebsites.net/api/Get"));
+                var response = await HttpClient.GetAsync(new Uri("https://nightowlwebservice.azurewebsites.net/api/Persons/Get"));
                 var contents = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
@@ -91,8 +83,9 @@ namespace NightOwl.PersonRecognitionService.Services
                     personsList = JsonConvert.DeserializeObject<IEnumerable<Person>>(contents);                 
                 }
 
-                int i = 0, y = 0;
-                IList<Image<Gray, byte>> PersonsPhotoList = new List<Image<Gray, byte>> ();
+                int y = 0;
+                IList<Image<Gray, byte>> PersonsPhotoList = new List<Image<Gray, byte>>();
+                IList<int> PersonsIdList = new List<int>();
 
                 foreach (var person in personsList)
                 {
@@ -100,8 +93,6 @@ namespace NightOwl.PersonRecognitionService.Services
 
                     foreach(var face in person.FacePhotos)
                     {
-                        _PersonsIdArray[i] = person.Id;
-
                         CloudStorageAccount _cloudStorageAccount = CloudStorageAccount.Parse(Connections.CloudBlobStorageConnection);
                         CloudBlobClient blobClient = _cloudStorageAccount.CreateCloudBlobClient();
 
@@ -111,14 +102,18 @@ namespace NightOwl.PersonRecognitionService.Services
                         blockBlob.DownloadToStream(memStream);
 
                         Image<Gray, byte> faceImg = new Image<Gray, byte>(new Bitmap(Image.FromStream(memStream)));
+                        PersonsIdList.Add(person.Id);
                         PersonsPhotoList.Add(faceImg);
                         y++;
                     }
                 }
 
+                _PersonsIdArray = new int[PersonsIdList.Count()];
+                _PersonsIdArray = PersonsIdList.ToArray();
+
                 _eigen.Train(PersonsPhotoList.ToArray(), _PersonsIdArray);
                 _eigen.Write(_recognizerFileName);
-                File.WriteAllLines(_recognizerFacesFileName, _FacesNamesArray, Encoding.UTF8);
+                File.WriteAllText(_recognizerFacesFileName, string.Join(Environment.NewLine, _PersonsIdArray), Encoding.UTF8);
                 return true;
             }
             catch(Exception ex)
@@ -127,7 +122,7 @@ namespace NightOwl.PersonRecognitionService.Services
             }
         }
       
-        public IEnumerable<int> RecognizeFace(byte[] photoByteArray)
+        public async Task<IEnumerable<Person>> RecognizeFace(byte[] photoByteArray)
         {
             try
             {
@@ -139,17 +134,38 @@ namespace NightOwl.PersonRecognitionService.Services
                 IFaceDetectionService faceDetectionService = new FaceDetectionService();
                 Rectangle[] faces = faceDetectionService.DetectFacesAsRect(photo);
 
-                ICollection<int> recognizedNames = new List<int>();
+                ICollection<int> recognizedPersons = new List<int>();
 
                 foreach (Rectangle faceRectangle in faces)
                 {
                     var face = photo.Copy(faceRectangle).ConvertToRecognition();                  
                     FaceRecognizer.PredictionResult result = _eigen.Predict(face);
 
-                   /* if (result.Label > 0)
-                        recognizedNames.Add(_FacesNamesArray[result.Label - 1]);*/
+                    if (result.Label > 0)
+                        recognizedPersons.Add(result.Label);
                 }
-                return recognizedNames;
+
+                if (recognizedPersons.Count() <= 0)
+                    return null; 
+
+                HttpClient HttpClient = new HttpClient();
+
+                IEnumerable<Person> personsList = new List<Person>();
+
+                var response = await HttpClient.GetAsync(new Uri("https://nightowlwebservice.azurewebsites.net/api/Persons/Get"));
+                var contents = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Error: " + contents);
+                }
+                else
+                {
+                    personsList = JsonConvert.DeserializeObject<IEnumerable<Person>>(contents);
+                }
+                IEnumerable<string> a = personsList.Select(p => p.Name);
+
+                return personsList.Where(p => recognizedPersons.All(p2 => p2 == p.Id)).ToList();
             }
             catch (Exception)
             {

@@ -288,8 +288,8 @@ namespace NightOwl.Xamarin.Views
             }
             finally
             {
-                if (await TrainRecognizer())
-                    await DisplayAlert("Viksasg erai", "Viskas gerai", "Viskas geria");
+                if(!await TrainRecognizer())
+                    await DisplayAlert(ConfigurationManager.AppSettings["SystemErrorTitle"], ConfigurationManager.AppSettings["SystemErrorMessage"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
 
                 addPerson.IsEnabled = true;
                 editPerson.IsEnabled = true;
@@ -385,7 +385,8 @@ namespace NightOwl.Xamarin.Views
         }
         private async Task<bool> TrainRecognizer()
         {
-            var trainRecognizer = await _faceRecognitionService.TrainFacesAsync();
+
+            var trainRecognizer = await _faceRecognitionService.TrainFacesAsync(int.Parse(ConfigurationManager.AppSettings["RecognizerThreshold"]));
 
             if (trainRecognizer.Success)
                 return true;
@@ -394,7 +395,6 @@ namespace NightOwl.Xamarin.Views
             ErrorLogger.Instance.LogError(trainRecognizer.Error);
             return false;
         }
-
 
         public byte[] GetByteArrayFromStream(Func<Stream> stream)
         {

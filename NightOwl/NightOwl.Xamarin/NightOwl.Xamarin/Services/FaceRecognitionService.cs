@@ -28,11 +28,11 @@ namespace NightOwl.Xamarin.Services
             return null;
         }
 
-        public async Task<APIMessage<string>> TrainFacesAsync()
+        public async Task<APIMessage<string>> TrainFacesAsync(int threshold)
         {
                 try
                 {
-                    var response = await httpClient.PostAsync<string, object>(APIEndPoints.TrainFaceEndPoint, null);
+                    var response = await httpClient.PostAsync<string, int>(APIEndPoints.TrainFaceEndPoint, threshold);
                     return response;
                 }
                 catch (Exception ex)

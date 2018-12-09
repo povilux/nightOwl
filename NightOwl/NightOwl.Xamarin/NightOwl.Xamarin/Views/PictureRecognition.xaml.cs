@@ -64,8 +64,6 @@ namespace NightOwl.Xamarin.Views
             });
 
             byte[] photo = await _imageResizerService.ResizeImageAsync(GetByteArrayFromStream(imageStream));
-            
-
             image.Source = ImageSource.FromStream(() => new MemoryStream(photo));
 
             try
@@ -75,15 +73,12 @@ namespace NightOwl.Xamarin.Views
                 if (recognizedPersons == null)
                 {
                     await DisplayAlert(ConfigurationManager.AppSettings["NotRecognizedPersonTitle"], ConfigurationManager.AppSettings["NotRecognizedPersonText"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                    PersonsData.ItemsSource = null;
+                    BindingContext = null;
                     return;
                 }
 
                 PersonsData.ItemsSource = recognizedPersons;
-                /* if (!string.IsNullOrEmpty(recognizedPersons))
-                     await DisplayAlert(ConfigurationManager.AppSettings["RecognizedPersonTitle"], string.Join(Environment.NewLine, recognizedPersons), ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
-                 else
-                     await DisplayAlert(ConfigurationManager.AppSettings["NotRecognizedPersonTitle"], ConfigurationManager.AppSettings["NotRecognizedPersonText"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);           
-           */
             }
             catch (Exception ex)
             {
@@ -124,7 +119,7 @@ namespace NightOwl.Xamarin.Views
 
            if (recognition.Success)
            {
-                if (recognition.Message.Count() <= 0)
+                if (recognition.Message == null || recognition.Message.Count() <= 0)
                     return null;
 
                 return recognition.Message;
@@ -136,8 +131,5 @@ namespace NightOwl.Xamarin.Views
             }
         }
     }
-    class test
-    {
-        public string PersonName { get; set; }
-    }
+
 }

@@ -22,39 +22,38 @@ namespace NightOwl.PersonRecognitionService.Controllers
 
         // POST: api/Faces/Train
         [HttpPost]
-        public async Task<IHttpActionResult> Train([FromBody]Trainer trainer)
+        public async Task<IHttpActionResult> Train([FromBody]int threshold)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(string.Join(Environment.NewLine, ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
+            if (threshold <= 0)
+                return BadRequest("No threshold");
 
             try
             {
-                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(null, trainer.NumOfComponents, trainer.Threshold);
-
-               // trainer.Data = await faceRecognitionService.LoadFacesAsync(trainer.Data);
+                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(threshold);
                 bool success = await faceRecognitionService.TrainRecognizer();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Source + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine + ex.InnerException);
             }
             return Ok("Success");
         }
 
         // POST: api/Faces/RecognizeFace
         [HttpPost]
-        public  IHttpActionResult Recognize([FromBody]byte[] photoByteArray)
+        public async Task<IHttpActionResult> Recognize([FromBody]byte[] photoByteArray)
         {
             try {
-                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService(null);
+                IFaceRecognitionService faceRecognitionService = new FaceRecognitionService();
 
-               // IEnumerable<int> personsId = faceRecognitionService.RecognizeFace(photoByteArray);
-                return Ok(3);
+                IEnumerable<Person> persons = await faceRecognitionService.RecognizeFace(photoByteArray);
+
+                return Ok(persons);
 
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message.ToString());
             }
         }
 
@@ -73,7 +72,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message.ToString());
             }
         }
 
