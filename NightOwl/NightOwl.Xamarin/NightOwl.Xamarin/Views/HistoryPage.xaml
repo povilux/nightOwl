@@ -84,9 +84,9 @@
                     </Grid.ColumnDefinitions>
 
             
-                        <!--<Image x:Name="imageToShow" 
+                       <!-- <Image x:Name="imageToShow" 
                                 VerticalOptions="CenterAndExpand" 
-                                HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"/>
+                                HorizontalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0"/>
                        -->
 
                     <ListView x:Name="listToShow" SeparatorVisibility="Default" WidthRequest="450"

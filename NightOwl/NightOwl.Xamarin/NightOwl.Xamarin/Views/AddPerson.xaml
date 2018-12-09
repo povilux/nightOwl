@@ -172,32 +172,18 @@
 
                             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
                                 <Button x:Name="PrevPhotos"
-                                    Text="Previous"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="CenterAndExpand"
-                                    BackgroundColor="RoyalBlue"
-                                    BorderWidth="2"
-                                    BorderColor="White"                    
-                                    TextColor="White"
-                                    Font="Microsoft Sans Serif"
-                                    FontSize="Medium"
-                                    FontAttributes="Bold"
-                                    WidthRequest="150"
+                                   Image="Images\\back.png" 
+                                    
+                                    BackgroundColor="Transparent"                    
+                                    WidthRequest="30"
                                     Clicked="OnPreviousImgPageClicked"
                                 />
 
                                 <Button x:Name="NextPhotos"
-                                    Text="Next"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="CenterAndExpand"
-                                    BackgroundColor="RoyalBlue"
-                                    BorderWidth="2"
-                                    BorderColor="White"                    
-                                    TextColor="White"
-                                    Font="Microsoft Sans Serif"
-                                    FontSize="Medium"
-                                    FontAttributes="Bold"
-                                    WidthRequest="150"
+                                    Image="Images\\next.png"
+                                   
+                                    BackgroundColor="Transparent"                   
+                                    WidthRequest="30"
                                     Clicked="OnNextImgPageClicked"
                                 />
                             </StackLayout>
