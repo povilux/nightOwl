@@ -152,9 +152,14 @@
     <Compile Include="Services\IFaceRecognitionService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="connection.config" />
+    <Content Include="connection.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\NightOwlPersonRecognitionServ - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\NightOwlPersonRecognitionService - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\nightowlRecognitionService - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\nightowlRecognitionService - Web Deploy1.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
