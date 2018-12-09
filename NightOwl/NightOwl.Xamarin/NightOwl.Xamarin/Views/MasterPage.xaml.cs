@@ -34,8 +34,8 @@ namespace NightOwl.Xamarin.Views
                 new MasterMenuItem("Video recognition", "Images\\video.png", typeof(VideoRecognition)),
                 new MasterMenuItem("Picture recognition", "Images\\photo.png", typeof(PictureRecognition)),
                 new MasterMenuItem("Persons management", "Images\\plus.png", typeof(ManagePage)),
-                new MasterMenuItem("Recognition history", "Images\\map.png", typeof(Map))
-            };
+                new MasterMenuItem("History", "Images\\history.png", typeof(HistoryPage))
+        };
             ListView.ItemsSource = items;
         }
 

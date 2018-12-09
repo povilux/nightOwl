@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NightOwl.Xamarin.Views.HistoryPage">
+    <ContentPage.Content>
+        <RelativeLayout>
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                    RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                    RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
+            </Grid>
+            <StackLayout>
+                <Image x:Name="imageToShow"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="30, 30, 100, 50" 
+                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                      RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Filter by:" Grid.Row="0" Grid.Column="0" 
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
+                           FontSize="Medium"/>
+                    <Picker x:Name="filterPicker" Grid.Row="0" Grid.Column="1"
+                            WidthRequest="50">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>All</x:String>
+                                <x:String>Name:</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <Entry x:Name="entry" Text="" Grid.Row="0" Grid.Column="2"/>
+                    <Button x:Name="filterButton" Grid.Row="0" Grid.Column="3"
+                            Text="Search"
+                            HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                BackgroundColor="RoyalBlue"
+                                BorderWidth="2"
+                                BorderColor="White"                    
+                                TextColor="White"
+                                Font="Microsoft Sans Serif"
+                                FontSize="Medium"
+                                FontAttributes="Bold"
+                                WidthRequest="100"
+                                Clicked="OnSearchButtonClicked"/>
+                </Grid>
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="Center" Padding="100, 30, 100, 20" 
+                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                      RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="previousPageButton" Image="Images\\back.png" BackgroundColor="Transparent" Clicked="OnPreviousButtonClicked"
+                            Grid.Row="0" Grid.Column="0" WidthRequest="30"/>
+                    <Label x:Name="pageNumberLabel"
+                           Grid.Row="0" Grid.Column="1"/>
+                    <Button x:Name="nextPageButton" Image="Images\\next.png" BackgroundColor="Transparent" Clicked="OnNextButtonClicked"
+                            Grid.Row="0" Grid.Column="2" WidthRequest="30"/>
+                </Grid>
+
+                <Grid VerticalOptions="FillAndExpand" HorizontalOptions="Center" Padding="100, 0, 0, 0" 
+                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                      RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="450"/>
+                    </Grid.ColumnDefinitions>
+
+            
+                        <!--<Image x:Name="imageToShow" 
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"/>
+                       -->
+
+                    <ListView x:Name="listToShow" SeparatorVisibility="Default" WidthRequest="450"
+                          HorizontalOptions="Center" ItemsSource="{Binding .}"
+                              Grid.Row="0" Grid.Column="1">
+                        <ListView.Header>
+                            <Grid BackgroundColor="White">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="personIDButton" Text="ID" Grid.Row="0" Grid.Column="0" BackgroundColor="White" Clicked="OnIDButtonClicked"
+                                    WidthRequest="150" HorizontalOptions="CenterAndExpand"/>
+                                <Button x:Name="personNameButton" Text="Name" Grid.Row="0" Grid.Column="1" BackgroundColor="White"
+                                    WidthRequest="150" HorizontalOptions="CenterAndExpand" Clicked="OnPersonNameButtonClicked"/>
+                                <Button x:Name="personDateButton" Text="Date" Grid.Row="0" Grid.Column="2" BackgroundColor="White"
+                                    WidthRequest="150" HorizontalOptions="CenterAndExpand" Clicked="OnPersonDateButtonClicked"/>
+                            </Grid>
+                        </ListView.Header>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid x:Name="historyGrid" BackgroundColor="White">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="150"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding PersonId}" Grid.Column="0" BackgroundColor="White" WidthRequest="50"/>
+                                        <Label Text="{Binding PersonName}" Grid.Column="1" BackgroundColor="White" WidthRequest="200"/>
+                                        <Label Text="{Binding Date}" Grid.Column="2" BackgroundColor="White" WidthRequest="200"/>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </StackLayout>
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>
