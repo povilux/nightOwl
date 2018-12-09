@@ -10,6 +10,9 @@
                 <Image Source="Assets/Background.png" Aspect = "AspectFill"/>
             </Grid>
             <StackLayout>
+                <Image x:Name="imageToShow"
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center"/>
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="30, 30, 100, 50" 
                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                       RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}">
@@ -79,12 +82,13 @@
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition Width="450"/>
                     </Grid.ColumnDefinitions>
-                    <Image x:Name="imageToShow" Grid.Row="0" Grid.Column="0">
 
-                        <!-- sutvarkyt su foto rodymu -->
+            
+                        <!--<Image x:Name="imageToShow" 
+                                VerticalOptions="CenterAndExpand" 
+                                HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"/>
+                       -->
 
-
-                    </Image>
                     <ListView x:Name="listToShow" SeparatorVisibility="Default" WidthRequest="450"
                           HorizontalOptions="Center" ItemsSource="{Binding .}"
                               Grid.Row="0" Grid.Column="1">
@@ -112,9 +116,9 @@
                                             <ColumnDefinition Width="150"/>
                                             <ColumnDefinition Width="150"/>
                                         </Grid.ColumnDefinitions>
-                                        <Label Text="{Binding PersonID}" Grid.Column="0" BackgroundColor="White" WidthRequest="50"/>
+                                        <Label Text="{Binding PersonId}" Grid.Column="0" BackgroundColor="White" WidthRequest="50"/>
                                         <Label Text="{Binding PersonName}" Grid.Column="1" BackgroundColor="White" WidthRequest="200"/>
-                                        <Label Text="{Binding PersonDate}" Grid.Column="2" BackgroundColor="White" WidthRequest="200"/>
+                                        <Label Text="{Binding Date}" Grid.Column="2" BackgroundColor="White" WidthRequest="200"/>
                                     </Grid>
                                 </ViewCell>
                             </DataTemplate>
