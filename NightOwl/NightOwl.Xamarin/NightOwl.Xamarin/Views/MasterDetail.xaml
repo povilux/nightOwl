@@ -4,10 +4,10 @@
                   xmlns:Local="clr-namespace:NightOwl.Xamarin.Views"
              x:Class="NightOwl.Xamarin.Views.MasterDetail">
     <MasterDetailPage.Master>
-        <Local:MasterPage x:Name="masterpage"/>
+        <Local:MasterPage x:Name="masterpage" BackgroundColor="#5097A4"/>
     </MasterDetailPage.Master>
     <MasterDetailPage.Detail>
-        <NavigationPage>
+        <NavigationPage BarBackgroundColor="#5097A4">
             <x:Arguments>
                 <Local:InfoScreen1/>
             </x:Arguments>

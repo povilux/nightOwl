@@ -23,7 +23,6 @@ namespace NightOwl.PersonRecognitionService.Services
     public class FaceRecognitionService : IFaceRecognitionService
     {
         private readonly string _recognizerFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["RecognizerTrainFile"]);
-        private readonly string _recognizerFacesFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["RecognizerNamesFile"]);
 
         private readonly int _recognizerThreshold;
 
@@ -113,7 +112,6 @@ namespace NightOwl.PersonRecognitionService.Services
 
                 _eigen.Train(PersonsPhotoList.ToArray(), _PersonsIdArray);
                 _eigen.Write(_recognizerFileName);
-                File.WriteAllText(_recognizerFacesFileName, string.Join(Environment.NewLine, _PersonsIdArray), Encoding.UTF8);
                 return true;
             }
             catch(Exception ex)

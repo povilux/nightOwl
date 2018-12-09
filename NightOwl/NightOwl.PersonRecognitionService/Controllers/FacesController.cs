@@ -34,7 +34,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Source + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace + Environment.NewLine + ex.InnerException);
+                return BadRequest(ex.Message.ToString() + Environment.NewLine + ex.InnerException.ToString());
             }
             return Ok("Success");
         }
@@ -53,7 +53,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.Message.ToString());
+                return BadRequest(ex.Message.ToString() + Environment.NewLine + ex.InnerException.ToString());
             }
         }
 
@@ -72,7 +72,7 @@ namespace NightOwl.PersonRecognitionService.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message.ToString());
+                return BadRequest(ex.Message.ToString() + Environment.NewLine + ex.InnerException.ToString());
             }
         }
 

@@ -43,15 +43,28 @@ namespace NightOwl.Xamarin.Views
                 return;
             }
 
+            if(!string.Equals(RepeatedPassword.Text, Password.Text))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationPasswordDontMatch"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
             if (string.IsNullOrEmpty(Email.Text) || (!string.IsNullOrEmpty(Email.Text) && !Regex.IsMatch(Email.Text, "([0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$")))
             {
                 await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidEmail"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
                 return;
             }
 
+            if(string.IsNullOrEmpty(PhoneNumber.Text))
+            {
+                await DisplayAlert(ConfigurationManager.AppSettings["InvalidDataTitle"], ConfigurationManager.AppSettings["RegistrationInvalidPhoneNr"], ConfigurationManager.AppSettings["MessageBoxClosingBtnText"]);
+                return;
+            }
+
             RegisterVM.Username = Username.Text;
             RegisterVM.Password = Password.Text;
             RegisterVM.Email = Email.Text;
+            RegisterVM.Phone = PhoneNumber.Text;
 
             try
             {
@@ -62,8 +75,8 @@ namespace NightOwl.Xamarin.Views
                     PasswordHash = RegisterVM.Password,
                     Email = RegisterVM.Email,
                     EmailConfirmed = true,
-                    PhoneNumberConfirmed = false,
-                    PhoneNumber = ""
+                    PhoneNumberConfirmed = true,
+                    PhoneNumber = RegisterVM.Phone
                 };
 
                 var result = await _userService.RegisterAsync(newUser);

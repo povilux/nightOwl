@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NightOwl.Xamarin.Components;
+using NightOwl.Xamarin.Services;
 using NightOwl.Xamarin.Views;
 
 using Xamarin.Forms;
@@ -17,6 +18,9 @@ namespace NightOwl.Xamarin.Views
         public ListView ListView { get { return listview; } }
         public List<MasterMenuItem> items;
 
+        public delegate void LogoutEventHandler(object sender, EventArgs args);
+        public event LogoutEventHandler LogoutClicked;
+
         public MasterPage()
         {
             InitializeComponent();
@@ -25,13 +29,20 @@ namespace NightOwl.Xamarin.Views
 
         void SetItems()
         {
-            items = new List<MasterMenuItem>();
-            items.Add(new MasterMenuItem("Video", "C:\\Users\\vidma\\Desktop", typeof(VideoRecognition)));
-            items.Add(new MasterMenuItem("Picture", "C:\\Users\\vidma\\Desktop", typeof(PictureRecognition)));
-            items.Add(new MasterMenuItem("Camera", "C:\\Users\\vidma\\Desktop", typeof(CameraRecognition)));
-            items.Add(new MasterMenuItem("New Person", "C:\\Users\\vidma\\Desktop", typeof(AddPerson)));
-            items.Add(new MasterMenuItem("Map", "C:\\Users\\vidma\\Desktop", typeof(Map)));
+            items = new List<MasterMenuItem>
+            {
+                new MasterMenuItem("Video recognition", "C:\\Users\\vidma\\Desktop", typeof(VideoRecognition)),
+                new MasterMenuItem("Picture recognition", "C:\\Users\\vidma\\Desktop", typeof(PictureRecognition)),
+                //items.Add(new MasterMenuItem("Camera", "C:\\Users\\vidma\\Desktop", typeof(CameraRecognition)));
+                new MasterMenuItem("Persons management", "C:\\Users\\vidma\\Desktop", typeof(AddPerson)),
+                new MasterMenuItem("Recognition history", "C:\\Users\\vidma\\Desktop", typeof(Map))
+            };
             ListView.ItemsSource = items;
+        }
+
+        private void OnLogoutClicked(object sender, EventArgs e)
+        {
+            LogoutClicked?.Invoke(sender, e);
         }
     }
 }
